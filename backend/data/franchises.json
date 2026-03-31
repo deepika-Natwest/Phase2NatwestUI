@@ -1,0 +1,17 @@
+[
+  {
+    "id": "67e49d2e-7d21-444c-bb76-29eb95ab66dc",
+    "name": "Retail banking",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92"
+  },
+  {
+    "id": "524ae53c-342e-4ea5-bfd3-1554cb836621",
+    "name": "FinCrime",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92"
+  },
+  {
+    "id": "9f331d19-6ac4-4e6c-8a99-3e575ba2efdf",
+    "name": "C&I",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92"
+  }
+]

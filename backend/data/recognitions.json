@@ -1,0 +1,93 @@
+[
+  {
+    "id": "1b2d3c4e-9a01-4f5b-8d12-11aa22bb33cc",
+    "name": "Ashish Sharma",
+    "designation": "Associate Manager",
+    "location": "London",
+    "recognitionType": "Client Recognized",
+    "recognitionTag": "Information Technology",
+    "shortDescription": "Recognized for outstanding contribution to client project delivery and technical leadership.",
+    "pic": "668848b231d2afa1121c03dade13468d",
+    "createdAt": "2026-03-12T09:06:02.121Z",
+    "updatedAt": "2026-03-12T09:19:42.098Z",
+    "genderType": "Male"
+  },
+  {
+    "id": "2c3d4e5f-1b23-4e7c-9f01-22bb33cc44dd",
+    "name": "Priya Mehta",
+    "designation": "Senior Software Engineer",
+    "location": "Bangalore",
+    "recognitionType": "Manager Recognized",
+    "recognitionTag": "Engineering",
+    "shortDescription": "Awarded for delivering high-quality scalable backend solutions and mentoring junior developers.",
+    "pic": "af8848b231d2afa1121c03dade13468a",
+    "createdAt": "2026-03-11T10:12:15.320Z",
+    "updatedAt": "2026-03-12T11:02:44.120Z",
+    "genderType": "Female"
+  },
+  {
+    "id": "3d4e5f6a-2c34-4a9d-8b11-33cc44dd55ee",
+    "name": "Rohit Verma",
+    "designation": "Technical Lead",
+    "location": "Hyderabad",
+    "recognitionType": "Peer Recognized",
+    "recognitionTag": "Cloud Technology",
+    "shortDescription": "Recognized for successfully leading cloud migration initiatives and improving system reliability.",
+    "pic": "bf9948b231d2afa1121c03dade13468b",
+    "createdAt": "2026-03-10T08:20:11.101Z",
+    "updatedAt": "2026-03-12T10:05:20.220Z",
+    "genderType": "Male"
+  },
+  {
+    "id": "4e5f6a7b-3d45-4c8e-9c22-44dd55ee66ff",
+    "name": "Neha Kapoor",
+    "designation": "Project Manager",
+    "location": "Pune",
+    "recognitionType": "Client Recognized",
+    "recognitionTag": "Project Management",
+    "shortDescription": "Acknowledged by clients for excellent project delivery, stakeholder communication, and leadership.",
+    "pic": "cf1048b231d2afa1121c03dade13468c",
+    "createdAt": "2026-03-09T07:15:30.000Z",
+    "updatedAt": "2026-03-11T16:40:10.500Z",
+    "genderType": "Female"
+  },
+  {
+    "id": "5f6a7b8c-4e56-4d7f-8d33-55ee66ff77aa",
+    "name": "Vikram Singh",
+    "designation": "Data Analyst",
+    "location": "Delhi",
+    "recognitionType": "Manager Recognized",
+    "recognitionTag": "Data Analytics",
+    "shortDescription": "Recognized for delivering actionable insights through data analysis and dashboard automation.",
+    "pic": "df2148b231d2afa1121c03dade13468d",
+    "createdAt": "2026-03-08T12:30:45.200Z",
+    "updatedAt": "2026-03-11T14:22:12.900Z",
+    "genderType": "Male"
+  },
+  {
+    "id": "6a7b8c9d-5f67-4e6a-9e44-66ff77aa88bb",
+    "name": "Ananya Gupta",
+    "designation": "UI/UX Designer",
+    "location": "Mumbai",
+    "recognitionType": "Peer Recognized",
+    "recognitionTag": "Design",
+    "shortDescription": "Appreciated for creating intuitive user experiences and improving product usability.",
+    "pic": "ef3248b231d2afa1121c03dade13468e",
+    "createdAt": "2026-03-07T11:11:11.111Z",
+    "updatedAt": "2026-03-10T13:00:30.200Z",
+    "genderType": "Female"
+  },
+  {
+    "id": "7b8c9d0e-6a78-4f5b-8f55-77aa88bb99cc",
+    "name": "Karan Malhotra",
+    "designation": "DevOps Engineer",
+    "location": "Chennai",
+    "recognitionType": "Client Recognized",
+    "recognitionTag": "DevOps",
+    "shortDescription": "Recognized for optimizing CI/CD pipelines and improving deployment efficiency.",
+    "pic": "ff4348b231d2afa1121c03dade13468f",
+    "createdAt": "2026-03-06T09:45:22.010Z",
+    "updatedAt": "2026-03-10T12:10:18.550Z",
+    "genderType": "Male"
+  }
+]

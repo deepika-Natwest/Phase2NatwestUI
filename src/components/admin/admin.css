@@ -1,0 +1,39 @@
+.brandLogo {
+  background-color: #5a287d;
+  padding: 1rem;
+  margin: 0;
+}
+.sideBar{
+    background: #3c1053;
+}
+.sideBar .list-group-item{
+  background-color: #5a287d !important;
+  border-bottom: 1px solid #3c1053 !important;;
+  color: #ad79d1;
+}
+.sideBar .list-group-item-action:not(.active):focus, .sideBar .list-group-item-action:not(.active):hover{
+    color: #fff !important;
+      background-color: #3c1053 !important;
+}
+.sideBar .list-group-item.active{
+        background: #3c1053 !important;
+}
+.adminHeader{
+    background: #3c1053 !important;
+}
+.titleBox{
+    background: #f3f3f3 !important;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e3e3e3;
+}
+.titleBox h2{
+    font-weight: 700 !important;
+}
+.searchBox{
+    background: #f9f9f9 !important;
+    padding: 1rem;    
+    border-bottom: 1px solid #e3e3e3;
+}
+.contentBox{
+    padding: 1rem;
+}

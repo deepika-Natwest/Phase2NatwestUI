@@ -1,0 +1,98 @@
+[
+  {
+    "id": "c3c5c7f1-9f7c-4f02-a8c6-1f6b77b1c1a1",
+    "eventName": "Women's Day",
+    "date": "2026-03-26",
+    "tag": "star",
+    "location": "London",
+    "description": "A global celebration recognizing women's achievements and promoting gender equality.",
+    "status": "Upcoming",
+    "eventImage": "2a804762d8971e53e2cf2ef8a1ec471f",
+    "createdAt": "2026-03-12T10:08:33.037Z",
+    "updatedAt": "2026-03-16T04:01:08.525Z"
+  },
+  {
+    "id": "8e1d9f3a-cc91-4b5a-a7c3-9b2b41d2d2b2",
+    "eventName": "Tech Innovation Summit",
+    "date": "2026-04-15",
+    "tag": "technology",
+    "location": "Mumbai",
+    "description": "An event where industry leaders discuss emerging technologies and digital transformation.",
+    "status": "Upcoming",
+    "eventImage": "32f1cb66cba4cfb241a73dd79533e078",
+    "createdAt": "2026-03-10T09:15:21.010Z",
+    "updatedAt": "2026-03-16T04:01:20.876Z"
+  },
+  {
+    "id": "f4b32f90-1f5c-4b73-9e74-5f3c99a3c3c3",
+    "eventName": "Global Startup Meetup",
+    "date": "2026-05-02",
+    "tag": "startup",
+    "location": "Mumbai",
+    "description": "Entrepreneurs and investors gather to share ideas, pitch startups, and network.",
+    "status": "Upcoming",
+    "eventImage": "67d8905211c3d392204582ab8af4a735",
+    "createdAt": "2026-03-08T14:20:11.210Z",
+    "updatedAt": "2026-03-16T04:01:29.690Z"
+  },
+  {
+    "id": "2a9f1e21-6b7e-4f87-8e4c-1c2d55d4d4d4",
+    "eventName": "AI & Future Conference",
+    "date": "2026-06-10",
+    "tag": "ai",
+    "location": "Tokyo",
+    "description": "A conference focusing on artificial intelligence advancements and future applications.",
+    "status": "Upcoming",
+    "eventImage": "0454d51e96b8a3432522afd6cf66013b",
+    "createdAt": "2026-03-07T08:30:55.412Z",
+    "updatedAt": "2026-03-16T04:01:36.248Z"
+  },
+  {
+    "id": "7b3d5f44-9c92-4d1a-a0d2-7e1e66e5e5e5",
+    "eventName": "Healthcare Innovation Forum",
+    "date": "2026-04-28",
+    "tag": "health",
+    "location": "London",
+    "description": "Medical experts and innovators discussing advancements in healthcare technology.",
+    "status": "Upcoming",
+    "eventImage": "6e11dc88adc57c414a5d0c4d2c68202b",
+    "createdAt": "2026-03-05T13:11:09.500Z",
+    "updatedAt": "2026-03-16T04:01:49.555Z"
+  },
+  {
+    "id": "a1c6f8a2-3c3d-4e6e-92b1-2f9a77f6f6f6",
+    "eventName": "Marketing Leaders Summit",
+    "date": "2026-05-18",
+    "tag": "marketing",
+    "location": "New York",
+    "description": "A gathering of global marketing leaders to discuss strategies and trends.",
+    "status": "Upcoming",
+    "eventImage": "cc4a37ab692e91928eba9efb53342229",
+    "createdAt": "2026-03-06T11:44:21.201Z",
+    "updatedAt": "2026-03-16T04:02:13.229Z"
+  },
+  {
+    "id": "d2b7e0f5-5e9b-4a8d-91c7-3b0b88a7a7a7",
+    "eventName": "Global Education Expo",
+    "date": "2026-07-05",
+    "tag": "education",
+    "location": "London",
+    "description": "Universities and institutions showcase global education opportunities.",
+    "status": "Upcoming",
+    "eventImage": "1ed1710bdd24d9910b5cc3074f73a27f",
+    "createdAt": "2026-03-04T07:25:44.110Z",
+    "updatedAt": "2026-03-16T04:02:18.662Z"
+  },
+  {
+    "id": "e5a8f2b7-0b44-4c6e-8c33-4c1c99b8b8b8",
+    "eventName": "Sustainability & Climate Forum",
+    "date": "2026-06-22",
+    "tag": "climate",
+    "location": "New York",
+    "description": "Experts and policymakers discuss sustainable solutions for climate change.",
+    "status": "Upcoming",
+    "eventImage": "734fdfbe99d4646eee8f5ac438a93604",
+    "createdAt": "2026-03-03T12:02:30.000Z",
+    "updatedAt": "2026-03-16T04:02:32.273Z"
+  }
+]

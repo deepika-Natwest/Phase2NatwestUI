@@ -1,0 +1,423 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap');
+
+h1, h2, h3, h4, h5, h6{
+    font-family: "Lexend Deca", sans-serif !important;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  color: #252A4E !important;
+}
+
+.w100{
+  width: 100%;
+}
+
+/* Main Top Heading Row */
+.recog-detailed-heading {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  background: #eef0ff;
+}
+.recog-main-side-line {
+  width: 72px;
+  height: 72px;
+  background: #eef0ff;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.trophy-emoji {
+  font-size: 2.8rem;
+  filter: drop-shadow(0 3px 10px rgba(220,170,60,0.15));
+  animation: trophy-wobble 2.5s infinite linear;
+}
+@keyframes trophy-wobble {
+  0%, 100% { transform: rotate(-7deg);}
+  25% { transform: rotate(4deg);}
+  50% { transform: rotate(-3deg);}
+  75% { transform: rotate(7deg);}
+}
+.recog-main-title {
+  font-size: 2.7rem;
+  font-weight: 900;
+  color: #25185c;
+  letter-spacing: 2px;
+}
+.recog-main-underline {
+  border: none;
+  height: 6px;
+  background: #563fff;
+  border-radius: 7px;
+  margin: 0 0 36px 0;
+  width: 470px;
+}
+
+.recog-card {
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 7px 38px rgba(70, 60, 120, 0.14);
+  padding: 26px 26px 20px 22px;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  min-width: 0;
+  transition: box-shadow 0.19s, transform 0.13s;
+  animation: recog-popin 0.6s cubic-bezier(0.2,1.13,0.3,1.06);
+  position: relative;
+}
+.recog-card:hover {
+  box-shadow: 0 16px 48px rgba(80,50,190,0.19);
+  transform: translateY(-4px) scale(1.032);
+}
+@keyframes recog-popin {
+  0% { opacity: 0; transform: scale(0.93) translateY(30px);}
+  100% { opacity: 1; transform: scale(1) translateY(0);}
+}
+.recog-img-wrap img {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f7f8fd;
+  box-shadow: 0 2px 9px rgba(60, 55, 140, 0.17);
+  animation: recog-img-bounce 1.7s cubic-bezier(.47,1.64,.41,.83);
+}
+@keyframes recog-img-bounce {
+  0% { transform: scale(0.82);}
+  40% { transform: scale(1.08);}
+  70% { transform: scale(0.95);}
+  100% { transform: scale(1);}
+}
+.recog-card-content {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.recog-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+.recog-card-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2d2365;
+}
+
+/* ===== Badge Styles & Animations ===== */
+.recog-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 8px 28px 8px 16px;
+  border-radius: 19px;
+  margin-left: -9px;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 13px rgba(80,60,120,0.10);
+  position: relative;
+  animation: badge-pop 1.6s cubic-bezier(.5,1.7,.7,.92) both;
+  border: none;
+  min-width: 182px;
+  min-height: 42px;
+}
+@keyframes badge-pop {
+  0% { opacity: 0; transform: scale(0.6);}
+  70% { opacity: 1; transform: scale(1.13);}
+  100% { opacity: 1; transform: scale(1);}
+}
+.recog-badge-icon {
+  font-size: 1.55rem;
+  margin-right: 5px;
+  display: inline-block;
+  animation: badge-emoji-bounce 2s infinite;
+}
+@keyframes badge-emoji-bounce {
+  0%,100% { transform: translateY(0);}
+  40% { transform: translateY(-7px) scale(1.14);}
+}
+.recog-badge.star-performer {
+  background: linear-gradient(90deg, #fff8cb 20%, #ffe791 80%);
+  color: #b2901b;
+  border: 2.2px solid #f8da60;
+  box-shadow: 0 2px 12px #ffeb97a0;
+  animation-delay: .1s;
+}
+.recog-badge.employee-of-the-month {
+  background: linear-gradient(90deg, #f6eeff 12%, #ebe8ff 80%);
+  color: #5133b0;
+  border: 2.2px solid #e1d3ff;
+  box-shadow: 0 2px 12px #c0b6f6a0;
+  animation-delay: .23s;
+}
+.recog-badge.client-recognized {
+  background: linear-gradient(90deg, #e5fcfa 10%, #d1faf0 80%);
+  color: #158062;
+  border: 2.2px solid #91f5d4;
+  box-shadow: 0 2px 12px #8bffe2a0;
+  animation-delay: .33s;
+}
+
+/* ===== Card Content ===== */
+.recog-card-title {
+  font-size: 1.09rem;
+  color: #45347b;
+  font-weight: 700;
+  margin-bottom: 2px;
+  margin-top: 2px;
+}
+.recog-card-message {
+  font-size: 0.98rem;
+  color: #484475;
+  margin-bottom: 2px;
+}
+.recog-card-dept {
+  font-size: 0.94rem;
+  color: #837ab8;
+  margin-top: 2px;
+  letter-spacing: 0.04em;
+}
+
+.eventCard{
+  position: relative;
+}
+/* Common badge styling */
+.eventStatus {
+  position: absolute;
+  right: 10px;
+  top: 30px;
+  z-index: 99;
+  padding: 6px 12px;
+  border-radius: 20px;      /* Rounded pill shape */
+  font-weight: bold;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Hover effect (optional) */
+.eventStatus:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Status colors */
+.status-upcoming { background: linear-gradient(135deg, #3498db, #2980b9); }
+.status-active   { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+.status-completed { background: linear-gradient(135deg, #95a5a6, #7f8c8d); }
+.status-cancelled { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.status-postponed { background: linear-gradient(135deg, #f39c12, #d35400); }
+
+
+/* BASE CARD */
+.eventCard {
+  position: relative;
+  background: #fff;
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  overflow: hidden;
+  z-index: 1;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* 🌈 ANIMATED BORDER */
+.eventCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 1.5rem;
+  padding: 2px;
+
+  background-size: 300% 300%;
+  animation: eventBorderMove 6s linear infinite;
+
+  /* border mask trick */
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+/* 🌈 ANIMATED BORDER */
+.eventCard:hover::before{
+  background: linear-gradient(
+    270deg,
+    #ff6a00,
+    #ee0979,
+    #00c6ff,
+    #ff6a00
+  );
+}
+/* ✨ INNER CLEAN BACKGROUND */
+.eventCard::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: #fff;
+  border-radius: 1.4rem;
+  z-index: -1;
+}
+
+/* 🚀 HOVER EFFECT */
+.eventCard:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+/* 💡 GLOW ON HOVER */
+.eventCard:hover::before {
+  filter: blur(6px);
+}
+
+/* ✨ SHIMMER LIGHT SWEEP */
+.eventCard .eventContent::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.6),
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: eventShimmer 5s infinite;
+}
+
+/* KEYFRAMES */
+@keyframes eventBorderMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+@keyframes eventShimmer {
+  0% { left: -120%; }
+  50% { left: 120%; }
+  100% { left: 120%; }
+}
+
+.leadershipCard{
+  position: relative;
+}
+
+/* BASE */
+.leadershipCard {
+  position: relative;
+  background: #fff;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  z-index: 1;
+}
+
+
+/* ✨ SOFT AURA GLOW (continuous animation) */
+.leadershipCard::before {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  top: -25%;
+  left: -25%;
+  background: radial-gradient(
+    circle,
+    rgba(108, 99, 255, 0.15),
+    rgba(0, 198, 255, 0.1),
+    transparent 70%
+  );
+  opacity: 0.6;
+  z-index: -1;
+  animation: auraMove 8s ease-in-out infinite;
+}
+
+/* CONTENT */
+.leadContent {
+  margin-top: 1rem;
+  transition: transform 0.4s ease;
+}
+
+/* 🚀 HOVER EFFECT */
+.leadershipCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+}
+
+/* IMAGE ZOOM */
+.leadershipCard:hover img {
+  transform: scale(1.05);
+}
+
+/* CONTENT SLIGHT MOVE */
+.leadershipCard:hover .leadContent {
+  transform: translateY(-3px);
+}
+
+/* 💡 SOFT BORDER GLOW ON HOVER */
+.leadershipCard:hover {
+  outline: 2px solid rgba(108, 99, 255, 0.2);
+}
+
+/* KEYFRAME */
+@keyframes auraMove {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+.leadershipCard .card-img-top{
+  border-radius: 50%;
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  color: var(--secondary-color);
+  border-bottom: 3px solid var(--primary-color);
+  padding-bottom: 8px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-bottom: 3px solid #5e2ced;
+}
+
+.leadershipCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
+  border-color: #5e2ced;
+}
+.leadershipCard .card-subtitle{
+   color: #5e2ced !important;
+}
