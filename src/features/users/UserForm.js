@@ -165,11 +165,11 @@ const UserForm = ({ user, onClose }) => {
                 <div className="mb-3 col">
                   <label>Gender</label>
                   <select
-                  name="location"
+                  name="gender"
                   className="form-control"
                   value={form.gender}
                   onChange={handleChange}
-                  required
+                  
                 >
                   <option value="">Select Gender</option>
                   {GENDER_OPTIONS.map((loc) => (
@@ -185,7 +185,7 @@ const UserForm = ({ user, onClose }) => {
                   className="form-control"
                   value={form.location}
                   onChange={handleChange}
-                  required
+                  
                 >
                   <option value="">Select Location</option>
                   {LOCATION_OPTIONS.map((loc) => (
