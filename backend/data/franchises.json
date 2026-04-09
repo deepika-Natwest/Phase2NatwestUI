@@ -13,5 +13,20 @@
     "id": "9f331d19-6ac4-4e6c-8a99-3e575ba2efdf",
     "name": "C&I",
     "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92"
+  },
+  {
+    "id": "2f73f624-07e7-451c-95a1-61d46079d1e9",
+    "name": "Wealth",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92"
+  },
+  {
+    "id": "f9eec64c-53ae-401d-8831-1eeab0421c7a",
+    "name": "D&A",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92"
+  },
+  {
+    "id": "cbbb54c3-3538-4859-8074-d87802dd1650",
+    "name": "Functions",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92"
   }
 ]
