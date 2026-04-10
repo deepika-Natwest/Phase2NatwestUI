@@ -28,7 +28,7 @@ return (
       {/* Welcome Section */}
       <section className='homeBanner d-flex align-items-center'>
             <div className='container'>
-              <div className='row'>
+              <div className='row alignCenter'>
                   <div className='col-8  textContent'>
                     <h4 className="subtitle">Welcome to NatWest</h4>
                     <h3 className="title gradientText">  NatWest, or National Westminster Bank, is one of the largest banks in the United Kingdom and is part of the NatWest Group, which also includes other financial institutions like Ulster Bank and Coutts. Established in 1968 through the merger of National Provincial Bank and Westminster Bank, NatWest has a long history of serving individuals, businesses, and corporations with a wide range of financial services.</h3>
@@ -37,7 +37,7 @@ return (
                         <span className="authorRole">Accenture Leadership </span> 
                         </div>
                   </div>
-                  <div className='col-4 position-relative imageWrapper'>  <img class="leadPic" src={leadImg} alt="insurance" /></div>
+                  <div className='col-4  imageWrapper'>  <img class="leadPic" src={leadImg} alt="insurance" /></div>
               </div>
             </div>
       </section>

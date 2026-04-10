@@ -1,25 +1,22 @@
 const fs = require("fs");
 const path = require("path");
 const leadershipRepo = require("../repositories/leadershipRepository");
-const { LOCATIONS } = require("../config/userConfig");
+//const { LOCATION_OPTIONS } = require("../config/userConfig");
 
 exports.getAllLeadership = (req, res) => {
   res.json(leadershipRepo.getAll());
 };
 
 exports.createLeadership = (req, res) => {
-  const { name, designation, location, shortDescription } = req.body;
+  const { name, managementLevel, designation, location, shortDescription } = req.body;
 
-  if (!name || !designation || !location) {
+  if (!name || !designation ) {
     return res.status(400).json({ message: "Required fields missing" });
-  }
-
-  if (!LOCATIONS.includes(location)) {
-    return res.status(400).json({ message: "Invalid location" });
   }
 
   const newItem = leadershipRepo.create({
     name: name.trim(),
+    managementLevel: managementLevel.trim(),
     designation: designation.trim(),
     location,
     shortDescription: shortDescription?.trim() || "",
@@ -30,7 +27,7 @@ exports.createLeadership = (req, res) => {
 };
 
 exports.updateLeadership = (req, res) => {
-  const { name, designation, location, shortDescription } = req.body;
+  const { name,managementLevel, designation, location, shortDescription } = req.body;
 
   const leadershipList = leadershipRepo.getAll();
   const existing = leadershipList.find(l => l.id === req.params.id);
@@ -54,6 +51,7 @@ exports.updateLeadership = (req, res) => {
 
   const updated = leadershipRepo.update(req.params.id, {
     name: name?.trim(),
+    managementLevel: managementLevel.trim(),
     designation: designation?.trim(),
     location,
     shortDescription: shortDescription?.trim(),

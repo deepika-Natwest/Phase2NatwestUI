@@ -1,10 +1,14 @@
 .homeBanner{
   background: url(../img/bgHome.png);
-  height: 70vh;
+  height: 85vh;
   background-size: 100%;
+  position: relative;
 }
 .purpleText{
     color: #9255CE !important;
+}
+.alignCenter{
+  align-items: center!important;
 }
 .homeBanner h4{
   position: relative;
@@ -47,8 +51,11 @@
   color: #9255CE;
 }
 .leadPic{
-      position: absolute;
-    bottom: -80px;
+  max-width: 100%;
+  height: auto;
+  
+  position: absolute !important;
+  bottom: 0;
 }
 
 .serviceBox{
@@ -420,7 +427,7 @@
 .imageWrapper {
   animation: fadeSlideRight 1.2s ease forwards;
   opacity: 0;
-  position: relative;
+  height: 85vh;
 }
 
 /* GRADIENT TEXT */
@@ -465,12 +472,6 @@
 
 .authorBox:hover {
   transform: translateX(8px);
-}
-
-/* IMAGE */
-.leadPic {
-  position: relative;
-  z-index: 2;
 }
 
 

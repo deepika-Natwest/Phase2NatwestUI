@@ -36,34 +36,34 @@
     "id": "201d4e9f-8a71-4c94-9d43-44de55fa66bc",
     "managementLevel": "Senior Delivery Managers",
     "name": "Suman Dahiya",
-    "designation": "D&A Senior Delivery Lead",
+    "designation": "D&A Sr. Delivery Manager",
     "location": "Gurugram",
     "shortDescription": "Oversees large-scale client delivery programs and ensures successful execution.",
     "profilePic": "0db92fdda0a987a63aeb51dc23ebdc6b",
     "createdAt": "2026-03-13T07:33:52.330Z",
-    "updatedAt": "2026-04-09T11:35:00.950Z"
+    "updatedAt": "2026-04-09T12:28:20.296Z"
   },
   {
     "id": "202e3f8a-9b82-4da5-ae54-55ef66ab77cd",
     "managementLevel": "Senior Delivery Managers",
     "name": "Sukhwant Singh",
-    "designation": "Enterprise Engg . Senior Delivery Manager",
+    "designation": "Enterprise Engg . Sr. Delivery Manager",
     "location": "Gurugram",
     "shortDescription": "Manages enterprise delivery programs and ensures high-quality project outcomes.",
     "profilePic": "ae7d3f2f6aa53a2dd77f003782bbc0e0",
     "createdAt": "2026-03-13T07:36:20.900Z",
-    "updatedAt": "2026-04-09T11:37:06.250Z"
+    "updatedAt": "2026-04-10T04:33:32.698Z"
   },
   {
     "id": "203f4a9b-ac93-4eb6-bf65-66fa77bc88de",
     "managementLevel": "Senior Delivery Managers",
     "name": "Teena Kashyap",
-    "designation": "RS - FRAL, Treasury, Market, Sr. Delivery Manager",
+    "designation": "FS - FRAL, Treasury, Market, Sr. Delivery Manager",
     "location": "Gurugram",
     "shortDescription": "Leads cross-functional delivery teams for global enterprise clients.",
     "profilePic": "b2e32eafb3aaa102f69b9aa8eb27e3bd",
     "createdAt": "2026-03-13T07:38:12.220Z",
-    "updatedAt": "2026-04-09T11:41:08.971Z"
+    "updatedAt": "2026-04-09T12:20:47.003Z"
   },
   {
     "id": "204a5b0c-bda4-4fc7-c076-77ab88cd99ef",
@@ -121,14 +121,13 @@
     "updatedAt": "2026-04-09T11:46:00.323Z"
   },
   {
-    "id": "304f0a51-0cf9-42bc-15cb-c2fa33bc44de",
-    "managementLevel": "Sales Executive Managers",
+    "id": "f6b112dd-c678-4c42-8c78-4bc3b706fe51",
     "name": "Sharon Lewis",
-    "designation": "Delivery Lead Executive",
+    "managementLevel": "Leadership Team",
+    "designation": "Delivery Lead Architect",
     "location": "Bangalore",
-    "shortDescription": "Leads business development initiatives and manages large client portfolios.",
-    "profilePic": "1261b4b38cfd3cd0dccc2f052e9b1ce3",
-    "createdAt": "2026-03-13T07:50:33.200Z",
-    "updatedAt": "2026-04-09T11:47:05.696Z"
+    "shortDescription": "Delivery Lead Architect",
+    "profilePic": null,
+    "createdAt": "2026-04-10T04:34:12.482Z"
   }
 ]
