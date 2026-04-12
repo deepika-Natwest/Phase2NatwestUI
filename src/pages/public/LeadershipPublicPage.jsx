@@ -84,7 +84,7 @@ function LeadershipPublicPage() {
                             <div className="col-3">
                               {leader.profilePic && (
                             <img
-                              src={`/uploads/leadership/${leader.profilePic}`}
+                              src={`/uploads/${leader.profilePic}`}
                               className="card-img-top"
                               alt={leader.name}
 

@@ -119,9 +119,9 @@ return (
         <div className='col-4'>
             <div className='accBox'>
                 <div className='accIcon'> <img src={accIocn1} alt="accIocn" /></div>
-                <div className='accHeading'>Total Members</div>
-                <div className='accDes'>Every pleasure is to be welcomed and every pain avoided.</div>
-                <div className='accStats'>{totalMembers}</div>
+                <div className='accHeading'>AI Driver</div>
+                <div className='accDes'>10+ AI powered projects Delivered/POC</div>
+              
             </div>
         </div>
         <div className='col-4'>
@@ -151,8 +151,8 @@ return (
           <div className='row'>
              <div className='col-4'>
                <div className="stat-box">
-              <strong>102+</strong>
-              <p>Clients</p>
+              <strong>550+</strong>
+              <p>Members</p>
             </div>
              </div >
             <div className='col-4'>
