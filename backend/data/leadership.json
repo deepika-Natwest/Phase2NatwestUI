@@ -58,12 +58,12 @@
     "id": "203f4a9b-ac93-4eb6-bf65-66fa77bc88de",
     "managementLevel": "Senior Delivery Managers",
     "name": "Teena Kashyap",
-    "designation": "FS - FRAL, Treasury, Market, Sr. Delivery Manager",
+    "designation": "Treasury & Market, Sr. Delivery Manager",
     "location": "Gurugram",
     "shortDescription": "Leads cross-functional delivery teams for global enterprise clients.",
-    "profilePic": "b2e32eafb3aaa102f69b9aa8eb27e3bd",
+    "profilePic": "leadership/b2e32eafb3aaa102f69b9aa8eb27e3bd",
     "createdAt": "2026-03-13T07:38:12.220Z",
-    "updatedAt": "2026-04-09T12:20:47.003Z"
+    "updatedAt": "2026-05-24T11:17:57.728Z"
   },
   {
     "id": "204a5b0c-bda4-4fc7-c076-77ab88cd99ef",
@@ -130,5 +130,16 @@
     "profilePic": "leadership/b5b1e103ed5b5c6fb9ec0bf53c2f5f10",
     "createdAt": "2026-04-10T04:34:12.482Z",
     "updatedAt": "2026-04-10T11:14:41.712Z"
+  },
+  {
+    "id": "4631222d-dfd7-4381-8c59-e57aba7fb40f",
+    "name": "Amita Sharma",
+    "managementLevel": "Senior Delivery Managers",
+    "designation": "FRAL Sr. Delivery Manager",
+    "location": "Gurugram",
+    "shortDescription": "",
+    "profilePic": "leadership/71131d5e67ad4747283f444e6dab87aa",
+    "createdAt": "2026-05-24T11:18:49.815Z",
+    "updatedAt": "2026-05-24T11:29:57.031Z"
   }
 ]
