@@ -12,6 +12,7 @@ import LeadershipPublicPage from "../pages/public/LeadershipPublicPage";
 import TeamsPage from "../pages/public/TeamsPage";
 import DeliverablePublicPage from "../pages/public/DeliverablePublicPage";
 import DeliverableAIPublicPage from "../pages/public/AIPublicPage";
+import TeamsPublicTablePage from "../pages/public/TeamsPublicTablePage";
 
 // Admin pages
 import LoginPage from "../pages/admin/LoginPage";
@@ -31,16 +32,34 @@ function AppRouter() {
   return (
     <BrowserRouter>
       {/* Only show frontend Header/Footer for public routes */}
-      <Routes>
-        {/* Public frontend routes */}
-        <Route path="/" element={<><Header /><Home /><Footer /></>} />
-        <Route path="/leadership" element={<><Header /><Leadership /><Footer /></>} />
-        <Route path="/recognitions" element={<RecognitionPublicPage />} />
-        <Route path="/events" element={<EventPublicPage />} />
-        <Route path="/leaderships" element={<LeadershipPublicPage />} />
-        <Route path="/teams" element={<TeamsPage />} />
-        <Route path="/deliverables" element={<DeliverablePublicPage />} />
-        <Route path="/deliverables/ai" element={<DeliverableAIPublicPage />} />
+     <Routes>
+  {/* Public frontend routes */}
+  <Route
+    path="/"
+    element={<><Header /><Home /><Footer /></>}
+  />
+
+  <Route
+    path="/leadership"
+    element={<><Header /><Leadership /><Footer /></>}
+  />
+
+  <Route path="/recognitions" element={<RecognitionPublicPage />} />
+  <Route path="/events" element={<EventPublicPage />} />
+  <Route path="/leaderships" element={<LeadershipPublicPage />} />
+
+  {/* ✅ Existing Teams cards page */}
+  <Route path="/teams" element={<TeamsPage />} />
+
+  {/* ✅ ADD THIS: Teams table page */}
+  <Route
+    path="/teams/table"
+    element={<TeamsPublicTablePage />}
+  />
+
+  <Route path="/deliverables" element={<DeliverablePublicPage />} />
+  <Route path="/deliverables/ai" element={<DeliverableAIPublicPage />} />
+
 
         {/* Admin routes */}
         <Route path="/admin/login" element={<LoginPage />} />

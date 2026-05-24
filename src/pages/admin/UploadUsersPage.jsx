@@ -3,13 +3,61 @@ import Layout from "../../components/admin/Layout";
 import UploadUsersSection from "../../features/users/UploadUsersSection";
 
 export default function UploadUsersPage() {
-    return (
+  return (
     <Layout>
       <div className="d-flex justify-content-between align-items-center titleBox">
         <h2>Upload User Data</h2>
       </div>
+
       <div className="adminContent p-4">
-      <UploadUsersSection />
+        <UploadUsersSection />
+
+        {/* ✅ Excel Layout Section */}
+        <div className="mt-5">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h4>Excel Upload Format</h4>
+
+            {/* ✅ Download Button */}
+            <a
+              href="/User_Upload_Template.xlsx"
+              download
+              className="btn btn-primary"
+            >
+              Download Template
+            </a>
+          </div>
+
+          <p>Please follow the below format while uploading:</p>
+
+          <div className="table-responsive">
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Enterprise ID</th>
+                  <th>Level</th>
+                  <th>Work Location</th>
+                  <th>Project/Program</th>
+                  <th>NWG Line Manager</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>John Doe</td>
+                  <td>EMP001</td>
+                  <td>L2</td>
+                  <td>Gurugram</td>
+                  <td>Project A</td>
+                  <td>Manager 1</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p className="text-muted">
+            * Do not change column names. Fill data exactly as shown.
+          </p>
+        </div>
       </div>
     </Layout>
   );

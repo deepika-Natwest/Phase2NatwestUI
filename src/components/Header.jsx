@@ -1,6 +1,6 @@
 // src/components/Header.jsx
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { getImageUrl } from "../services/imageHelper";
 import "../assets/styles/custom.css";
 
@@ -9,18 +9,21 @@ function Header() {
   const username = localStorage.getItem("username");
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    localStorage.removeItem("role");
-    navigate("/"); // redirect to home
+    localStorage.clear();
+    navigate("/");
   };
+
+  const navClass = ({ isActive }) =>
+    isActive ? "nav-link active" : "nav-link";
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light headerBox">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">
+
+        <NavLink className="navbar-brand" to="/" end>
           <img src={getImageUrl("siteLogo.png")} alt="Natwest" />
-        </Link>
+        </NavLink>
+
         <button
           className="navbar-toggler"
           type="button"
@@ -29,48 +32,69 @@ function Header() {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
+
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto">
+
             <li className="nav-item">
-              <Link className="nav-link" to="/">
-                  Home 
-              </Link>
+              <NavLink to="/" className={navClass} end>
+                Home
+              </NavLink>
             </li>
+
             <li className="nav-item">
-              <Link className="nav-link" to="/deliverables">
-                  Deliverables 
-              </Link>
+              <NavLink to="/deliverables" className={navClass} end>
+                Deliverables
+              </NavLink>
             </li>
+
             <li className="nav-item">
-              <Link className="nav-link" to="/deliverables/ai">
-                  AI 
-              </Link>
+              <NavLink to="/deliverables/ai" className={navClass}>
+                AI
+              </NavLink>
             </li>
+
+            {/* This tab is to display team members in card format */}
+            {/*
+<li className="nav-item">
+  <NavLink to="/teams" className={navClass} end>
+    Teams
+  </NavLink>
+</li>
+*/}
             <li className="nav-item">
-              <Link className="nav-link" to="/teams">
-                  Teams
-              </Link>
+              <NavLink to="/teams/table" className={navClass}>
+                Teams 
+              </NavLink>
             </li>
+
             <li className="nav-item">
-              <Link className="nav-link" to="/leaderships">
+              <NavLink to="/leaderships" className={navClass}>
                 Leadership
-              </Link>
+              </NavLink>
             </li>
+
             <li className="nav-item">
-              <Link className="nav-link" to="/events">
+              <NavLink to="/events" className={navClass}>
                 Events
-              </Link>
+              </NavLink>
             </li>
+
             <li className="nav-item">
-              <Link className="nav-link" to="/recognitions">
+              <NavLink to="/recognitions" className={navClass}>
                 Recognitions
-              </Link>
+              </NavLink>
             </li>
+
           </ul>
+
           {username && (
             <span className="navbar-text">
-              {username}{" "}
-              <button className="btn btn-sm btn-outline-secondary ms-2" onClick={handleLogout}>
+              {username}
+              <button
+                className="btn btn-sm btn-outline-secondary ms-2"
+                onClick={handleLogout}
+              >
                 Logout
               </button>
             </span>

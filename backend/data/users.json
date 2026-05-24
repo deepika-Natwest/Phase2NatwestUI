@@ -1007,13 +1007,13 @@
     "location": "Chennai",
     "careerLevel": "Level 9",
     "lineManager": "Akram Shaik",
-    "projectName": "Natwest",
+    "projectName": "Transaction Filtering",
     "role": "viewer",
     "status": "Active",
     "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
     "franchiseId": "524ae53c-342e-4ea5-bfd3-1554cb836621",
     "profilePic": "eda7afe61999537c439b22fe4fd275f2",
-    "shortDescription": "",
+    "shortDescription": "Worked as infrastructure engineer in V6 program.",
     "createdAt": "2026-03-30T15:41:42.864Z"
   },
   {
@@ -1025,7 +1025,7 @@
     "location": "Kolkata",
     "careerLevel": "Level 8",
     "lineManager": "Angsuman Chaudhuri",
-    "projectName": "Natwest",
+    "projectName": "Pega",
     "role": "viewer",
     "status": "Active",
     "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
@@ -2275,5 +2275,22 @@
     "profilePic": "f71663fc0ce64d56ddc13b10d50589c132",
     "shortDescription": "",
     "createdAt": "2026-03-30T15:41:46.037Z"
+  },
+  {
+    "id": "0e273112-7d8a-4e3c-b95c-2311df1f31a5",
+    "name": "Aditi Singh Rajput",
+    "enterpriseId": "aditi.s.rajput",
+    "password": "$2b$10$Ox2seLrREkghEgvPbI4Zd.Qi1bXEfQp5.BodgHvmacV6l/t3JMeJe",
+    "gender": "Female",
+    "location": "Gurugram",
+    "careerLevel": "Level 12",
+    "lineManager": "Nirav",
+    "projectName": "NATWEST",
+    "role": "viewer",
+    "status": "Active",
+    "capabilityId": "d8018d81-f0a6-4863-bc7c-20996cd27eff",
+    "franchiseId": "5971e8e7-4469-49ab-80ad-21551314d230",
+    "profilePic": null,
+    "createdAt": "2026-05-02T08:49:01.421Z"
   }
 ]

@@ -1,82 +1,109 @@
-.homeBanner{
+.homeBanner {
   background: url(../img/bgHome.png);
-  height: 85vh;
+
+  min-height: 85vh;
+  height: auto;
+
   background-size: 100%;
   position: relative;
 }
-.purpleText{
-    color: #9255CE !important;
+
+.purpleText {
+  color: #9255CE !important;
 }
-.alignCenter{
-  align-items: center!important;
+
+.alignCenter {
+  align-items: center !important;
 }
-.homeBanner h4{
+
+.homeBanner h4 {
   position: relative;
-    display: inline-block;
-    font-size: 16px;
-    letter-spacing: 0.32px;
-    line-height: 26px;
-    text-transform: uppercase;
-    background: linear-gradient(90deg, #FFA835 -3.85%, #FA3DCC 97.3%, #FA3AD0 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    padding-left: 90px;
-    margin-bottom: 12px;
+  display: inline-block;
+  font-size: 16px;
+  letter-spacing: 0.32px;
+  line-height: 26px;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #FFA835 -3.85%, #FA3DCC 97.3%, #FA3AD0 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-left: 90px;
+  margin-bottom: 12px;
 }
-.homeBanner h4::after{
+
+.homeBanner h4::after {
   width: 80px;
   height: 1.5px;
-    content: "";
-    position: absolute;
-    top: 48%;
-    left: 0;
-    transform: translateY(-50%);
-    background: linear-gradient(90deg, #FFA835 -3.85%, #FA3DCC 97.3%, #FA3AD0 100%);
-    border-radius: 30px;
-    transition: 2000ms ease-in-out;
+  content: "";
+  position: absolute;
+  top: 48%;
+  left: 0;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, #FFA835 -3.85%, #FA3DCC 97.3%, #FA3AD0 100%);
+  border-radius: 30px;
+  transition: 2000ms ease-in-out;
 }
-.homeBanner h3{
-    font-size: 1.4rem;
-    line-height: 150%;
-    margin-bottom: 2rem;
+
+.homeBanner h3 {
+
+  font-size: clamp(1.1rem, 1.4vw, 1.6rem);
+  line-height: 1.6;
+  margin-bottom: 2rem;
 }
-.homeBanner .authorBox{
-      font-family: "Lexend Deca", sans-serif !important;
+
+.homeBanner .authorBox {
+  font-family: "Lexend Deca", sans-serif !important;
 }
-.homeBanner  .authorName{
+
+.homeBanner .authorName {
   font-size: 2.2rem;
   font-weight: 600;
   margin: 0;
   color: #9255CE;
 }
-.leadPic{
+
+.leadPic {
   max-width: 100%;
   height: auto;
-  
+
   position: absolute !important;
+
+  max-width: 100%;
+  height: auto;
+  transition: all 0.4s ease;
+
   bottom: 0;
 }
 
-.serviceBox{
+.title {
+  text-align: justify;
+  text-justify: inter-word;
+  line-height: 1.7;
+}
+
+
+.serviceBox {
   background: #F2F2F2;
   padding: 4rem 0 0rem 0;
 }
-.serviceBox h2{
+
+.serviceBox h2 {
   font-size: 2.8rem;
   font-weight: 700;
   letter-spacing: -1px;
 }
-.aboutImg{
+
+.aboutImg {
   background: url(../img/aboutImg2.png);
   background-repeat: no-repeat;
   background-size: 100%;
   padding: 2.5rem;
   padding-bottom: 0;
 }
-.aboutImg img{
-    width: 100%;
-    height: auto;
+
+.aboutImg img {
+  width: 100%;
+  height: auto;
 }
 
 
@@ -84,23 +111,62 @@
 /* YOUR EXISTING STYLE (enhanced) */
 .serviceItem {
   background: #fff;
+
+  padding: 0.6rem 0.6rem;
+  margin-bottom: 0.7rem;
   border-radius: 2rem;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+
+
   position: relative;
   overflow: hidden;
   z-index: 1;
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
+/* GROUP FOR LAST 3 VERTICAL ITEMS */
+.verticalGroup {
+  display: flex;
+  gap: 1.4rem;
+  /* slightly more space between cards */
+  padding-top: 1rem;
+  /* little breathing room from above */
+}
+
+/* EACH VERTICAL CARD */
+.serviceItem.vertical {
+  flex: 1;
+  text-align: center;
+
+  padding: 2rem 1rem;
+  /* inner spacing */
+  min-height: 260px;
+  /* makes them taller */
+}
+
+/* OPTIONAL: horizontal alignment */
+.serviceItem.horizontal {
+  display: flex;
+
+
+  gap: 20px;
+
+  align-items: center;
+
+  padding: 1.2rem 1.4rem;
+  /* increases overall height nicely */
+  min-height: 110px;
+  /* ensures consistent bar height */
+}
+
 /* TEXT */
-.serContent h4 {
-  font-weight: 800;
+.serContent h5 {
+  font-weight: 600;
+  padding: 0.2rem;
 }
 
 .serContent p {
   color: #575757;
-  font-size: 1.1rem;
+  font-size: 1 rem;
 }
 
 /* 🌈 ANIMATED BORDER */
@@ -109,20 +175,19 @@
   position: absolute;
   inset: 0;
   border-radius: 2rem;
-  padding: 2px; /* thickness of border */
-  background: linear-gradient(
-    270deg,
-    #6c63ff,
-    #00c6ff,
-    #00ffcc,
-    #6c63ff
-  );
+  padding: 2px;
+  /* thickness of border */
+  background: linear-gradient(270deg,
+      #6c63ff,
+      #00c6ff,
+      #00ffcc,
+      #6c63ff);
   background-size: 300% 300%;
   animation: borderAnimation 6s linear infinite;
 
   /* mask trick to show only border */
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -147,12 +212,10 @@
   left: -120%;
   width: 60%;
   height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255,255,255,0.6),
-    transparent
-  );
+  background: linear-gradient(120deg,
+      transparent,
+      rgba(255, 255, 255, 0.6),
+      transparent);
   transform: skewX(-20deg);
   animation: shimmerMove 5s infinite;
 }
@@ -161,27 +224,43 @@
 
 /* moving gradient border */
 @keyframes borderAnimation {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 300% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 300% 50%;
+  }
 }
 
 /* light sweep */
 @keyframes shimmerMove {
-  0% { left: -120%; }
-  50% { left: 120%; }
-  100% { left: 120%; }
+  0% {
+    left: -120%;
+  }
+
+  50% {
+    left: 120%;
+  }
+
+  100% {
+    left: 120%;
+  }
 }
-.serIcon{
+
+.serIcon {
   flex: 0 0 auto;
-    width: 78px;
-    height: 84px;
-    background: linear-gradient(90deg, #5A1CCB -2.17%, #815EDC 100%);
-    border-radius: 50px 6px 6px 6px;
-    text-align: center;
-    line-height: 103px;
-    color: #fff;
-    font-size: 40px;
+  width: 78px;
+  height: 84px;
+  background: linear-gradient(90deg, #5A1CCB -2.17%, #815EDC 100%);
+  border-radius: 50px 6px 6px 6px;
+  text-align: center;
+  line-height: 103px;
+  color: #fff;
+  font-size: 40px;
+  bottom: 0;
 }
+
 /* Welcome Section */
 .welcome-section {
   text-align: center;
@@ -189,15 +268,18 @@
   margin: auto;
   margin-bottom: 50px;
 }
+
 .welcome-section h1 {
   font-size: 32px;
   color: #2e2e2e;
 }
+
 .welcome-section p {
   font-size: 16px;
   margin: 15px 0;
   line-height: 1.6;
 }
+
 .welcome-section strong {
   font-size: 14px;
   color: #333;
@@ -221,17 +303,20 @@
 .fs-section {
   margin-top: 40px;
 }
+
 .fs-text-group {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 30px;
 }
+
 .fs-text-group h2 {
   font-size: 24px;
   flex: 1;
   color: #2c2c2c;
 }
+
 .fs-text-group p {
   flex: 1.5;
   background: #f9f9fb;
@@ -247,101 +332,113 @@
 .fs-stats {
   border: 2px solid #000;
   padding: 0 3rem;
-  
+
 }
-.stat-box{
-  margin: 3rem 2rem ;
+
+.stat-box {
+  margin: 3rem 2rem;
   border-right: 1px solid #000;
 }
+
 .stat-box strong {
   font-size: 65px;
-    line-height: 1;
-    font-weight: 800;
-    
+  line-height: 1;
+  font-weight: 800;
+
 }
 
 .stat-box p {
-    color: #141515;
-    text-transform: capitalize;
-    font-weight: 700;
-    line-height: 1;
-    margin-bottom: 0;
-    font-size: 24px;
+  color: #141515;
+  text-transform: capitalize;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0;
+  font-size: 24px;
 }
 
 
-.accOverview{
+.accOverview {
   padding: 4rem 0 0 0;
   text-align: center;
 }
-.team-heading{
+
+.team-heading {
   font-size: 48px;
-    font-weight: 800;
-    line-height: 1;
-    text-transform: capitalize;
-    color: #141515;
-    margin-bottom: 4rem;
-    text-align: center;
-}
-.accBox{
+  font-weight: 800;
+  line-height: 1;
+  text-transform: capitalize;
+  color: #141515;
+  margin-bottom: 4rem;
   text-align: center;
-    background: #1c1c2d;
-    border-radius: 250px 250px 0 0;
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-    padding-bottom: 2.5rem;
-    min-height: 395px;
 }
-.accBox::after{
-    content: "";
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(32deg, rgb(162, 73, 237) 20%, rgb(97, 49, 232) 100%);
-    z-index: -1;
-    border-radius: 190px 190px 0 0;
-    top: 430px;
-    opacity: 0;
-    transition: 400ms ease;
+
+.accBox {
+  text-align: center;
+  background: #1c1c2d;
+  border-radius: 250px 250px 0 0;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  padding-bottom: 2.5rem;
+  min-height: 395px;
 }
-.accBox:hover::after{
-    top: 0;
-    opacity: 1;
+
+.accBox::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(32deg, rgb(162, 73, 237) 20%, rgb(97, 49, 232) 100%);
+  z-index: -1;
+  border-radius: 190px 190px 0 0;
+  top: 430px;
+  opacity: 0;
+  transition: 400ms ease;
 }
-.accIcon{
-    width: 70px;
-    margin: auto;
-    margin-bottom: 25px;
-    padding-top: 50px;
-    padding-bottom: 25px;
-    border-bottom: 1px solid #46465c;
+
+.accBox:hover::after {
+  top: 0;
+  opacity: 1;
 }
-.accIcon img{
+
+.accIcon {
+  width: 70px;
+  margin: auto;
+  margin-bottom: 25px;
+  padding-top: 50px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #46465c;
+}
+
+.accIcon img {
   width: 100%;
   height: auto;
 }
-.accHeading{
-    font-size: 30px;
-    font-weight: 800;
-    color: #fff;
-    margin-bottom: 16px;
+
+.accHeading {
+  font-size: 30px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 16px;
 }
-.accDes{
-    color: #fff;
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 1.556;
-    margin-bottom: 0;
-    padding: 0 3rem;
+
+.accDes {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.556;
+  margin-bottom: 0;
+  padding: 0 3rem;
 }
-.accStats{
-    font-size: 40px;
-    color: #fff;
-    font-weight: 800;
-    text-transform: capitalize;
+
+.accStats {
+  font-size: 40px;
+  color: #fff;
+  font-weight: 800;
+  text-transform: capitalize;
 }
+
 /* Images Row */
 .fs-images {
   display: flex;
@@ -350,6 +447,7 @@
   margin-top: 50px;
   flex-wrap: wrap;
 }
+
 .fs-images img {
   width: 100%;
   max-width: 240px;
@@ -358,6 +456,7 @@
   border-radius: 10px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
+
 .leadership-wrapper {
 
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -366,43 +465,49 @@
   max-width: 1200px;
   margin: -40px auto;
 }
-.lead-name .details {
-    width: 404px;
-    height: 54px;
-    position: absolute;
-    top: 12px;
-    left: 320px;
-    color: white;
-    text-align: right;
-}
-.lead-name {
-    width: 1220px;
-    height: 79px;
-    top: -12px;
-    position: relative;
-    background: linear-gradient(90deg, rgba(217, 217, 217, 0) 0.86%, #460073 54.09%, #460073 100%);
-}
-.lead-name .name {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 2px;
-}
-.lead-name .title {
-    font-size: 14px;
-    font-weight: 400;
-}
-.profile-pic {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    top: -3px;
-    right: -95px;
-}
-.leadership-wrapper {
-    padding: 20px 16px;
-  }
 
-  .success-message {
+.lead-name .details {
+  width: 404px;
+  height: 54px;
+  position: absolute;
+  top: 12px;
+  left: 320px;
+  color: white;
+  text-align: right;
+}
+
+.lead-name {
+  width: 1220px;
+  height: 79px;
+  top: -12px;
+  position: relative;
+  background: linear-gradient(90deg, rgba(217, 217, 217, 0) 0.86%, #460073 54.09%, #460073 100%);
+}
+
+.lead-name .name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.lead-name .title {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.profile-pic {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  top: -3px;
+  right: -95px;
+}
+
+.leadership-wrapper {
+  padding: 20px 16px;
+}
+
+.success-message {
   max-width: 400px;
   margin: 12px auto 24px auto;
   padding: 16px 20px;
@@ -432,7 +537,7 @@
 
 /* GRADIENT TEXT */
 .gradientText {
-  font-size: 34px;
+  font-size: clamp(1.5rem, 2.6vw, 2.2rem);
   font-weight: 800;
   background: linear-gradient(90deg, #6c63ff, #00c6ff, #6c63ff);
   background-size: 200% auto;
@@ -481,6 +586,7 @@
     opacity: 0;
     transform: translateX(-80px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -492,6 +598,7 @@
     opacity: 0;
     transform: translateX(80px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -500,28 +607,190 @@
 
 /* Floating image */
 @keyframes floatImage {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-12px); }
-  100% { transform: translateY(0px); }
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 /* Gradient moving */
 @keyframes gradientMove {
-  0% { background-position: 0% center; }
-  100% { background-position: 200% center; }
+  0% {
+    background-position: 0% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
 }
 
 /* Glow pulse */
 @keyframes pulseGlow {
-  0% { transform: scale(1); opacity: 0.6; }
-  50% { transform: scale(1.1); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.6; }
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
 }
 
 /* Simple fade */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 
+/* ✅ 2x2 square layout */
+.squareTabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 15px;
+
+}
+
+/* ✅ Each box */
+.squareTab {
+
+  padding: 25px 10px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  background: #fff;
+  margin-bottom: 0.7rem;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* ✅ Hover effect */
+.squareTab:hover {
+  background: #e2d8ff;
+  transform: translateY(-3px);
+}
+
+/* ✅ Active tab */
+.squareTab.active {
+  background: #9255CE;
+  color: white;
+}
+
+/* ✅ Description box */
+.squareContent {
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 10px;
+  min-height: 80px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  max-width: 50%;
+}
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* ✅ 4 columns */
+  grid-template-rows: repeat(2, 1fr);    /* ✅ 2 rows */
+  gap: 16px;
+  width: 100%;
+}
+
+/* Each box */
+.servicesGrid div {
+  height: 110px;                /* ✅ fixed height (uniform boxes) */
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+/* ✅ Hover effect (optional but recommended) */
+.servicesGrid div:hover {
+  transform: translateY(-4px);
+  border-color: #e60028;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+.serviceItem.horizontal {
+  position: relative;
+}
+
+/* GRID */
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+
+  animation: fadeIn 0.4s ease;
+}
+
+/* DESC PANEL */
+.descBox {
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 20px;
+  min-height: 250px;
+  background: #fff;
+
+  animation: zoomIn 0.3s ease;
+}
+
+/* ✅ ANIMATIONS */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.serviceItem::before,
+.serviceItem::after {
+  pointer-events: none;  /* ✅ THIS FIXES CLICK */
+}

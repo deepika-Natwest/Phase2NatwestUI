@@ -38,7 +38,6 @@ function LeadershipPublicPage() {
       }
 
       acc[level].push(leader);
-
       return acc;
     }, {});
   };
@@ -48,19 +47,24 @@ function LeadershipPublicPage() {
   return (
     <>
       <Header />
-          <div className="recog-detailed-heading p-3 mb-5">
-      <div className="container">
-        <div className="row w100">
-            <div className="col-8  d-flex">
-                <span className="recog-main-side-line"><span className="trophy-emoji" role="img" aria-label="trophy">👑</span></span>
-                <span className="recog-main-title">OUR LEADERSHIP TEAM</span>
+
+      {/* Page Header */}
+      <div className="recog-detailed-heading p-3 mb-5">
+        <div className="container">
+          <div className="row w100">
+            <div className="col-8 d-flex">
+              <span className="recog-main-side-line">
+                <span role="img" aria-label="crown">👑</span>
+              </span>
+              <span className="recog-main-title">
+                Executive Team
+              </span>
             </div>
+          </div>
         </div>
+      </div>
 
-      </div>
-      </div>
       <div className="container my-5">
-
         {loading ? (
           <div className="text-center mt-5">Loading...</div>
         ) : leaders.length === 0 ? (
@@ -83,31 +87,26 @@ function LeadershipPublicPage() {
                           <div className="row">
                             <div className="col-3">
                               {leader.profilePic && (
-                            <img
-                              src={`/uploads/${leader.profilePic}`}
-                              className="card-img-top"
-                              alt={leader.name}
-
-                            />
-                          )}
+                                <img
+                                  src={`/uploads/${leader.profilePic}`}
+                                  className="card-img-top"
+                                  alt={leader.name}
+                                />
+                              )}
                             </div>
+
                             <div className="col-9">
-                               <div className="card-body">
-                            <h5 className="card-title">
-                              {leader.name}
-                            </h5>
+                              <div className="card-body">
+                                <h5 className="card-title">
+                                  {leader.name}
+                                </h5>
 
-                            <p className="card-subtitle text-muted mb-2">
-                              {leader.designation} | {leader.location}
-                            </p>
-
-                            {leader.shortDescription && (
-                              <p className="mt-2">
-                                {leader.shortDescription}
-                              </p>
-                            )}
-                          </div>
+                                <p className="card-subtitle text-muted mb-2">
+                                  {leader.designation} | {leader.location}
+                                </p>
+                              </div>
                             </div>
+
                           </div>
                         </div>
                       </div>

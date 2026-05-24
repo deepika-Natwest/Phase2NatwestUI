@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/admin/Layout";
-
 import {
   getDeliverables,
   createDeliverable,
   updateDeliverable,
   deleteDeliverable,
 } from "../../features/deliverables/deliverableService";
-
 import { getCapabilities } from "../../features/capabilities/capabilityService";
 import { getFranchises } from "../../features/franchises/franchiseService";
 import { getUsers } from "../../features/users/userService";
-
 import { getUserRole } from "../../utils/tokenUtils";
 import { hasAnyRole } from "../../utils/roleUtils";
 import { ROLES } from "../../constants/roles";
+
 
 const CATEGORY_OPTIONS = [
   "Cost Saving",
@@ -29,12 +27,11 @@ function DeliverablePage() {
   const [capabilities, setCapabilities] = useState([]);
   const [franchises, setFranchises] = useState([]);
   const [users, setUsers] = useState([]);
-
   const [modalOpen, setModalOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
 
   const [formData, setFormData] = useState({
-    deliveryTitle:"",
+    deliveryTitle: "",
     capabilityId: "",
     franchiseId: "",
     category: "",
@@ -42,6 +39,17 @@ function DeliverablePage() {
     projectName: "",
     description: "",
     resources: [],
+
+    // ✅ category-specific
+    costSavingAmount: "",
+    costSavingCurrency: "GPP",
+
+    improvementType: "",
+    timeHours: "",
+    timeMinutes: "",
+    percentage: "",
+
+    newFunctionality: "",
   });
 
   const loadData = async () => {
@@ -51,7 +59,6 @@ function DeliverablePage() {
       getFranchises(),
       getUsers(),
     ]);
-
     setDeliverables(d.data);
     setCapabilities(c.data);
     setFranchises(f.data);
@@ -64,10 +71,9 @@ function DeliverablePage() {
 
   const openModal = (item = null) => {
     setCurrentItem(item);
-
     setFormData(
       item || {
-        deliveryTitle:"",
+        deliveryTitle: "",
         capabilityId: "",
         franchiseId: "",
         category: "",
@@ -75,9 +81,17 @@ function DeliverablePage() {
         projectName: "",
         description: "",
         resources: [],
+        costSavingAmount: "",
+        costSavingCurrency: "GPP",
+
+        improvementType: "",
+        timeHours: "",
+        timeMinutes: "",
+        percentage: "",
+
+        newFunctionality: "",
       }
     );
-
     setModalOpen(true);
   };
 
@@ -89,6 +103,33 @@ function DeliverablePage() {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
+    if (name === "category") {
+      setFormData({
+        ...formData,
+        category: value,
+        improvementType: "",
+        costSavingAmount: "",
+        timeHours: "",
+        timeMinutes: "",
+        percentage: "",
+        newFunctionality: "",
+      });
+      return;
+    }
+
+    // ✅ reset when switching between Time / Percentage
+    if (name === "improvementType") {
+      setFormData({
+        ...formData,
+        improvementType: value,
+        timeHours: "",
+        timeMinutes: "",
+        percentage: "",
+      });
+      return;
+    }
+
+
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
@@ -99,19 +140,16 @@ function DeliverablePage() {
     const selected = Array.from(e.target.selectedOptions).map(
       (opt) => opt.value
     );
-
     setFormData({ ...formData, resources: selected });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (currentItem) {
       await updateDeliverable(currentItem.id, formData);
     } else {
       await createDeliverable(formData);
     }
-
     closeModal();
     loadData();
   };
@@ -131,7 +169,6 @@ function DeliverablePage() {
     <Layout>
       <div className="d-flex justify-content-between align-items-center titleBox">
         <h2>Deliverables Manager</h2>
-
         {hasAnyRole(role, [ROLES.ADMIN, ROLES.EDITOR]) && (
           <button className="btn btn-primary" onClick={() => openModal()}>
             Add Deliverable
@@ -150,7 +187,6 @@ function DeliverablePage() {
               <th width="150">Actions</th>
             </tr>
           </thead>
-
           <tbody>
             {deliverables.map((d) => (
               <tr key={d.id}>
@@ -158,7 +194,6 @@ function DeliverablePage() {
                 <td>{d.projectName}</td>
                 <td>{d.category}</td>
                 <td>{d.aiBased ? "Yes" : "No"}</td>
-
                 <td>
                   {hasAnyRole(role, [ROLES.ADMIN, ROLES.EDITOR]) && (
                     <button
@@ -168,7 +203,6 @@ function DeliverablePage() {
                       Edit
                     </button>
                   )}
-
                   {hasAnyRole(role, [ROLES.ADMIN]) && (
                     <button
                       className="btn btn-sm btn-danger"
@@ -193,18 +227,15 @@ function DeliverablePage() {
                   <h5 className="modal-title">
                     {currentItem ? "Edit Deliverable" : "Add Deliverable"}
                   </h5>
-
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={closeModal}
-                  />
+                  <button className="btn-close" onClick={closeModal} />
                 </div>
 
                 <div className="modal-body row">
+                  {/* ✅ ALL ORIGINAL FIELDS KEPT */}
+
                   <div className="col-md-12 mb-3">
                     <label>Title</label>
-                     <input
+                    <input
                       type="text"
                       name="deliveryTitle"
                       className="form-control"
@@ -242,7 +273,6 @@ function DeliverablePage() {
                       required
                     >
                       <option value="">Select</option>
-
                       {filteredFranchises.map((f) => (
                         <option key={f.id} value={f.id}>
                           {f.name}
@@ -261,7 +291,6 @@ function DeliverablePage() {
                       required
                     >
                       <option value="">Select</option>
-
                       {CATEGORY_OPTIONS.map((c) => (
                         <option key={c}>{c}</option>
                       ))}
@@ -277,12 +306,111 @@ function DeliverablePage() {
                         checked={formData.aiBased}
                         onChange={handleChange}
                       />
-
                       <label className="form-check-label">
                         AI Based Project
                       </label>
                     </div>
                   </div>
+
+                  {/* ✅ CONDITIONAL FIELDS */}
+
+                  {formData.category === "Cost Saving" && (
+                    <>
+                      <div className="col-md-6 mb-3">
+                        <label>Amount Saved : GPP </label>
+                        <input
+                          type="number"
+                          name="costSavingAmount"
+                          className="form-control"
+                          value={formData.costSavingAmount}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+
+                    </>
+                  )}
+
+                  {formData.category === "Process Improvement" && (
+                    <>
+                      {/* ✅ Type Selection */}
+                      <div className="col-md-6 mb-3">
+                        <label>Improvement Type</label>
+                        <select
+                          name="improvementType"
+                          className="form-control"
+                          value={formData.improvementType}
+                          onChange={handleChange}
+                          required
+                        >
+                          <option value="">Select</option>
+                          <option value="Time">Time Saved</option>
+                          <option value="Percentage">Percentage Improvement</option>
+                        </select>
+                      </div>
+
+                      {/* ✅ Time Inputs */}
+                      {formData.improvementType === "Time" && (
+                        <>
+                          <div className="col-md-6 mb-3">
+                            <label>Time Saved (Hours)</label>
+                            <input
+                              type="number"
+                              name="timeHours"
+                              className="form-control"
+                              value={formData.timeHours}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+
+                          <div className="col-md-6 mb-3">
+                            <label>Time Saved (Minutes)</label>
+                            <input
+                              type="number"
+                              name="timeMinutes"
+                              className="form-control"
+                              value={formData.timeMinutes}
+                              onChange={handleChange}
+                              min="0"
+                              max="59"
+                              required
+                            />
+                          </div>
+                        </>
+                      )}
+
+                      {/* ✅ Percentage Input */}
+                      {formData.improvementType === "Percentage" && (
+                        <div className="col-md-6 mb-3">
+                          <label>Improvement (%)</label>
+                          <input
+                            type="number"
+                            name="percentage"
+                            className="form-control"
+                            value={formData.percentage}
+                            onChange={handleChange}
+                            min="0"
+                            max="100"
+                            required
+                          />
+                        </div>
+                      )}
+                    </>
+                  )}
+                  {formData.category === "New Functionality" && (
+                    <div className="col-12 mb-3">
+                      <label>New Functionality</label>
+                      <textarea
+                        name="newFunctionality"
+                        className="form-control"
+                        rows="3"
+                        value={formData.newFunctionality}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  )}
 
                   <div className="col-md-6 mb-3">
                     <label>Project Name</label>
@@ -325,14 +453,9 @@ function DeliverablePage() {
                 </div>
 
                 <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={closeModal}
-                  >
+                  <button className="btn btn-secondary" onClick={closeModal}>
                     Cancel
                   </button>
-
                   <button type="submit" className="btn btn-success">
                     Save
                   </button>

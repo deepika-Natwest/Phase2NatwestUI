@@ -9,7 +9,7 @@ import {
 import { getUserRole } from "../../utils/tokenUtils";
 import { hasAnyRole } from "../../utils/roleUtils";
 import { ROLES } from "../../constants/roles";
-import { RECOGNITION_TYPES, GENDER_OPTIONS } from "../../utils/userConfig";
+import { GENDER_OPTIONS } from "../../utils/userConfig";
 
 function RecognitionPage() {
   const role = getUserRole();
@@ -26,6 +26,7 @@ function RecognitionPage() {
     recognitionType: "",
     recognitionTag: "",
     shortDescription: "",
+    recognitionDate: "",
   });
 
   const loadData = async () => {
@@ -47,6 +48,7 @@ function RecognitionPage() {
         recognitionType: "",
         recognitionTag: "",
         shortDescription: "",
+        recognitionDate: new Date().toISOString().split("T")[0],
       }
     );
     setPic(null);
@@ -66,7 +68,10 @@ function RecognitionPage() {
     e.preventDefault();
     const data = new FormData();
 
-    Object.keys(formData).forEach((key) => data.append(key, formData[key]));
+    Object.keys(formData).forEach((key) =>
+      data.append(key, formData[key])
+    );
+
     if (pic) data.append("pic", pic);
 
     if (currentRecog) {
@@ -105,6 +110,7 @@ function RecognitionPage() {
               <th>Designation</th>
               <th>Type</th>
               <th>Tag</th>
+              <th>Date</th>
               <th width="150">Actions</th>
             </tr>
           </thead>
@@ -115,6 +121,14 @@ function RecognitionPage() {
                 <td>{r.designation}</td>
                 <td>{r.recognitionType}</td>
                 <td>{r.recognitionTag}</td>
+                <td>
+                  {r.recognitionDate
+                    ? new Date(r.recognitionDate).toLocaleDateString(
+                        "en-IN",
+                        { day: "2-digit", month: "short", year: "numeric" }
+                      )
+                    : "-"}
+                </td>
                 <td>
                   {hasAnyRole(role, [ROLES.ADMIN, ROLES.EDITOR]) && (
                     <button
@@ -146,7 +160,9 @@ function RecognitionPage() {
               <form onSubmit={handleSubmit}>
                 <div className="modal-header">
                   <h5 className="modal-title">
-                    {currentRecog ? "Edit Recognition" : "Add Recognition"}
+                    {currentRecog
+                      ? "Edit Recognition"
+                      : "Add Recognition"}
                   </h5>
                   <button
                     type="button"
@@ -156,6 +172,7 @@ function RecognitionPage() {
                 </div>
 
                 <div className="modal-body row">
+
                   <div className="col-md-6 mb-3">
                     <label>Name</label>
                     <input
@@ -181,6 +198,19 @@ function RecognitionPage() {
                   </div>
 
                   <div className="col-md-6 mb-3">
+                    <label>Date</label>
+                    <input
+                      type="date"
+                      name="recognitionDate"
+                      className="form-control"
+                      value={formData.recognitionDate || ""}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  {/* ✅ FINAL DROPDOWN */}
+                  <div className="col-md-6 mb-3">
                     <label>Recognition Type</label>
                     <select
                       name="recognitionType"
@@ -190,9 +220,16 @@ function RecognitionPage() {
                       required
                     >
                       <option value="">Select</option>
-                      {RECOGNITION_TYPES.map((type) => (
-                        <option key={type}>{type}</option>
-                      ))}
+                      <option value="Townhall Recognition">
+                        Townhall Recognition
+                      </option>
+                      <option value="ACE Award">ACE Award</option>
+                      <option value="Employee of the Month">
+                        Employee of the Month
+                      </option>
+                      <option value="Client Recognized">
+                        Client Recognized
+                      </option>
                     </select>
                   </div>
 
@@ -212,7 +249,7 @@ function RecognitionPage() {
                     </select>
                   </div>
 
-                   <div className="col-md-6 mb-3">
+                  <div className="col-md-6 mb-3">
                     <label>Department</label>
                     <input
                       type="text"
@@ -242,6 +279,7 @@ function RecognitionPage() {
                       onChange={handleChange}
                     />
                   </div>
+
                 </div>
 
                 <div className="modal-footer">
@@ -256,6 +294,7 @@ function RecognitionPage() {
                     Save
                   </button>
                 </div>
+
               </form>
             </div>
           </div>

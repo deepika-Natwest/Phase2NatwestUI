@@ -1,27 +1,46 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import defaultImg from "../../assets/img/user-avatar.png";
-
 import { getPublicDeliverables } from "../../features/deliverables/publicDeliverableService";
+
+/* -----------------------------------------
+   Helper to show category-specific value
+------------------------------------------ */
+const getCategoryDisplayValue = (item) => {
+  if (item.category === "Cost Saving" && item.costSavingAmount) {
+    return `💰 ${item.costSavingCurrency || "₹"} ${item.costSavingAmount}`;
+  }
+
+  if (item.category === "Process Improvement") {
+    if (item.timeHours || item.timeMinutes) {
+      return `⏱ ${item.timeHours || 0}h ${item.timeMinutes || 0}m saved`;
+    }
+  }
+
+  if (item.category === "New Functionality" && item.newFunctionality) {
+    return `⚙️ ${item.newFunctionality}`;
+  }
+
+  return null;
+};
 
 function DeliverablePublicPage() {
   const [deliverables, setDeliverables] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+  const [category, setCategory] = useState("");
+  const [expandedId, setExpandedId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await getPublicDeliverables();
-
-        const filteredData = res.data.filter(
-        (d) => d.aiBased === false
-        );
-        setDeliverables(filteredData);
-        setFiltered(filteredData);
+        const nonAI = res.data.filter((d) => d.aiBased === false);
+        setDeliverables(nonAI);
+        setFiltered(nonAI);
       } catch (err) {
         console.error("Failed to load deliverables:", err);
       } finally {
@@ -31,7 +50,6 @@ function DeliverablePublicPage() {
     fetchData();
   }, []);
 
-  // Apply month/year filters
   useEffect(() => {
     let temp = [...deliverables];
 
@@ -47,32 +65,38 @@ function DeliverablePublicPage() {
       );
     }
 
-    setFiltered(temp);
-  }, [month, year, deliverables]);
+    if (category) {
+      temp = temp.filter((d) => d.category === category);
+    }
 
-  // Generate years dynamically
+    setFiltered(temp);
+  }, [month, year, category, deliverables]);
+
   const years = Array.from(
     new Set(deliverables.map((d) => new Date(d.createdAt).getFullYear()))
   ).sort((a, b) => b - a);
+
+  const categories = ["Cost Saving", "Process Improvement", "New Functionality"]
+    .filter((cat) => deliverables.some((d) => d.category === cat));
+
+  const toggleExpand = (id) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
 
   return (
     <>
       <Header />
 
-      {/* Heading + Filters */}
+      {/* Heading & Filters */}
       <div className="recog-detailed-heading p-3 mb-5">
         <div className="container">
-          <div className="row w100">
-            <div className="col-8 d-flex">
-              <span className="recog-main-side-line">
-                📦
-              </span>
-              <span className="recog-main-title">
-                DELIVERABLES SHOWCASE
-              </span>
+          <div className="row align-items-center">
+            <div className="col-6 d-flex">
+              <span className="recog-main-side-line">📦</span>
+              <span className="recog-main-title">Key Deliverables</span>
             </div>
 
-            <div className="col-2 mt-3">
+            <div className="col-2">
               <select
                 className="form-select"
                 value={month}
@@ -89,7 +113,7 @@ function DeliverablePublicPage() {
               </select>
             </div>
 
-            <div className="col-2 mt-3">
+            <div className="col-2">
               <select
                 className="form-select"
                 value={year}
@@ -103,63 +127,78 @@ function DeliverablePublicPage() {
                 ))}
               </select>
             </div>
+
+            <div className="col-2">
+              <select
+                className="form-select"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option value="">All Categories</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Content */}
+      {/* Cards */}
       <div className="container">
         {loading ? (
           <div className="text-center mt-5">Loading...</div>
         ) : filtered.length === 0 ? (
-          <div className="text-center mt-5">
-            No deliverables found.
-          </div>
+          <div className="text-center mt-5">No deliverables found.</div>
         ) : (
           <div className="row">
-            {filtered.map((item) => (
-              <div key={item.id} className="col-md-4 mb-4">
-                <div className="recog-card">
-                  
-                  {/* Image / File Preview */}
-                  {item.file && (
-                    <div className="recog-img-wrap">
-                      <img
-                        src={defaultImg}
-                        className="card-img-top"
-                        alt="deliverable"
-                      />
-                    </div>
-                  )}
+            {filtered.map((item) => {
+              const isExpanded = expandedId === item.id;
 
-                  <div className="recog-card-content">
-                    <div className="recog-card-title-row">
+              return (
+                <div key={item.id} className="col-md-4 mb-4">
+                  <div
+                    className={`recog-card h-100 ${
+                      isExpanded ? "expanded" : ""
+                    }`}
+                    onClick={() => toggleExpand(item.id)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <div className="recog-card-content">
+
+                      {/* ✅ CATEGORY + VALUE INLINE */}
+                      <div className="d-flex align-items-center gap-2 flex-wrap mt-2">
                         <span className="recog-badge">
-                        📄 {item.category || "General"}
-                      </span>
-                      <span className="recog-card-name">
+                          📄 {item.category || "General"}
+                        </span>
+
+                        {getCategoryDisplayValue(item) && (
+                          <span className="fw-bold text-success">
+                            {getCategoryDisplayValue(item)}
+                          </span>
+                        )}
+                      </div>
+
+                      <h6 className="recog-card-name mt-2">
                         {item.deliveryTitle}
-                      </span>
+                      </h6>
 
-                    
+                      <p className="recog-card-message mt-2">
+                        {isExpanded
+                          ? item.description
+                          : `${item.description?.slice(0, 140)}...`}
+                      </p>
+
+                      <div className="recog-card-dept mt-2">
+                        {item.projectName || "Team"}
+                      </div>
                     </div>
-
-                    <span className="recog-card-title">
-                      
-                    </span>
-
-                    <span className="recog-card-message">
-                      {item.description}
-                    </span>
-                    <span className="recog-card-dept">
-                      {item.projectName || "Team"}
-                    </span>
-                    
                   </div>
-
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

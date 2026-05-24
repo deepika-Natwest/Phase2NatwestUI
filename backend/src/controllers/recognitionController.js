@@ -16,6 +16,7 @@ exports.createRecognition = (req, res) => {
     recognitionType: req.body.recognitionType,
     recognitionTag: req.body.recognitionTag,
     shortDescription: req.body.shortDescription,
+    recognitionDate: req.body.recognitionDate, // ✅ NEW FIELD
     pic: req.file ? req.file.filename : null,
   };
 
@@ -24,11 +25,17 @@ exports.createRecognition = (req, res) => {
 };
 
 exports.updateRecognition = (req, res) => {
-  const existing = recognitionRepo.getAll().find(r => r.id === req.params.id);
-  if (!existing) return res.status(404).json({ message: "Not found" });
+  const existing = recognitionRepo.getAll().find(
+    (r) => r.id === req.params.id
+  );
+
+  if (!existing) {
+    return res.status(404).json({ message: "Not found" });
+  }
 
   let pic = existing.pic;
 
+  // ✅ Handle image update
   if (req.file) {
     if (existing.pic) {
       const oldPath = path.join(uploadDir, existing.pic);
@@ -38,7 +45,7 @@ exports.updateRecognition = (req, res) => {
   }
 
   const updated = recognitionRepo.update(req.params.id, {
-    ...req.body,
+    ...req.body, // ✅ includes recognitionDate automatically
     pic,
   });
 
@@ -47,7 +54,10 @@ exports.updateRecognition = (req, res) => {
 
 exports.deleteRecognition = (req, res) => {
   const deleted = recognitionRepo.delete(req.params.id);
-  if (!deleted) return res.status(404).json({ message: "Not found" });
+
+  if (!deleted) {
+    return res.status(404).json({ message: "Not found" });
+  }
 
   if (deleted.pic) {
     const imgPath = path.join(uploadDir, deleted.pic);

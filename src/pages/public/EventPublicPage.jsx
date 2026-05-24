@@ -56,7 +56,7 @@ function EventPublicPage() {
         <div className="row w100">
             <div className="col-8  d-flex">
                 <span className="recog-main-side-line"><span className="trophy-emoji" role="img" aria-label="trophy">📢</span></span>
-                <span className="recog-main-title">UPCOMING EVENTS</span>
+                <span className="recog-main-title">Event Calendar</span>
             </div>
              <div className="col-2 mt-3">
                     <select

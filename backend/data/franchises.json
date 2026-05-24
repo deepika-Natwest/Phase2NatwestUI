@@ -1,7 +1,7 @@
 [
   {
     "id": "67e49d2e-7d21-444c-bb76-29eb95ab66dc",
-    "name": "Retail banking",
+    "name": "RB",
     "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92"
   },
   {
@@ -28,5 +28,10 @@
     "id": "cbbb54c3-3538-4859-8074-d87802dd1650",
     "name": "Functions",
     "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92"
+  },
+  {
+    "id": "5971e8e7-4469-49ab-80ad-21551314d230",
+    "name": "Bank Of API's",
+    "capabilityId": "d8018d81-f0a6-4863-bc7c-20996cd27eff"
   }
 ]
