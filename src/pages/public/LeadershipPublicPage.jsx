@@ -53,8 +53,8 @@ function LeadershipPublicPage() {
         <div className="container">
           <div className="row w100">
             <div className="col-8 d-flex">
-              <span className="recog-main-side-line">
-                <span role="img" aria-label="crown">👑</span>
+              <span className="recog-main-side-line ">
+                <span className="trophy-emoji" role="img" aria-label="crown">👑</span>
               </span>
               <span className="recog-main-title">
                 Executive Team

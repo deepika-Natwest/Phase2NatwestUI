@@ -31,11 +31,11 @@ h1, h2, h3, h4, h5, h6{
   align-items: center;
   margin-bottom: 20px;
   background: #eef0ff;
+  margin-top: 60px;
 }
 .recog-main-side-line {
   width: 72px;
   height: 72px;
-  background: #eef0ff;
   border-radius: 20px;
   display: flex;
   align-items: center;

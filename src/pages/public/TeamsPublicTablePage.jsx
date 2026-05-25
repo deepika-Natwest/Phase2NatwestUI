@@ -140,9 +140,9 @@ function TeamsPublicTablePage() {
 
       <div className="container my-4">
         {/* Header */}
-        <div className="d-flex justify-content-between align-items-center mb-4">
+        <div className="d-flex justify-content-between align-items-center mb-4 teamHeading">
           <div className="d-flex align-items-center">
-            <span className="recog-main-side-line">👥</span>
+            <span className="recog-main-side-line trophy-emoji">👥</span>
             <span className="recog-main-title ms-2">
               Team Directory:{" "}
               {selectedCap ? capabilitiesMap[selectedCap] : "All"}

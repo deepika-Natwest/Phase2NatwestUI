@@ -111,8 +111,8 @@ function TeamsPublicPage() {
         <div className="container">
           <div className="row w100">
             <div className="col-10 d-flex">
-              <span className="recog-main-side-line">
-                <span role="img" aria-label="team">👥</span>
+              <span className="recog-main-side-line ">
+                <span className="trophy-emoji" role="img" aria-label="team">👥</span>
               </span>
               <span className="recog-main-title">
                 TEAM: {capabilityName}

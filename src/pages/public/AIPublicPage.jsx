@@ -98,7 +98,7 @@ function DeliverableAIPublicPage() {
           <div className="row align-items-center">
 
             <div className="col-6 d-flex">
-              <span className="recog-main-side-line">🤖</span>
+              <span className="recog-main-side-line trophy-emoji" >🤖</span>
               <span className="recog-main-title">AI Artifacts</span>
             </div>
 

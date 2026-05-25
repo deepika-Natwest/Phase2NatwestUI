@@ -76,7 +76,7 @@ function RecognitionPublicPage() {
         <div className="container">
           <div className="row w100">
             <div className="col-8 d-flex">
-              <span className="recog-main-side-line">
+              <span className="recog-main-side-line trophy-emoji">
                 <span role="img" aria-label="trophy">🏆</span>
               </span>
               <span className="recog-main-title">

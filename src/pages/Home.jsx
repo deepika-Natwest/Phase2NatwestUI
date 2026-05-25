@@ -287,21 +287,21 @@ Fraud Prevention CoE (Centre of Excellence) is a centralized, specialist team th
                 <div className="serviceItem vertical">
                   <h5>Retail Banking</h5>
                   <p>
-                    Advanced mobile and online banking for convenient financial management.
+                    Accenture helps bank in providing range of banking products and related financial services, including CASA, mortgages, and unsecured lending through credit cards and loans.
                   </p>
                 </div>
 
                 <div className="serviceItem vertical">
                   <h5>Wealth</h5>
                   <p>
-                    Supporting sustainable finance and a low‑carbon economy.
+                    We help bank by improving their internal processes and supporting banks OBDS (One Bank Design System) vision by reengineering new solutions.
                   </p>
                 </div>
 
                 <div className="serviceItem vertical">
                   <h5>Commercial and Institute</h5>
                   <p>
-                    Support through branches, online platforms, and call centers.
+                    Accenture help Bank with their customer experience into various areas like MMM, EDB, MMG by enabling digital ecosystem, process improvement to better serve customers.
                   </p>
                 </div>
               </div>

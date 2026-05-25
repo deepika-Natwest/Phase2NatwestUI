@@ -92,7 +92,7 @@ function DeliverablePublicPage() {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-6 d-flex">
-              <span className="recog-main-side-line">📦</span>
+              <span className="recog-main-side-line" className="trophy-emoji">📦</span>
               <span className="recog-main-title">Key Deliverables</span>
             </div>
 
