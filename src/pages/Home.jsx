@@ -54,17 +54,17 @@ const Home = () => {
     },
     {
       key: "fincrime",
-      title: "FinCrime",
-      desc: `We are helping the Bank enable next‑generation FinCrime threat monitoring and processing across key programs in the FinCrime landscape – Customer Due Diligence, Name Screening, Anti‑Money Laundering, Fraud Prevention, Transaction Monitoring, Reporting, and Data Quality & Transformation.`
+      title: "Economic Crime & Fraud",
+      desc: `We are helping the Bank enable next‑generation FinCrime threat monitoring and processing across key programs in the FinCrime landscape – Customer Due Diligence, Name Screening, Anti‑Money Laundering, Fraud Prevention, Transaction Monitoring, Reporting, and Data Quality & Transformation.
+      
+      Fraud Prevention CoE (Centre of Excellence) is a centralized, specialist team that owns the end‑to‑end strategy, standards, and capabilities for detecting and stopping financial‑crime‑related fraud across products and channels. It acts as the “brain” of the bank’s fraud‑prevention ecosystem.`
     },
     {
       key: "infra-security",
-      title: "Infrastructure, Security & Fraud Prevention",
+      title: "Infrastructure & Security",
       desc: `We manage the infrastructure across the Bank which covers technologies that help set up and manage various platforms whether on premise or cloud to support numerous applications catering to the Bank’s customers as well as the enterprise as a whole.
 
-Security acts as a central risk‑control layer that combines people, processes, and technology to protect money, data, and trust across both bricks‑and‑mortar and digital channels.
-
-Fraud Prevention CoE (Centre of Excellence) is a centralized, specialist team that owns the end‑to‑end strategy, standards, and capabilities for detecting and stopping financial‑crime‑related fraud across products and channels. It acts as the “brain” of the bank’s fraud‑prevention ecosystem.`
+Security acts as a central risk‑control layer that combines people, processes, and technology to protect money, data, and trust across both bricks‑and‑mortar and digital channels.`
     },
     {
       key: "fral",
@@ -186,7 +186,7 @@ Fraud Prevention CoE (Centre of Excellence) is a centralized, specialist team th
         <div className='container'>
           <div className='row alignCenter'>
             <div className="col-12 col-lg-8 textContent">
-              <h4 className="subtitle">Welcome to NatWest</h4>
+              <h4 className="subtitle">NatWest Relationship Overview</h4>
               <h3 className="title gradientText">  NatWest, or National Westminster Bank, is one of the largest banks in the United Kingdom and is part of the NatWest Group, which also includes other financial institutions like Ulster Bank and Coutts. Established in 1968 through the merger of National Provincial Bank and Westminster Bank, NatWest has a long history of serving individuals, businesses, and corporations with a wide range of financial services.</h3>
               <div className='authorBox'>
                 <p className='authorName'>Nina S. Raphael</p>
@@ -205,7 +205,7 @@ Fraud Prevention CoE (Centre of Excellence) is a centralized, specialist team th
 
             <div className="col-5">
               <h2>
-                Financial Services <span className="purpleText">@ EMEA ATCi</span>
+                NatWest Organizational Overview
               </h2>
               <div className="aboutImg">
                 <img className="aboutPic" src={aboutImg} alt="About NatWest" />
@@ -241,11 +241,11 @@ Fraud Prevention CoE (Centre of Excellence) is a centralized, specialist team th
                     </div>
 
                     <div onClick={() => setActiveService(services.find(s => s.key === "fincrime"))}>
-                      FinCrime
+                      Economic Crime & Fraud
                     </div>
 
                     <div onClick={() => setActiveService(services.find(s => s.key === "infra-security"))}>
-                      Infrastructure, Security & Fraud Prevention
+                      Infrastructure & Security
                     </div>
 
                     <div onClick={() => setActiveService(services.find(s => s.key === "fral"))}>
@@ -299,7 +299,7 @@ Fraud Prevention CoE (Centre of Excellence) is a centralized, specialist team th
                 </div>
 
                 <div className="serviceItem vertical">
-                  <h5>Commercial and Institute</h5>
+                  <h5>Commercial and Institutional Banking</h5>
                   <p>
                     Accenture help Bank with their customer experience into various areas like MMM, EDB, MMG by enabling digital ecosystem, process improvement to better serve customers.
                   </p>
