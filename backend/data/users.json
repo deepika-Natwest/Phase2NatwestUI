@@ -2292,5 +2292,23 @@
     "franchiseId": "5971e8e7-4469-49ab-80ad-21551314d230",
     "profilePic": null,
     "createdAt": "2026-05-02T08:49:01.421Z"
+  },
+  {
+    "id": "cd742672-7cf3-4c9a-9b6a-d40dd442ab42",
+    "name": "",
+    "enterpriseId": "",
+    "password": "",
+    "gender": "",
+    "location": "",
+    "careerLevel": "",
+    "lineManager": "",
+    "projectName": "",
+    "role": "user",
+    "status": "Active",
+    "capabilityId": "",
+    "franchiseId": "",
+    "profilePic": "",
+    "shortDescription": "",
+    "createdAt": "2026-06-10T19:43:28.481Z"
   }
 ]
