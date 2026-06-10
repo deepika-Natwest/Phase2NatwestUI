@@ -29,7 +29,7 @@ const leadershipData = [
     ],
   },
   {
-    title: 'Senior Delivery Managers',
+    title: 'Senior Delivery Leads',
     members: [
       {
         name: 'Suman Dahiya',
@@ -70,7 +70,7 @@ const leadershipData = [
     ],
   },
   {
-    title: 'Sales Executive Managers',
+    title: 'Growth Team',
     members: [
       {
         name: 'Vinay Bagul',

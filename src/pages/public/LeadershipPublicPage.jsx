@@ -5,8 +5,8 @@ import { getPublicLeadership } from "../../features/leadership/publicLeadershipS
 
 const MANAGEMENT_ORDER = [
   "Leadership Team",
-  "Senior Delivery Managers",
-  "Sales Executive Managers",
+  "Senior Delivery Leads",
+  "Growth Team",
 ];
 
 function LeadershipPublicPage() {
