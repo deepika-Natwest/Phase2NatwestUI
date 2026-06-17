@@ -187,7 +187,8 @@ Security acts as a central risk‑control layer that combines people, processes,
           <div className='row alignCenter'>
             <div className="col-12 col-lg-8 textContent">
               <h4 className="subtitle">NatWest Relationship Overview</h4>
-              <h3 className="title gradientText">  NatWest, or National Westminster Bank, is one of the largest banks in the United Kingdom and is part of the NatWest Group, which also includes other financial institutions like Ulster Bank and Coutts. Established in 1968 through the merger of National Provincial Bank and Westminster Bank, NatWest has a long history of serving individuals, businesses, and corporations with a wide range of financial services.</h3>
+              <h3 className="title gradientText"> <p>Accenture has a strategic partnership with NatWest, a Diamond client, supported by over 1,050 consultants across the bank. Combining expertise in Strategy & Consulting, Technology, Song, and Operations, we help drive innovation and large-scale transformation.
+</p><p>Together, we have advanced NatWest’s digital leadership through GenAI adoption, ChatGPT integration, Cora enhancements with OpenAI technologies, cloud transformation, and data modernization—helping the bank achieve measurable business outcomes at scale.</p></h3>
               <div className='authorBox'>
                 <p className='authorName'>Nina S. Raphael</p>
                 <span className="authorRole">Accenture Leadership </span>

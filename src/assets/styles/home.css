@@ -1,11 +1,11 @@
 .homeBanner {
   background: url(../img/bgHome.png);
-
+  background-position: bottom;
   min-height: 85vh;
   height: auto;
-
   background-size: 100%;
   position: relative;
+  padding-top: 2rem;
 }
 
 .purpleText {
@@ -46,7 +46,7 @@
 
 .homeBanner h3 {
 
-  font-size: clamp(1.1rem, 1.4vw, 1.6rem);
+  font-size: clamp(1.1rem, 1.2vw, 1.4rem);
   line-height: 1.6;
   margin-bottom: 2rem;
 }
@@ -76,7 +76,6 @@
 }
 
 .title {
-  text-align: justify;
   text-justify: inter-word;
   line-height: 1.7;
 }
