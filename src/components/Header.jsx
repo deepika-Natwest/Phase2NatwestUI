@@ -36,11 +36,20 @@ function Header() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto">
 
-            <li className="nav-item">
-              <NavLink to="/" className={navClass} end>
-                Home
+           
+
+             <li className="nav-item">
+              <NavLink to="/dashboard" className={navClass} end>
+                Dashboard
               </NavLink>
             </li>
+            <li className="nav-item">
+              <NavLink to="/pricing" className={navClass} end>
+                SOW
+              </NavLink>
+            </li>
+            
+
 
             <li className="nav-item">
               <NavLink to="/deliverables" className={navClass} end>
@@ -65,6 +74,12 @@ function Header() {
             <li className="nav-item">
               <NavLink to="/teams/table" className={navClass}>
                 Teams 
+              </NavLink>
+            </li>
+
+            <li className="nav-item">
+              <NavLink to ="/program" className={navClass}>
+              Program
               </NavLink>
             </li>
 

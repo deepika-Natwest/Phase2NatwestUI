@@ -23,7 +23,74 @@ function RecognitionPublicPage() {
     "Star Performer": "⭐",
     "Employee of the Month": "🎗️",
     "Client Recognized": "👏",
+    Birthday: "🎂",
+    "3 Years": "🌟",
+    "5 Years": "🌟",
+    "10 Years": "🌟",
   };
+
+  const birthdays = [
+    {
+      id: 1,
+      name: "Aditi Sharma",
+      genderType: "female",
+      recognitionType: "Birthday",
+      recognitionTag: "Application Developer",
+      shortDescription:
+        "Wishing you a very happy birthday filled with happiness, success, and wonderful moments.",
+      date: "24 Jul",
+    },
+    {
+      id: 2,
+      name: "Rahul Verma",
+      genderType: "male",
+      recognitionType: "Birthday",
+      recognitionTag: "Business Analyst",
+      shortDescription:
+        "Warm birthday wishes for a fantastic year ahead filled with growth and achievements.",
+      date: "28 Jul",
+    },
+    {
+      id: 3,
+      name: "Priya Singh",
+      genderType: "female",
+      recognitionType: "Birthday",
+      recognitionTag: "Project Manager",
+      shortDescription:
+        "Celebrating your special day and wishing you continued success and happiness.",
+      date: "31 Jul",
+    },
+  ];
+
+  const milestones = [
+    {
+      id: 1,
+      name: "Aman Gupta",
+      genderType: "male",
+      recognitionType: "3 Years",
+      recognitionTag: "Software Engineer",
+      shortDescription:
+        "Congratulations on completing 3 successful years of dedication, contribution, and excellence.",
+    },
+    {
+      id: 2,
+      name: "Sneha Kapoor",
+      genderType: "female",
+      recognitionType: "5 Years",
+      recognitionTag: "Team Lead",
+      shortDescription:
+        "Celebrating 5 remarkable years of commitment, leadership, and valuable contributions.",
+    },
+    {
+      id: 3,
+      name: "Rohit Mehta",
+      genderType: "male",
+      recognitionType: "10 Years",
+      recognitionTag: "Senior Manager",
+      shortDescription:
+        "Congratulations on achieving 10 years of outstanding service, consistency, and impact.",
+    },
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,6 +104,7 @@ function RecognitionPublicPage() {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
@@ -75,14 +143,7 @@ function RecognitionPublicPage() {
       <div className="recog-detailed-heading p-3 mb-5">
         <div className="container">
           <div className="row w100">
-            <div className="col-8 d-flex">
-              <span className="recog-main-side-line trophy-emoji">
-                <span role="img" aria-label="trophy">🏆</span>
-              </span>
-              <span className="recog-main-title">
-                Excellence Gallery
-              </span>
-            </div>
+            
 
             <div className="col-2 mt-3">
               <select
@@ -109,7 +170,9 @@ function RecognitionPublicPage() {
               >
                 <option value="">All Years</option>
                 {years.map((y) => (
-                  <option key={y} value={y}>{y}</option>
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
                 ))}
               </select>
             </div>
@@ -117,7 +180,7 @@ function RecognitionPublicPage() {
         </div>
       </div>
 
-      {/* Cards */}
+      {/* Recognition Cards */}
       <div className="container">
         {loading ? (
           <div className="text-center mt-5">Loading...</div>
@@ -131,30 +194,20 @@ function RecognitionPublicPage() {
               return (
                 <div key={recog.id} className="col-md-4 mb-4">
                   <div
-                    className={`recog-card h-100 ${isExpanded ? "expanded" : ""}`}
+                    className={`recog-card h-100 ${
+                      isExpanded ? "expanded" : ""
+                    }`}
                     onClick={() => toggleExpand(recog.id)}
                     style={{ cursor: "pointer" }}
                   >
                     {/* Avatar */}
-                    {recog.pic && (
-                      <div className="recog-img-wrap">
-                        <img
-                          src={
-                            genderImages[
-                              recog.genderType?.trim().toLowerCase()
-                            ] || defaultImg
-                          }
-                          className="card-img-top"
-                          alt={recog.name}
-                        />
-                      </div>
-                    )}
+                    <div className="recog-img-wrap">
+                     
+                    </div>
 
                     <div className="recog-card-content">
                       <div className="recog-card-title-row">
-                        <span className="recog-card-name">
-                          {recog.name}
-                        </span>
+                        <span className="recog-card-name">{recog.name}</span>
 
                         <span
                           className={
@@ -187,6 +240,103 @@ function RecognitionPublicPage() {
             })}
           </div>
         )}
+      </div>
+
+    
+      {/* Employee Birthday Cards */}
+      <div className="container">
+        <div className="row">
+          {birthdays.map((emp) => {
+            const birthdayId = `birthday-${emp.id}`;
+            const isExpanded = expandedId === birthdayId;
+
+            return (
+              <div key={birthdayId} className="col-md-4 mb-4">
+                <div
+                  className={`recog-card h-100 ${
+                    isExpanded ? "expanded" : ""
+                  }`}
+                  onClick={() => toggleExpand(birthdayId)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <div className="recog-img-wrap">
+                  
+                  </div>
+
+                  <div className="recog-card-content">
+                    <div className="recog-card-title-row">
+                      <span className="recog-card-name">{emp.name}</span>
+
+                      <span className="recog-badge employee-of-the-month">
+                        <span className="recog-badge-icon">🎂</span>
+                        {emp.date}
+                      </span>
+                    </div>
+
+                    <span className="recog-card-message">
+                      {isExpanded
+                        ? emp.shortDescription
+                        : `${emp.shortDescription?.slice(0, 120)}...`}
+                    </span>
+
+                    <span className="recog-card-dept">
+                      {emp.recognitionTag}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      
+
+      {/* Personal Milestone Cards */}
+      <div className="container mb-5">
+        <div className="row">
+          {milestones.map((emp) => {
+            const milestoneId = `milestone-${emp.id}`;
+            const isExpanded = expandedId === milestoneId;
+
+            return (
+              <div key={milestoneId} className="col-md-4 mb-4">
+                <div
+                  className={`recog-card h-100 ${
+                    isExpanded ? "expanded" : ""
+                  }`}
+                  onClick={() => toggleExpand(milestoneId)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <div className="recog-img-wrap">
+                   
+                  </div>
+
+                  <div className="recog-card-content">
+                    <div className="recog-card-title-row">
+                      <span className="recog-card-name">{emp.name}</span>
+
+                      <span className="recog-badge star-performer">
+                        <span className="recog-badge-icon">⭐</span>
+                        {emp.recognitionType}
+                      </span>
+                    </div>
+
+                    <span className="recog-card-message">
+                      {isExpanded
+                        ? emp.shortDescription
+                        : `${emp.shortDescription?.slice(0, 120)}...`}
+                    </span>
+
+                    <span className="recog-card-dept">
+                      {emp.recognitionTag}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <Footer />

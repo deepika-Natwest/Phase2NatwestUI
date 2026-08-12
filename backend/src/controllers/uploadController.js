@@ -27,72 +27,143 @@ const uploadUsers = async (req, res) => {
       return res.status(400).json({ message: "Unsupported file type" });
     }
 
+    if (!usersFromFile.length) {
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      return res.status(400).json({ message: "Uploaded file is empty" });
+    }
+
+    // Strict header validation
+    const expectedHeaders = [
+      "Name",
+      "Enterprise ID",
+      "Capability",
+      "Franchise",
+      "Level",
+      "Work Location",
+      "Project/Program",
+      "NWG Line Manager",
+    ];
+
+    const uploadedHeaders = Object.keys(usersFromFile[0]).map((h) => h.trim());
+
+    const headersMatch =
+      expectedHeaders.length === uploadedHeaders.length &&
+      expectedHeaders.every((header, index) => header === uploadedHeaders[index]);
+
+    if (!headersMatch) {
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      return res.status(400).json({
+        message:
+          "Invalid template. Please use the downloaded template only. Do not rename, delete, reorder, or add columns.",
+      });
+    }
+
     // Load existing users
     const existingUsers = fs.existsSync(dataPath)
       ? JSON.parse(fs.readFileSync(dataPath, "utf8"))
       : [];
 
-    // Map uploaded users
-    // This is the important fix:
-    // uploaded file column names are matched with backend/master keys
-    const processedUsers = await Promise.all(
-      usersFromFile.map(async (user) => {
-        const id = user.id || user.Id || uuidv4();
+    const rowErrors = [];
+    let createdCount = 0;
+    let updatedCount = 0;
 
-        let password = user.password || user.Password || "";
-        password = String(password || "").trim();
+    for (let i = 0; i < usersFromFile.length; i++) {
+      const user = usersFromFile[i];
 
+      const name = String(user.Name || "").trim();
+      const enterpriseId = String(user["Enterprise ID"] || "").trim();
+      const capability = String(user.Capability || "").trim();
+      const franchise = String(user.Franchise || "").trim();
+      const level = String(user.Level || "").trim();
+      const workLocation = String(user["Work Location"] || "").trim();
+      const projectName = String(user["Project/Program"] || "").trim();
+      const lineManager = String(user["NWG Line Manager"] || "").trim();
+
+      if (
+        !name ||
+        !enterpriseId ||
+        !capability ||
+        !franchise ||
+        !level ||
+        !workLocation ||
+        !projectName ||
+        !lineManager
+      ) {
+        rowErrors.push(`Row ${i + 2}: All fields are mandatory.`);
+        continue;
+      }
+
+      const existingIndex = existingUsers.findIndex(
+        (u) =>
+          String(u.enterpriseId || "").trim().toLowerCase() ===
+          enterpriseId.toLowerCase()
+      );
+
+      if (existingIndex !== -1) {
+        // Update only template fields, keep all other existing fields unchanged
+        existingUsers[existingIndex] = {
+          ...existingUsers[existingIndex],
+          name,
+          enterpriseId,
+          capabilityId: capability,
+          franchiseId: franchise,
+          careerLevel: level,
+          location: workLocation,
+          projectName,
+          lineManager,
+        };
+
+        updatedCount++;
+      } else {
+        // Create new user with defaults
+        let password = "";
         if (password && !password.startsWith("$2b$")) {
           password = await bcrypt.hash(password, 10);
         }
 
-        return {
-          id,
+        existingUsers.push({
+          id: uuidv4(),
+          name,
+          enterpriseId,
+          password,
+          gender: "",
+          location: workLocation,
+          careerLevel: level,
+          lineManager,
+          projectName,
+          role: "user",
+          status: "Active",
+          capabilityId: capability,
+          franchiseId: franchise,
+          profilePic: "",
+          shortDescription: "",
+          createdAt: new Date().toISOString(),
+        });
 
-          // Match uploaded file headers with backend keys
-          name: user.name || user.Name || "",
-          enterpriseId: user.enterpriseId || user["Enterprise ID"] || "",
-          password: password || "",
-          gender: user.gender || user.Gender || "",
-          location: user.location || user["Work Location"] || "",
-          careerLevel: user.careerLevel || user.Level || "",
-          lineManager: user.lineManager || user["NWG Line Manager"] || "",
-          projectName: user.projectName || user["Project/Program"] || "",
-          role: user.role || user.Role || "user",
-          status: user.status || user.Status || "Active",
-          capabilityId: user.capabilityId || user.Capability || "",
-          franchiseId: user.franchiseId || user.Franchise || "",
-          profilePic: user.profilePic || user["Profile Pic"] || "",
-          shortDescription: user.shortDescription || user["Short Description"] || "",
-          createdAt: user.createdAt || user["Created At"] || new Date().toISOString(),
-        };
-      })
-    );
-
-    // Merge uploaded users with existing users
-    // Better to merge by enterpriseId instead of id,
-    // because uploaded files usually won't contain your internal UUIDs
-    const mergedUsers = [
-      ...existingUsers.filter(
-        (u) =>
-          !processedUsers.some(
-            (nu) =>
-              String(nu.enterpriseId || "").trim().toLowerCase() ===
-              String(u.enterpriseId || "").trim().toLowerCase()
-          )
-      ),
-      ...processedUsers,
-    ];
+        createdCount++;
+      }
+    }
 
     // Save back to JSON
-    fs.writeFileSync(dataPath, JSON.stringify(mergedUsers, null, 2));
+    fs.writeFileSync(dataPath, JSON.stringify(existingUsers, null, 2));
 
     // Delete temp file
-    fs.unlinkSync(filePath);
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+
+    if (rowErrors.length > 0) {
+      return res.status(400).json({
+        message: "Some rows failed validation",
+        errors: rowErrors,
+        createdCount,
+        updatedCount,
+      });
+    }
 
     res.json({
       message: "Users uploaded successfully",
-      count: processedUsers.length,
+      createdCount,
+      updatedCount,
+      count: createdCount + updatedCount,
     });
   } catch (err) {
     console.error(err);

@@ -7,12 +7,14 @@ import Home from "./pages/Home";
 import Leadership from "./pages/Leadership";
 import Events from "./pages/Events";
 
+
+
 function AppRouter() {
   return (
     <Router>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />} /> 
         <Route path="/leadership" element={<Leadership />} />
         <Route path="/events" element={<Events />} />
       </Routes>

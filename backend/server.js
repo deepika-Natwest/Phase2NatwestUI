@@ -15,6 +15,7 @@ const eventRoutes = require("./src/routes/eventRoutes");
 const recognitionRoutes = require("./src/routes/recognitionRoutes");
 const deliverableRoutes = require("./src/routes/deliverableRoutes");
 const uploadRoutes = require("./src/routes/uploadRoutes");
+const programRoutes = require( "./src/routes/programRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -41,6 +42,8 @@ app.use("/api/events", eventRoutes);
 app.use("/api/recognition", recognitionRoutes);
 app.use("/api/deliverables", deliverableRoutes);
 app.use("/api/users", uploadRoutes);
+app.use( "/api/programs",  programRoutes);   //program Route
+
 
 // Fallback route for unknown endpoints
 app.use((req, res) => {

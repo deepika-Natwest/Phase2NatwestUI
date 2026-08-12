@@ -13,10 +13,12 @@ import TeamsPage from "../pages/public/TeamsPage";
 import DeliverablePublicPage from "../pages/public/DeliverablePublicPage";
 import DeliverableAIPublicPage from "../pages/public/AIPublicPage";
 import TeamsPublicTablePage from "../pages/public/TeamsPublicTablePage";
+import PublicDashboardPage from "../pages/public/DashboardPage";
+import Pricing from "../pages/public/Pricing";
 
 // Admin pages
 import LoginPage from "../pages/admin/LoginPage";
-import DashboardPage from "../pages/admin/DashboardPage";
+import AdminDashboardPage from "../pages/admin/DashboardPage";
 import ProtectedRoute from "../components/admin/ProtectedRoute";
 import UsersPage from "../pages/admin/UsersPage";
 import LeadershipPage from "../pages/admin/LeadershipPage";
@@ -26,6 +28,8 @@ import FranchisePage from "../pages/admin/FranchisePage";
 import RecognitionPage from "../pages/admin/RecognitionPage";
 import DeliverablePage from "../pages/admin/DeliverablePage";
 import UploadUsersPage from "../pages/admin/UploadUsersPage";
+import ProjectProgramPage from "../pages/public/ProjectProgramPage";
+import AddProgram from "../pages/admin/Addprogram";
 
 
 function AppRouter() {
@@ -44,7 +48,13 @@ function AppRouter() {
     element={<><Header /><Leadership /><Footer /></>}
   />
 
+
+  <Route path="/pricing" element={<Pricing/>} />
+
+  <Route path="/dashboard" element={<PublicDashboardPage />} />
+
   <Route path="/recognitions" element={<RecognitionPublicPage />} />
+  <Route path ="/program" element = {<ProjectProgramPage/>} />
   <Route path="/events" element={<EventPublicPage />} />
   <Route path="/leaderships" element={<LeadershipPublicPage />} />
 
@@ -62,8 +72,9 @@ function AppRouter() {
 
 
         {/* Admin routes */}
+
         <Route path="/admin/login" element={<LoginPage />} />
-        <Route path="/admin/dashboard" element={<DashboardPage />} />
+        <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
         <Route path="/admin/capabilities" element={<CapabilitiesPage />} />
         <Route path="/admin/franchises" element={<FranchisePage />} />
         <Route path="/admin/users" element={<ProtectedRoute roles={["ADMIN"]}><UsersPage /></ProtectedRoute>} />
@@ -72,6 +83,7 @@ function AppRouter() {
         <Route path="/admin/recognition" element={<ProtectedRoute roles={["ADMIN","EDITOR","VIEWER"]}><RecognitionPage /></ProtectedRoute>} />
         <Route path="/admin/deliverables" element={<ProtectedRoute roles={["ADMIN","EDITOR","VIEWER"]}><DeliverablePage /></ProtectedRoute>} />
         <Route path="/admin/upload-users" element={<UploadUsersPage />} />
+        <Route path="/add-program" element={<AddProgram />}/>
       </Routes>
     </BrowserRouter>
   );

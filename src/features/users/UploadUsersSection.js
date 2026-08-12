@@ -94,7 +94,6 @@ export default function UploadUsersSection() {
     try {
       setLoading(true);
 
-      // Read Excel file
       const data = await file.arrayBuffer();
       const workbook = XLSX.read(data, { type: "array" });
 
@@ -119,7 +118,6 @@ export default function UploadUsersSection() {
         return;
       }
 
-      // Validate headers
       const uploadedHeaders = rows[0];
       const headerValidation = validateHeaders(uploadedHeaders);
 
@@ -148,7 +146,6 @@ export default function UploadUsersSection() {
         return;
       }
 
-      // Convert sheet to JSON after header validation
       const jsonData = XLSX.utils.sheet_to_json(worksheet, {
         defval: "",
         blankrows: false,
@@ -160,7 +157,6 @@ export default function UploadUsersSection() {
         return;
       }
 
-      // Validate required fields in rows
       const rowValidationErrors = validateRowData(jsonData);
 
       if (rowValidationErrors.length > 0) {
@@ -176,14 +172,14 @@ export default function UploadUsersSection() {
         return;
       }
 
-      // If validation passes, upload to backend
       const formData = new FormData();
       formData.append("file", file);
 
       const res = await api.post("/users/upload", formData);
 
-      setSuccess(`${res.data.message} (${res.data.count} records uploaded)`);
-
+      setSuccess(
+        `${res.data.message} (Created: ${res.data.createdCount || 0}, Updated: ${res.data.updatedCount || 0}, Total: ${res.data.count || 0})`
+      );
     } catch (err) {
       console.error(err);
       setError("Upload failed. Please make sure you are using the correct Excel template.");

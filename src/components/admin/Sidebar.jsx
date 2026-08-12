@@ -17,9 +17,17 @@ function Sidebar() {
           Dashboard
         </NavLink>
 
+
+
+
         {hasAnyRole(role, [ROLES.ADMIN, ROLES.EDITOR]) && (
           <NavLink to="/admin/capabilities" className="list-group-item list-group-item-action">
             Capabilities
+          </NavLink>
+        )}
+ {hasAnyRole(role, [ROLES.ADMIN, ROLES.EDITOR]) && (
+          <NavLink to="/admin/programs" className="list-group-item list-group-item-action">
+            Program
           </NavLink>
         )}
 
