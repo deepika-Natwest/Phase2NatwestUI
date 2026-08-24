@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import api from "../../services/api";
 
 // SOW Public Page
 
@@ -268,6 +269,18 @@ function Pricing() {
     },
   ];
 
+  const [backendPricing, setBackendPricing] = useState(null);
+
+  useEffect(() => {
+    api.get("/pricing")
+      .then((response) => setBackendPricing(response.data))
+      .catch((error) => console.error("Failed to load pricing data:", error));
+  }, []);
+
+  const expiryRows = backendPricing?.expiry || [];
+  const attritionRows = backendPricing?.attrition || [];
+  const extensionRows = backendPricing?.extension || [];
+
   const [selectedView, setSelectedView] = useState("all");
 
   const addGrandTotalRow = (rows, columns) => {
@@ -319,7 +332,7 @@ function Pricing() {
       grandTotal: 0,
     });
 
-    expiryData.forEach((row) => {
+    expiryRows.forEach((row) => {
       if (!mergedMap[row.category]) {
         mergedMap[row.category] = createEmptyRow(row.category);
       }
@@ -331,7 +344,7 @@ function Pricing() {
       mergedMap[row.category].plannedRelease = row.plannedRelease;
     });
 
-    attritionData.forEach((row) => {
+    attritionRows.forEach((row) => {
       if (!mergedMap[row.category]) {
         mergedMap[row.category] = createEmptyRow(row.category);
       }
@@ -340,7 +353,7 @@ function Pricing() {
       mergedMap[row.category].rollOff = row.rollOff;
     });
 
-    extensionData.forEach((row) => {
+    extensionRows.forEach((row) => {
       if (!mergedMap[row.category]) {
         mergedMap[row.category] = createEmptyRow(row.category);
       }
@@ -373,19 +386,19 @@ function Pricing() {
     });
 
     return addGrandTotalRow(mergedRows, allColumns);
-  }, []);
+  }, [expiryRows, attritionRows, extensionRows]);
 
   const expiryDataWithGrandTotal = useMemo(() => {
-    return addGrandTotalRow(expiryData, expiryColumns);
-  }, []);
+    return addGrandTotalRow(expiryRows, expiryColumns);
+  }, [expiryRows]);
 
   const attritionDataWithGrandTotal = useMemo(() => {
-    return addGrandTotalRow(attritionData, attritionColumns);
-  }, []);
+    return addGrandTotalRow(attritionRows, attritionColumns);
+  }, [attritionRows]);
 
   const extensionDataWithGrandTotal = useMemo(() => {
-    return addGrandTotalRow(extensionData, extensionColumns);
-  }, []);
+    return addGrandTotalRow(extensionRows, extensionColumns);
+  }, [extensionRows]);
 
   const currentTableConfig = useMemo(() => {
     if (selectedView === "expiry") {
@@ -458,7 +471,7 @@ function Pricing() {
               <option value="extension">Extension Status Summary</option>
             </select>
 
-            
+
           </div>
         </div>
 

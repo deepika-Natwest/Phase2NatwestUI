@@ -6,8 +6,17 @@ const userRepository = require('../repositories/userRepository');
 
 const getUsers = (req, res) => {
   try {
-    const { search } = req.query;
+    const { search, page, limit } = req.query;
     const users = userRepository.getAllUsers(search);
+    if (page || limit) {
+      const pageNumber = Math.max(parseInt(page, 10) || 1, 1);
+      const pageSize = Math.max(parseInt(limit, 10) || 50, 1);
+      const start = (pageNumber - 1) * pageSize;
+      return res.json({
+        users: users.slice(start, start + pageSize),
+        page: pageNumber, limit: pageSize, total: users.length,
+      });
+    }
     res.json(users);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching users' });

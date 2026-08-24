@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import api from "../../services/api";
 
 import {
   ResponsiveContainer,
@@ -24,7 +25,21 @@ import {
 import "../../assets/styles/dashboard.css";
 
 function DashboardPage() {
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    api.get("/dashboard/data")
+      .then((res) => {
+        setDashboardData(res.data);
+      })
+      .catch((err) => {
+        console.error("Failed to load dashboard data", err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
    const COLORS = [
     "#6A1B9A",
@@ -34,154 +49,29 @@ function DashboardPage() {
     "#CE93D8",
     ];
 
-    const weeklyHCTrend = [
-  { week: "April 2026", hc: 557 },
-  { week: "April 2026", hc: 558},
-  { week: "April 2026", hc: 550 },
-  { week: "April 2026", hc: 545 },
-  { week: "April 2026", hc: 541 },
-  { week: "May 2026", hc: 540},
-  { week: "May 2026", hc: 544},
-  { week: "May 2026", hc: 547 },
-  { week: "May 2026", hc: 550},
-  { week: "May 2026", hc: 557},
-  { week: "June 2026", hc: 563},
-  { week: "June 2026", hc: 560},
-  { week: "June 2026", hc: 568},
-  { week: "June 2026", hc: 563 },
-  { week: "June 2026", hc: 564},
-  { week: "July 2026", hc: 543},
- 
-];
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="container py-5 text-center">
+          <p>Loading dashboard data...</p>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
-const monthlyHCTrend = [
-  { month: "Jan 2024", hc: 557 },
-  { month: "Jan 2024", hc: 484},
-  { month: "Jan 2024", hc: 515},
-  { month: "Jan 2024", hc: 527 },
-  { month: "Jan 2024", hc: 556 },
-  { month: "Jan 2024", hc: 569},
-
-  { month: "Jul 2024", hc: 580},
-  { month: "Jul 2024", hc: 567 },
-  { month: "Jul 2024", hc: 509 },
-
-  { month: "Jan 2025", hc: 548 },
-  { month: "Jan 2025", hc: 612},
-  { month: "Jan 2025", hc: 642 },
-
-  { month: "Jul 2026", hc: 682 },
-   { month: "Jul 2026", hc: 659 },
-   { month: "Jul 2026", hc: 635 },
- { month: "Jul 2026", hc: 558 },
-
-  { month: "Jan 2026", hc: 553 },
-  { month: "Jan 2026", hc: 558 },
- { month: "Jan 2026", hc: 544},
-  { month: "Jan 2026", hc: 564 },
- 
-
-
-];
-
-const hcActualData = [
-  { name: "A&E+", value: 44},
-  { name: "D&A+", value: 112 },
-  { name: "Treasury & Markets", value: 140 },
-  { name: "FRAL", value: 100 },
-  { name: "IRB", value:59  },
-  { name: "Infra", value:72  },
-  { name: "Murex", value:  16},
-];
-const currentHC = 543;
-const additions = 31;
-const leavers = 31;
-
-const projectedHC = currentHC + additions - leavers;
-
-
-    const SBUwisezbillableHC = [
-        
-       { name: "A&E", value: 27, group:"A&E+"},
-       { name: "Shared Services", value: 6, group:"A&E+" },
-       { name: "Bank Of API's", value: 6 , group:"A&E+"},
-       { name: "Wealth CRM", value: 5, group:"A&E+"},
-  
-       { name: "D&A", value: 46, group:"D&A+" },
-       { name: "FinCrime", value: 16, group:"D&A+"  },
-       { name: "C&I", value: 4 , group:"D&A+" },
-       { name: "Wealth Management", value: 7,group:"D&A+"  },
-       { name: "REtail Banking", value: 33, group:"D&A+"  },
-       { name: "Functions", value: 6, group:"D&A+"  },
- 
-       { name: "Treasury Solutions-BSM", value: 24, group:"Treasury and Markets"  },
-       { name: "Treasury Solutions- Climate", value: 12 , group:"Treasury and Markets"},
-       { name: "Treasury Solutions-SFP/others", value: 32, group:"Treasury and Markets" },
-       { name: "Natwest Markets", value: 38 , group:"Treasury and Markets"},
-       { name: "NWM -RBSI", value: 7 , group:"Treasury and Markets"},
-       { name: "Payments", value: 3, group:"Treasury and Markets" },
-       { name: "Core Banking", value: 0, group:"Treasury and Markets" },
-       { name: "NWM-Ops", value: 4, group:"Treasury and Markets" },
-       { name: "Market Risk", value: 20, group:"Treasury and Markets"},
-
-       { name: "FS-FRAL", value: 42, group:"FRAL" },
-       { name: "RS-FRAL", value: 40 ,group:"FRAL" },
-       { name: "FRAL-Non Consolidated", value: 16,group:"FRAL"  },
-
-       { name: "IRB", value: 59,group:"IRB"  },
-       
-       { name: "Infra", value: 72, group:"Infra"  },
-       
-       { name: "Murex", value: 16 , group:"Murex"},
-
-    ];
-
-
-  const resourceAllocationData = [
-    { name: "Java", allocated: 45, actual: 40 },
-    { name: "React", allocated: 32, actual: 28 },
-    { name: "Testing", allocated: 25, actual: 22 },
-    { name: "Data", allocated: 18, actual: 16 },
-    { name: "DevOps", allocated: 22, actual: 20 },
-  ];
-
-  const utilizationTrendData = [
-    { month: "Jan", utilization: 72 },
-    { month: "Feb", utilization: 75 },
-    { month: "Mar", utilization: 78 },
-    { month: "Apr", utilization: 82 },
-    { month: "May", utilization: 84 },
-    { month: "Jun", utilization: 87 },
-  ];
-
-  const leakageData = [
-    { name: "Bench", value: 45 },
-    { name: "Learning", value: 22 },
-    { name: "Admin", value: 15 },
-    { name: "Leave", value: 18 },
-  ];
-
-  const timesheetData = [
-    { name: "Submitted", value: 91 },
-    { name: "Pending", value: 6 },
-    { name: "Rejected", value: 3 },
-  ];
-
-  const projectData = [
-    { project: "Digital Banking", hours: 540 },
-    { project: "Payments Hub", hours: 480 },
-    { project: "Customer Portal", hours: 410 },
-    { project: "Reporting Suite", hours: 350 },
-    { project: "Data Modernisation", hours: 290 },
-  ];
-
-  const locationData = [
-    { location: "Gurugram", resources: 55 },
-    { location: "Chennai", resources: 35 },
-    { location: "Pune", resources: 30 },
-    { location: "Bangalore", resources: 22 },
-  ];
-
+  const weeklyHCTrend = dashboardData?.weeklyHCTrend || [];
+  const monthlyHCTrend = dashboardData?.monthlyHCTrend || [];
+  const hcActualData = dashboardData?.hcActualData || [];
+  const currentHC = dashboardData?.currentHC ?? 0;
+  const additions = dashboardData?.additions ?? 0;
+  const leavers = dashboardData?.leavers ?? 0;
+  const projectedHC = currentHC + additions - leavers;
+  const SBUwisezbillableHC = dashboardData?.SBUwisezbillableHC || [];
+  const resourceAllocationData = dashboardData?.resourceAllocationData || [];
+  const leakageData = dashboardData?.leakageData || [];
+  const summaryCards = dashboardData?.summaryCards || {};
 
 const groupCounts = Object.entries(
   SBUwisezbillableHC.reduce((acc, item) => {
@@ -223,28 +113,28 @@ for (let i = 1; i < SBUwisezbillableHC.length; i++) {
         <div className="row mb-4">
           <div className="col-lg-3 col-md-6 mb-3">
             <div className="summary-card">
-              <h3>142</h3>
+              <h3>{summaryCards.totalResources ?? 142}</h3>
               <p>👥 Total Resources</p>
             </div>
           </div>
 
           <div className="col-lg-3 col-md-6 mb-3">
             <div className="summary-card">
-              <h3>84%</h3>
+              <h3>{summaryCards.billableHCPct ?? 84}%</h3>
               <p>⚙️ Billable HC</p>
             </div>
           </div>
 
           <div className="col-lg-3 col-md-6 mb-3">
             <div className="summary-card">
-              <h3>268</h3>
+              <h3>{summaryCards.leakageHours ?? 268}</h3>
               <p>⏱ Leakage Hours</p>
             </div>
           </div>
 
           <div className="col-lg-3 col-md-6 mb-3">
             <div className="summary-card">
-              <h3>91%</h3>
+              <h3>{summaryCards.timesheetCompliance ?? 91}%</h3>
               <p>📝 Timesheet Compliance</p>
             </div>
           </div>
@@ -260,45 +150,45 @@ for (let i = 1; i < SBUwisezbillableHC.length; i++) {
               </div>
         {/* Row 1 */}
         <div className="top-row">
-        
+
           <div className="pricing-card">
             <h4>Current Addition / Leavers</h4>
-        
+
             <div className="summary-row">
               <span>Current HC</span>
               <strong>{currentHC}</strong>
             </div>
-        
+
             <div className="summary-row">
               <span>Additions</span>
               <strong className="positive-value">
                 +{additions}
               </strong>
             </div>
-        
+
             <div className="summary-row">
               <span>Leavers</span>
               <strong className="negative-value">
                 -{leavers}
               </strong>
             </div>
-        
+
             <div className="summary-total">
               <span>Projected HC Month-end</span>
               <strong>{projectedHC}</strong>
             </div>
           </div>
-        
+
           <div className="pricing-card">
             <h4>HC Actual</h4>
-        
+
             <ResponsiveContainer width="100%" height={260}>
               <BarChart data={hcActualData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-        
+
                 <Bar dataKey="value" radius={[6, 6, 0, 0]}>
   <LabelList
     dataKey="value"
@@ -318,13 +208,13 @@ for (let i = 1; i < SBUwisezbillableHC.length; i++) {
               </BarChart>
             </ResponsiveContainer>
           </div>
-        
+
         </div>
               {/* Row 2 */}
               <div className="middle-row">
                 <div className="pricing-card">
                   <h4>HC Weekly Trend</h4>
-        
+
                   <ResponsiveContainer width="100%" height={260}>
                     <LineChart data={weeklyHCTrend}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -342,7 +232,7 @@ for (let i = 1; i < SBUwisezbillableHC.length; i++) {
         />
                       <Tooltip />
                       <Legend />
-        
+
 <Line
   type="monotone"
   dataKey="hc"
@@ -366,10 +256,10 @@ for (let i = 1; i < SBUwisezbillableHC.length; i++) {
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
-        
+
                 <div className="pricing-card">
                   <h4>HC Monthly Trend</h4>
-        
+
                   <ResponsiveContainer width="100%" height={260}>
                     <LineChart data={monthlyHCTrend}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -387,7 +277,7 @@ for (let i = 1; i < SBUwisezbillableHC.length; i++) {
         />
                       <Tooltip />
                       <Legend />
-        
+
                      <Line
   type="monotone"
   dataKey="hc"
@@ -412,11 +302,11 @@ for (let i = 1; i < SBUwisezbillableHC.length; i++) {
                   </ResponsiveContainer>
                 </div>
               </div>
-        
+
               {/* Row 3 */}
               <div className="pricing-card sub-sbu-chart-card">
                 <h4>Sub SBU wise Billable HC</h4>
-        
+
                 <ResponsiveContainer width="100%" height={500}>
                   <BarChart
                     data={SBUwisezbillableHC}
@@ -428,7 +318,7 @@ for (let i = 1; i < SBUwisezbillableHC.length; i++) {
                     }}
                   >
                     <CartesianGrid strokeDasharray="3 3" />
-        
+
                     <XAxis
                       dataKey="name"
                       interval={0}
@@ -436,10 +326,10 @@ for (let i = 1; i < SBUwisezbillableHC.length; i++) {
                       textAnchor="end"
                       height={130}
                     />
-        
+
                     <YAxis />
                     <Tooltip />
-        
+
                     <Bar dataKey="value" radius={[4, 4, 0, 0]}>
   <LabelList
     dataKey="value"
@@ -456,18 +346,18 @@ for (let i = 1; i < SBUwisezbillableHC.length; i++) {
     />
   ))}
 </Bar>
-        
+
                     {dividerNames.map((index) => (
                       <ReferenceLine
                         key={index}
                         x={index,0.5}
                         stroke="#6A1B9A"
                         strokeWidth={1}
-                      />   
+                      />
                     ))}
                   </BarChart>
                 </ResponsiveContainer>
-        
+
                 <div className="sub-sbu-groups">
                   {groupCounts.map(([groupName, count]) => (
                     <div

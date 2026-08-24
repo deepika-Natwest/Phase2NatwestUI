@@ -1,5 +1,5 @@
 
-require("dotenv").config();
+require("dotenv").config({ path: require("path").join(__dirname, "../.env") });
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -21,12 +21,11 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true,
-  })
-);
+const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:3000,http://127.0.0.1:3000")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
@@ -43,6 +42,18 @@ app.use("/api/recognition", recognitionRoutes);
 app.use("/api/deliverables", deliverableRoutes);
 app.use("/api/users", uploadRoutes);
 app.use( "/api/programs",  programRoutes);   //program Route
+
+const chatbotRoutes = require("./src/routes/chatbotRoutes");
+app.use("/api/chatbot", chatbotRoutes);
+
+const pricingRoutes = require("./src/routes/pricingRoutes");
+app.use("/api/pricing", pricingRoutes);
+
+const referenceDataRoutes = require("./src/routes/referenceDataRoutes");
+app.use("/api/reference-data", referenceDataRoutes);
+
+const userStatusRoutes = require("./src/routes/userStatusRoutes");
+app.use("/api/user-statuses", userStatusRoutes);
 
 
 // Fallback route for unknown endpoints

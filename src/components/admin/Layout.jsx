@@ -14,9 +14,9 @@ function Layout({ children }) {
   };
 
   return (
-    <div className="d-flex">
+    <div className="d-flex adminShell">
       <Sidebar />
-      <div className="flex-grow-1">
+      <div className="flex-grow-1 adminMain">
         <Header username={username} onLogout={handleLogout} />
         {children}
       </div>

@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test test/*.test.js",
     "start": "node server.js"
   },
   "keywords": [],
@@ -22,6 +22,9 @@
     "multer": "^2.0.2",
     "recharts": "^3.9.2",
     "sharp": "^0.34.5",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "@google/genai": "^2.18.0",
+    "better-sqlite3": "^13.0.3",
+    "sqlite-vec": "^0.1.9"
   }
 }

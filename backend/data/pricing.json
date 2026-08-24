@@ -1,0 +1,28 @@
+{
+  "expiry": [
+    { "id": 1, "category": "A&E+", "futureEnding": 15, "expiring1130": 5, "expiring3160": 7, "nba": 1, "plannedRelease": 2 },
+    { "id": 2, "category": "D&A+", "futureEnding": 12, "expiring1130": 3, "expiring3160": 6, "nba": 2, "plannedRelease": 1 },
+    { "id": 3, "category": "FRAL", "futureEnding": 8, "expiring1130": 2, "expiring3160": 4, "nba": 1, "plannedRelease": 0 },
+    { "id": 4, "category": "Infra", "futureEnding": 14, "expiring1130": 6, "expiring3160": 5, "nba": 2, "plannedRelease": 3 },
+    { "id": 5, "category": "IRB", "futureEnding": 7, "expiring1130": 3, "expiring3160": 2, "nba": 1, "plannedRelease": 1 },
+    { "id": 6, "category": "Murex", "futureEnding": 10, "expiring1130": 4, "expiring3160": 3, "nba": 1, "plannedRelease": 2 },
+    { "id": 7, "category": "Treasury & Markets", "futureEnding": 18, "expiring1130": 7, "expiring3160": 8, "nba": 3, "plannedRelease": 4 },
+    { "id": 8, "category": "Retail Banking", "futureEnding": 11, "expiring1130": 4, "expiring3160": 5, "nba": 2, "plannedRelease": 1 },
+    { "id": 9, "category": "Cards", "futureEnding": 9, "expiring1130": 3, "expiring3160": 2, "nba": 1, "plannedRelease": 1 },
+    { "id": 10, "category": "Shared Services", "futureEnding": 13, "expiring1130": 5, "expiring3160": 4, "nba": 1, "plannedRelease": 2 }
+  ],
+  "attrition": [
+    { "id": 1, "category": "A&E+", "attrition": 2, "rollOff": 3 },
+    { "id": 2, "category": "D&A+", "attrition": 1, "rollOff": 4 },
+    { "id": 3, "category": "FRAL", "attrition": 0, "rollOff": 2 },
+    { "id": 4, "category": "Infra", "attrition": 3, "rollOff": 5 },
+    { "id": 5, "category": "Treasury & Markets", "attrition": 2, "rollOff": 6 }
+  ],
+  "extension": [
+    { "id": 1, "category": "A&E+", "fgAvailable": 12, "fgNotAvailable": 4, "toBeIssued": 3, "clientConfirmationAwaited": 2 },
+    { "id": 2, "category": "D&A+", "fgAvailable": 10, "fgNotAvailable": 3, "toBeIssued": 4, "clientConfirmationAwaited": 1 },
+    { "id": 3, "category": "FRAL", "fgAvailable": 7, "fgNotAvailable": 2, "toBeIssued": 2, "clientConfirmationAwaited": 1 },
+    { "id": 4, "category": "Infra", "fgAvailable": 13, "fgNotAvailable": 5, "toBeIssued": 6, "clientConfirmationAwaited": 3 },
+    { "id": 5, "category": "Treasury & Markets", "fgAvailable": 15, "fgNotAvailable": 6, "toBeIssued": 5, "clientConfirmationAwaited": 4 }
+  ]
+}
