@@ -31,6 +31,7 @@ import UploadUsersPage from "../pages/admin/UploadUsersPage";
 import UserStatusPage from "../pages/admin/UserStatusPage";
 import ProjectProgramPage from "../pages/public/ProjectProgramPage";
 import AddProgram from "../pages/admin/Addprogram";
+import ChatbotWidget from "../components/ChatbotWidget";
 
 
 function AppRouter() {
@@ -88,6 +89,7 @@ function AppRouter() {
         <Route path="/add-program" element={<ProtectedRoute roles={["ADMIN","EDITOR"]}><AddProgram /></ProtectedRoute>}/>
         <Route path="/admin/programs" element={<ProtectedRoute roles={["ADMIN","EDITOR","VIEWER"]}><AddProgram /></ProtectedRoute>}/>
       </Routes>
+      <ChatbotWidget />
     </BrowserRouter>
   );
 }

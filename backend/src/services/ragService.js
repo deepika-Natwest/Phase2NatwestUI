@@ -4,7 +4,7 @@ const { search: searchVectorIndex } = require("./vectorStore");
 
 const DATA_DIR = path.join(__dirname, "../../data");
 const PRICING_FILE = path.join(DATA_DIR, "pricing.json");
-const DASHBOARD_FILE = path.join(DATA_DIR, "dashboard.json");
+const DASHBOARD_FILE = path.join(DATA_DIR, "public-dashboard.json");
 
 const TAB_LABELS = {
   users: "Users",
@@ -620,17 +620,6 @@ function answerQuestion(question, knowledge = buildKnowledgeBase()) {
   }
 
   const top = scored[0].doc;
-  const topFacts = scored
-    .slice(0, 3)
-    .map(({ doc }) => {
-      const raw = doc.raw || {};
-      const label = raw.name || raw.eventName || raw.projectName || raw.title || raw.designation || doc.title;
-      const location = raw.location || raw.place || "";
-      const summary = raw.description || raw.shortDescription || raw.summary || raw.status || "";
-      return `${label}${location ? ` (${location})` : ""}${summary ? ` - ${summary.slice(0, 140)}` : ""}`;
-    })
-    .join("; ");
-
   return `I found related records in the ${top.tab} section, but I could not determine a reliable direct answer. Please specify the person, field, filter, or metric you need.`;
 }
 
