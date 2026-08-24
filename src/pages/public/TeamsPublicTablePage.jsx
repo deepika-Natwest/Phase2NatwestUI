@@ -9,6 +9,7 @@ function TeamsPublicTablePage() {
 
   const [capabilitiesMap, setCapabilitiesMap] = useState({});
   const [franchisesMap, setFranchisesMap] = useState({});
+  const [programsMap, setProgramsMap] = useState({});
   const [selectedCap, setSelectedCap] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -17,36 +18,6 @@ function TeamsPublicTablePage() {
 
   const [selectedProject, setSelectedProject] = useState("");
 const [showPopup, setShowPopup] = useState(false);
-
-const projectDescriptions = {
-  "Single Pane of Glass":
-    "A centralized platform that provides a unified view of business data, applications, and operational metrics. It enables users to access information from multiple systems through a single interface, improving visibility, decision-making, and operational efficiency.",
-
-  "NA":
-    "Project description will be updated soon.",
-
-  "Exits (Exodus)":
-    "Exodus is an application designed to streamline and manage employee exit processes. It helps coordinate exit workflows, track approvals, maintain compliance, and provide visibility into offboarding activities for HR and business stakeholders.",
-
-  "DLS":
-    "DLS is a data-driven platform that supports business operations by managing, processing, and delivering critical datasets. It focuses on ensuring data quality, reliability, and timely availability for reporting and downstream applications.",
-
-  "Kepler":
-    "Kepler is an enterprise solution that enables data integration, analytics, and operational insights. It consolidates information from multiple sources to provide actionable intelligence for business users and leadership teams.",
-
-  "GenAI Gateway":
-    "GenAI Gateway provides a secure and standardized interface for accessing Generative AI capabilities across the organization. It simplifies AI adoption by offering centralized authentication, governance, API management, and integration with approved Large Language Models (LLMs).",
-
-  "ETD & SFT POCs":
-    "A collection of Proof of Concepts (POCs) focused on evaluating Enterprise Technology Development (ETD) and Smart Factory Technologies (SFT). These initiatives explore innovative solutions, validate technical feasibility, and assess business value before production implementation.",
-
-  "Leapfrog":
-    "Leapfrog is an innovation initiative aimed at accelerating digital transformation through modern technologies, process automation, and improved user experiences. The project focuses on delivering scalable solutions that enhance productivity and operational excellence.",
-
-  "Genesis":
-    "Genesis is a case reporting and data processing platform that extracts case-related data from MongoDB, applies data quality checks and business validations, and delivers a consolidated reporting dataset in Snowflake. The platform ensures accurate, consistent, and timely availability of case information through the ALL_CASE_REPORT dataset for business reporting and downstream analytical consumption. The Streamlit application consumes data from ALL_CASE_REPORT as part of the Genesis data pipeline. It includes the Genesis Custom Reporting dashboard, which is used by the Operations team for business reporting and analytical insights."
-};
-
 
   const [filters, setFilters] = useState({
     franchiseId: [],
@@ -102,9 +73,10 @@ const projectDescriptions = {
   useEffect(() => {
     const fetchMaster = async () => {
       try {
-        const [capsRes, frRes] = await Promise.all([
+        const [capsRes, frRes, programsRes] = await Promise.all([
           api.get("/capabilities"),
           api.get("/franchises"),
+          api.get("/programs"),
         ]);
 
         const capMap = {};
@@ -118,6 +90,12 @@ const projectDescriptions = {
           frMap[f.id] = f.name;
         });
         setFranchisesMap(frMap);
+
+        const programsMapData = {};
+        (programsRes.data || []).forEach((program) => {
+          programsMapData[program.name] = program.description;
+        });
+        setProgramsMap(programsMapData);
       } catch (err) {
         console.error("Failed to load master data:", err);
       }
@@ -162,7 +140,7 @@ const projectDescriptions = {
   });
 };
 
-  
+
   const filteredUsers = users.filter((u) => {
     return (
       (!selectedCap || String(u.capabilityId) === String(selectedCap)) &&
@@ -488,7 +466,7 @@ const projectDescriptions = {
       <hr />
 
       <p style={{ whiteSpace: "pre-line" }}>
-        {projectDescriptions[selectedProject] ||
+        {programsMap[selectedProject] ||
           "Description not available."}
       </p>
 

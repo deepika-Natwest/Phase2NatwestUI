@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import api from "../../services/api";
 
-const REQUIRED_HEADERS = [
-  "Name",
-  "Enterprise ID",
-  "Capability",
-  "Franchise",
-  "Level",
-  "Work Location",
-  "Project/Program",
-  "NWG Line Manager",
+const ALL_HEADERS = [
+  "Name", "Enterprise ID", "Email", "Role", "Career Level",
+  "Location", "Capability", "Franchise",
+  "Resource Type", "NatWest DOJ", "SOW Start Date", "SOW End Date", "SOW ID"
+];
+
+const MANDATORY_FIELDS = [
+  "Name", "Enterprise ID", "Email", "Role", "Career Level",
+  "Location", "Capability", "Franchise"
 ];
 
 export default function UploadUsersSection() {
@@ -24,22 +24,22 @@ export default function UploadUsersSection() {
       String(header || "").trim()
     );
 
-    const missingHeaders = REQUIRED_HEADERS.filter(
+    const missingHeaders = ALL_HEADERS.filter(
       (header) => !normalizedHeaders.includes(header)
     );
 
     const extraHeaders = normalizedHeaders.filter(
-      (header) => !REQUIRED_HEADERS.includes(header)
+      (header) => !ALL_HEADERS.includes(header)
     );
 
     const orderMismatch =
-      normalizedHeaders.length === REQUIRED_HEADERS.length &&
+      normalizedHeaders.length === ALL_HEADERS.length &&
       normalizedHeaders.some(
-        (header, index) => header !== REQUIRED_HEADERS[index]
+        (header, index) => header !== ALL_HEADERS[index]
       );
 
     const exactLengthMismatch =
-      normalizedHeaders.length !== REQUIRED_HEADERS.length;
+      normalizedHeaders.length !== ALL_HEADERS.length;
 
     return {
       isValid:
@@ -58,7 +58,7 @@ export default function UploadUsersSection() {
     const rowErrors = [];
 
     jsonData.forEach((row, index) => {
-      const missingFields = REQUIRED_HEADERS.filter((header) => {
+      const missingFields = MANDATORY_FIELDS.filter((header) => {
         const value = row[header];
         return value === undefined || value === null || String(value).trim() === "";
       });

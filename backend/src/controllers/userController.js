@@ -38,7 +38,12 @@ const createUser = async (req, res) => {
       status,
       capabilityId,
       franchiseId,
-      shortDescription
+      shortDescription,
+      resourceType,
+      natwestDoj,
+      sowStartDate,
+      sowEndDate,
+      sowId
     } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -60,6 +65,11 @@ const createUser = async (req, res) => {
       //profilePic: req.file ? req.file.path : null,
       profilePic: req.file ? req.file.filename : null,
       shortDescription,
+      resourceType: resourceType || "",
+      natwestDoj: natwestDoj || "",
+      sowStartDate: sowStartDate || "",
+      sowEndDate: sowEndDate || "",
+      sowId: sowId || "",
       createdAt: new Date().toISOString()
     };
 

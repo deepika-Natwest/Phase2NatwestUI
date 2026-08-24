@@ -43,6 +43,12 @@ function Sidebar() {
           </NavLink>
         )}
 
+        {hasAnyRole(role, [ROLES.ADMIN]) && (
+          <NavLink to="/admin/user-status" className={({ isActive }) => isActive ? "active" : ""}>
+            User Status
+          </NavLink>
+        )}
+
         {hasAnyRole(role, [ROLES.ADMIN, ROLES.EDITOR, ROLES.VIEWER]) && (
           <>
           <NavLink to="/admin/deliverables" className="list-group-item list-group-item-action">

@@ -5,6 +5,7 @@ import { LOCATION_OPTIONS, GENDER_OPTIONS } from "../../utils/userConfig";
 const UserForm = ({ user, onClose }) => {
   const [capabilities, setCapabilities] = useState([]);
   const [franchises, setFranchises] = useState([]);
+  const [userStatuses, setUserStatuses] = useState([]);
   const [form, setForm] = useState({
     capabilityId: "",
     franchiseId: "",
@@ -19,16 +20,22 @@ const UserForm = ({ user, onClose }) => {
     role: "",
     status: "",
     profilePic: null,
-    shortDescription: ""
+    shortDescription: "",
+    resourceType: "",
+    natwestDoj: "",
+    sowStartDate: "",
+    sowEndDate: "",
+    sowId: "",
   });
 
   const roles = ["admin", "viewer", "editor"];
   const careerLevels = Array.from({ length: 12 }, (_, i) => `Level ${i + 1}`);
   const statuses = ["Active", "Inactive"];
 
-  // Fetch capabilities
+  // Fetch capabilities and user statuses
   useEffect(() => {
     api.get("/capabilities").then(res => setCapabilities(res.data));
+    api.get("/user-statuses").then(res => setUserStatuses(res.data)).catch(() => {});
   }, []);
 
   // Set form when editing a user
@@ -283,6 +290,41 @@ const UserForm = ({ user, onClose }) => {
                   value={form.shortDescription}
                   onChange={handleChange}
                 />
+              </div>
+
+              <div className="row">
+                {/* Resource Type */}
+                <div className="col-md-6 mb-3">
+                  <label>Resource Type</label>
+                  <select name="resourceType" className="form-control" value={form.resourceType} onChange={handleChange}>
+                    <option value="">Select</option>
+                    {userStatuses.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
+                  </select>
+                </div>
+
+                {/* NatWest DOJ */}
+                <div className="col-md-6 mb-3">
+                  <label>NatWest DOJ</label>
+                  <input type="date" name="natwestDoj" className="form-control" value={form.natwestDoj || ""} onChange={handleChange} />
+                </div>
+
+                {/* SOW ID */}
+                <div className="col-md-6 mb-3">
+                  <label>SOW ID</label>
+                  <input type="text" name="sowId" className="form-control" value={form.sowId || ""} onChange={handleChange} />
+                </div>
+
+                {/* SOW Start Date */}
+                <div className="col-md-6 mb-3">
+                  <label>SOW Start Date</label>
+                  <input type="date" name="sowStartDate" className="form-control" value={form.sowStartDate || ""} onChange={handleChange} />
+                </div>
+
+                {/* SOW End Date */}
+                <div className="col-md-6 mb-3">
+                  <label>SOW End Date</label>
+                  <input type="date" name="sowEndDate" className="form-control" value={form.sowEndDate || ""} onChange={handleChange} />
+                </div>
               </div>
 
               <button type="submit" className="btn btn-primary">

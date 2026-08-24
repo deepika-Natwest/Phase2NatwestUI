@@ -28,6 +28,7 @@ import FranchisePage from "../pages/admin/FranchisePage";
 import RecognitionPage from "../pages/admin/RecognitionPage";
 import DeliverablePage from "../pages/admin/DeliverablePage";
 import UploadUsersPage from "../pages/admin/UploadUsersPage";
+import UserStatusPage from "../pages/admin/UserStatusPage";
 import ProjectProgramPage from "../pages/public/ProjectProgramPage";
 import AddProgram from "../pages/admin/Addprogram";
 
@@ -78,6 +79,7 @@ function AppRouter() {
         <Route path="/admin/capabilities" element={<CapabilitiesPage />} />
         <Route path="/admin/franchises" element={<FranchisePage />} />
         <Route path="/admin/users" element={<ProtectedRoute roles={["ADMIN"]}><UsersPage /></ProtectedRoute>} />
+        <Route path="/admin/user-status" element={<ProtectedRoute roles={["ADMIN"]}><UserStatusPage /></ProtectedRoute>} />
         <Route path="/admin/leadership" element={<ProtectedRoute roles={["ADMIN","EDITOR","VIEWER"]}><LeadershipPage /></ProtectedRoute>} />
         <Route path="/admin/events" element={<ProtectedRoute roles={["ADMIN","EDITOR","VIEWER"]}><EventsPage /></ProtectedRoute>} />
         <Route path="/admin/recognition" element={<ProtectedRoute roles={["ADMIN","EDITOR","VIEWER"]}><RecognitionPage /></ProtectedRoute>} />

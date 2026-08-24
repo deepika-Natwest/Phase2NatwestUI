@@ -128,10 +128,8 @@ function UserStatusPage() {
 
       <div className="searchHeadBox p-3">
         <div className="row align-items-center">
-          <div className="col-4" />
-
           {/* Bulk delete action */}
-          <div className="col-4 text-center">
+          <div className="col-4">
             {hasAnyRole(role, [ROLES.ADMIN]) && selectedCount > 0 && !confirmDelete && (
               <button className="btn btn-danger" onClick={() => setConfirmDelete(true)}>
                 Delete Selected ({selectedCount})
@@ -153,6 +151,8 @@ function UserStatusPage() {
               </div>
             )}
           </div>
+
+          <div className="col-4" />
 
           <div className="col-4 text-end">
             {hasAnyRole(role, [ROLES.ADMIN]) && (
@@ -250,7 +250,7 @@ function UserStatusPage() {
       </div>
 
       {modalOpen && (
-        <div className="modal show fade d-block" tabIndex="-1">
+        <div className="modal show fade d-block" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <form onSubmit={handleSubmit}>

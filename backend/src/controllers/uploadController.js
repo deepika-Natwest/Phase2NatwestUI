@@ -34,14 +34,9 @@ const uploadUsers = async (req, res) => {
 
     // Strict header validation
     const expectedHeaders = [
-      "Name",
-      "Enterprise ID",
-      "Capability",
-      "Franchise",
-      "Level",
-      "Work Location",
-      "Project/Program",
-      "NWG Line Manager",
+      "Name", "Enterprise ID", "Email", "Role", "Career Level",
+      "Location", "Capability", "Franchise",
+      "Resource Type", "NatWest DOJ", "SOW Start Date", "SOW End Date", "SOW ID"
     ];
 
     const uploadedHeaders = Object.keys(usersFromFile[0]).map((h) => h.trim());
@@ -72,24 +67,29 @@ const uploadUsers = async (req, res) => {
 
       const name = String(user.Name || "").trim();
       const enterpriseId = String(user["Enterprise ID"] || "").trim();
+      const email = String(user.Email || "").trim();
+      const role = String(user.Role || "").trim();
+      const careerLevel = String(user["Career Level"] || "").trim();
+      const location = String(user.Location || "").trim();
       const capability = String(user.Capability || "").trim();
       const franchise = String(user.Franchise || "").trim();
-      const level = String(user.Level || "").trim();
-      const workLocation = String(user["Work Location"] || "").trim();
-      const projectName = String(user["Project/Program"] || "").trim();
-      const lineManager = String(user["NWG Line Manager"] || "").trim();
+      const resourceType = String(user["Resource Type"] || "").trim();
+      const natwestDoj = String(user["NatWest DOJ"] || "").trim();
+      const sowStartDate = String(user["SOW Start Date"] || "").trim();
+      const sowEndDate = String(user["SOW End Date"] || "").trim();
+      const sowId = String(user["SOW ID"] || "").trim();
 
       if (
         !name ||
         !enterpriseId ||
+        !email ||
+        !role ||
+        !careerLevel ||
+        !location ||
         !capability ||
-        !franchise ||
-        !level ||
-        !workLocation ||
-        !projectName ||
-        !lineManager
+        !franchise
       ) {
-        rowErrors.push(`Row ${i + 2}: All fields are mandatory.`);
+        rowErrors.push(`Row ${i + 2}: All mandatory fields are required.`);
         continue;
       }
 
@@ -105,12 +105,17 @@ const uploadUsers = async (req, res) => {
           ...existingUsers[existingIndex],
           name,
           enterpriseId,
+          email,
+          role,
+          careerLevel,
+          location,
           capabilityId: capability,
           franchiseId: franchise,
-          careerLevel: level,
-          location: workLocation,
-          projectName,
-          lineManager,
+          resourceType,
+          natwestDoj,
+          sowStartDate,
+          sowEndDate,
+          sowId,
         };
 
         updatedCount++;
@@ -125,18 +130,22 @@ const uploadUsers = async (req, res) => {
           id: uuidv4(),
           name,
           enterpriseId,
+          email,
           password,
           gender: "",
-          location: workLocation,
-          careerLevel: level,
-          lineManager,
-          projectName,
-          role: "user",
+          location,
+          careerLevel,
+          role,
           status: "Active",
           capabilityId: capability,
           franchiseId: franchise,
           profilePic: "",
           shortDescription: "",
+          resourceType,
+          natwestDoj,
+          sowStartDate,
+          sowEndDate,
+          sowId,
           createdAt: new Date().toISOString(),
         });
 

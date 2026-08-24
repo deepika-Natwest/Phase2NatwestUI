@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../components/admin/Layout";
 import {
   getDeliverables,
@@ -18,6 +18,14 @@ const CATEGORY_OPTIONS = [
   "Cost Saving",
   "Process Improvement",
   "New Functionality",
+];
+
+const BULK_EDIT_CATEGORY_OPTIONS = [
+  "Design",
+  "Development",
+  "Testing",
+  "Documentation",
+  "Deployment",
 ];
 
 function DeliverablePage() {
@@ -40,7 +48,7 @@ function DeliverablePage() {
     description: "",
     resources: [],
 
-    // ✅ category-specific
+    // category-specific
     costSavingAmount: "",
     costSavingCurrency: "GPP",
 
@@ -51,6 +59,22 @@ function DeliverablePage() {
 
     newFunctionality: "",
   });
+
+  // ── Bulk select ────────────────────────────────────────────────────────────
+  const [selectedIds, setSelectedIds] = useState(new Set());
+  const [deleting, setDeleting] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  // ── Bulk edit ──────────────────────────────────────────────────────────────
+  const [bulkEditOpen, setBulkEditOpen] = useState(false);
+  const [bulkEditData, setBulkEditData] = useState({
+    capabilityId: "",
+    franchiseId: "",
+    category: "",
+  });
+  const [bulkEditing, setBulkEditing] = useState(false);
+
+  const selectAllRef = useRef(null);
 
   const loadData = async () => {
     const [d, c, f, u] = await Promise.all([
@@ -69,6 +93,35 @@ function DeliverablePage() {
     loadData();
   }, []);
 
+  // ── Bulk-select helpers ────────────────────────────────────────────────────
+  const allSelected =
+    deliverables.length > 0 && selectedIds.size === deliverables.length;
+  const someSelected =
+    selectedIds.size > 0 && selectedIds.size < deliverables.length;
+  const selectedCount = selectedIds.size;
+
+  useEffect(() => {
+    if (selectAllRef.current) {
+      selectAllRef.current.indeterminate = someSelected;
+    }
+  }, [someSelected]);
+
+  const toggleSelectAll = () => {
+    if (allSelected) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(deliverables.map((d) => d.id)));
+    }
+  };
+
+  const toggleOne = (id) => {
+    const next = new Set(selectedIds);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    setSelectedIds(next);
+  };
+
+  // ── Single add / edit ──────────────────────────────────────────────────────
   const openModal = (item = null) => {
     setCurrentItem(item);
     setFormData(
@@ -117,7 +170,7 @@ function DeliverablePage() {
       return;
     }
 
-    // ✅ reset when switching between Time / Percentage
+    // reset when switching between Time / Percentage
     if (name === "improvementType") {
       setFormData({
         ...formData,
@@ -128,7 +181,6 @@ function DeliverablePage() {
       });
       return;
     }
-
 
     setFormData({
       ...formData,
@@ -161,10 +213,54 @@ function DeliverablePage() {
     }
   };
 
+  // ── Bulk delete ────────────────────────────────────────────────────────────
+  const handleBulkDelete = async () => {
+    setDeleting(true);
+    try {
+      await Promise.all([...selectedIds].map((id) => deleteDeliverable(id)));
+      setSelectedIds(new Set());
+      setConfirmDelete(false);
+      await loadData();
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  // ── Bulk edit ──────────────────────────────────────────────────────────────
+  const handleBulkEdit = async () => {
+    const changes = Object.fromEntries(
+      Object.entries(bulkEditData).filter(([, v]) => v !== "")
+    );
+    if (!Object.keys(changes).length) {
+      setBulkEditOpen(false);
+      return;
+    }
+    setBulkEditing(true);
+    try {
+      await Promise.all(
+        [...selectedIds].map((id) => {
+          const existing = deliverables.find((d) => d.id === id);
+          return updateDeliverable(id, { ...existing, ...changes });
+        })
+      );
+      setSelectedIds(new Set());
+      setBulkEditOpen(false);
+      await loadData();
+    } finally {
+      setBulkEditing(false);
+    }
+  };
+
+  // ── Derived ────────────────────────────────────────────────────────────────
   const filteredFranchises = franchises.filter(
     (f) => f.capabilityId === formData.capabilityId
   );
 
+  const bulkFilteredFranchises = bulkEditData.capabilityId
+    ? franchises.filter((f) => f.capabilityId === bulkEditData.capabilityId)
+    : franchises;
+
+  // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <Layout>
       <div className="d-flex justify-content-between align-items-center titleBox">
@@ -176,10 +272,66 @@ function DeliverablePage() {
         )}
       </div>
 
+      {/* Bulk action toolbar */}
+      {selectedCount > 0 && !confirmDelete && (
+        <div className="searchHeadBox p-3 d-flex align-items-center gap-2">
+          <span className="me-2 fw-semibold">{selectedCount} selected</span>
+          {hasAnyRole(role, [ROLES.ADMIN]) && (
+            <button
+              className="btn btn-danger btn-sm"
+              onClick={() => setConfirmDelete(true)}
+            >
+              Delete Selected ({selectedCount})
+            </button>
+          )}
+          {hasAnyRole(role, [ROLES.ADMIN, ROLES.EDITOR]) && (
+            <button
+              className="btn btn-warning btn-sm"
+              onClick={() => {
+                setBulkEditData({ capabilityId: "", franchiseId: "", category: "" });
+                setBulkEditOpen(true);
+              }}
+            >
+              Edit Selected ({selectedCount})
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Bulk delete confirmation bar */}
+      {confirmDelete && (
+        <div className="searchHeadBox p-3 d-flex align-items-center gap-2">
+          <span className="text-danger fw-bold me-2">
+            Permanently delete {selectedCount} deliverable(s)? This cannot be undone.
+          </span>
+          <button
+            className="btn btn-danger btn-sm"
+            disabled={deleting}
+            onClick={handleBulkDelete}
+          >
+            {deleting ? "Deleting..." : "Confirm Delete"}
+          </button>
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={() => setConfirmDelete(false)}
+          >
+            Cancel
+          </button>
+        </div>
+      )}
+
       <div className="adminContent p-4">
         <table className="table table-bordered table-striped">
           <thead>
             <tr>
+              <th style={{ width: 40 }}>
+                <input
+                  type="checkbox"
+                  ref={selectAllRef}
+                  checked={allSelected}
+                  onChange={toggleSelectAll}
+                />
+              </th>
               <th>Title</th>
               <th>Project</th>
               <th>Category</th>
@@ -190,6 +342,13 @@ function DeliverablePage() {
           <tbody>
             {deliverables.map((d) => (
               <tr key={d.id}>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.has(d.id)}
+                    onChange={() => toggleOne(d.id)}
+                  />
+                </td>
                 <td>{d.deliveryTitle}</td>
                 <td>{d.projectName}</td>
                 <td>{d.category}</td>
@@ -218,6 +377,7 @@ function DeliverablePage() {
         </table>
       </div>
 
+      {/* ── Add / Edit Modal ─────────────────────────────────────────────────── */}
       {modalOpen && (
         <div className="modal show fade d-block">
           <div className="modal-dialog modal-lg modal-dialog-centered">
@@ -231,7 +391,7 @@ function DeliverablePage() {
                 </div>
 
                 <div className="modal-body row">
-                  {/* ✅ ALL ORIGINAL FIELDS KEPT */}
+                  {/* ALL ORIGINAL FIELDS KEPT */}
 
                   <div className="col-md-12 mb-3">
                     <label>Title</label>
@@ -312,7 +472,7 @@ function DeliverablePage() {
                     </div>
                   </div>
 
-                  {/* ✅ CONDITIONAL FIELDS */}
+                  {/* CONDITIONAL FIELDS */}
 
                   {formData.category === "Cost Saving" && (
                     <>
@@ -333,7 +493,7 @@ function DeliverablePage() {
 
                   {formData.category === "Process Improvement" && (
                     <>
-                      {/* ✅ Type Selection */}
+                      {/* Type Selection */}
                       <div className="col-md-6 mb-3">
                         <label>Improvement Type</label>
                         <select
@@ -349,7 +509,7 @@ function DeliverablePage() {
                         </select>
                       </div>
 
-                      {/* ✅ Time Inputs */}
+                      {/* Time Inputs */}
                       {formData.improvementType === "Time" && (
                         <>
                           <div className="col-md-6 mb-3">
@@ -380,7 +540,7 @@ function DeliverablePage() {
                         </>
                       )}
 
-                      {/* ✅ Percentage Input */}
+                      {/* Percentage Input */}
                       {formData.improvementType === "Percentage" && (
                         <div className="col-md-6 mb-3">
                           <label>Improvement (%)</label>
@@ -461,6 +621,111 @@ function DeliverablePage() {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Bulk Edit Modal ──────────────────────────────────────────────────── */}
+      {bulkEditOpen && (
+        <div className="modal show fade d-block" tabIndex="-1" role="dialog">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">
+                  Edit Selected Deliverables ({selectedCount})
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setBulkEditOpen(false)}
+                />
+              </div>
+              <div className="modal-body">
+                <p className="text-muted small mb-3">
+                  Only filled fields will be updated. Leave blank to keep existing values.
+                </p>
+                <div className="mb-3">
+                  <label className="form-label">Capability (BU)</label>
+                  <select
+                    className="form-control"
+                    value={bulkEditData.capabilityId}
+                    onChange={(e) =>
+                      setBulkEditData({
+                        ...bulkEditData,
+                        capabilityId: e.target.value,
+                        franchiseId: "",
+                      })
+                    }
+                  >
+                    <option value="">— keep existing —</option>
+                    {capabilities.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Franchise (SBU)</label>
+                  <select
+                    className="form-control"
+                    value={bulkEditData.franchiseId}
+                    onChange={(e) =>
+                      setBulkEditData({
+                        ...bulkEditData,
+                        franchiseId: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="">— keep existing —</option>
+                    {bulkFilteredFranchises.map((f) => (
+                      <option key={f.id} value={f.id}>
+                        {f.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Category</label>
+                  <select
+                    className="form-control"
+                    value={bulkEditData.category}
+                    onChange={(e) =>
+                      setBulkEditData({
+                        ...bulkEditData,
+                        category: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="">— keep existing —</option>
+                    {BULK_EDIT_CATEGORY_OPTIONS.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setBulkEditOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  disabled={bulkEditing}
+                  onClick={handleBulkEdit}
+                >
+                  {bulkEditing
+                    ? "Applying..."
+                    : `Apply to ${selectedCount} deliverable(s)`}
+                </button>
+              </div>
             </div>
           </div>
         </div>

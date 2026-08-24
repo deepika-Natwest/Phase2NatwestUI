@@ -32,26 +32,76 @@ export default function UploadUsersPage() {
             <table className="table table-bordered">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Enterprise ID</th>
-                  <th>Capability</th>
-                  <th>Franchise</th>
-                  <th>Level</th>
-                  <th>Work Location</th>
-                  <th>Project/Program</th>
-                  <th>NWG Line Manager</th>
+                  <th>Column</th>
+                  <th>Description</th>
+                  <th>Required</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>John Doe</td>
-                  <td>EMP001</td>
-                  <td>D&A+</td>
-                  <td>FinCrime</td>
-                  <td>L2</td>
-                  <td>Gurugram</td>
-                  <td>Project A</td>
-                  <td>Manager 1</td>
+                  <td>Name</td>
+                  <td>Full name of the user</td>
+                  <td>Mandatory</td>
+                </tr>
+                <tr>
+                  <td>Enterprise ID</td>
+                  <td>Unique enterprise identifier</td>
+                  <td>Mandatory</td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td>Email address of the user</td>
+                  <td>Mandatory</td>
+                </tr>
+                <tr>
+                  <td>Role</td>
+                  <td>User role (e.g. admin, editor, viewer)</td>
+                  <td>Mandatory</td>
+                </tr>
+                <tr>
+                  <td>Career Level</td>
+                  <td>Career level of the user (e.g. Level 1)</td>
+                  <td>Mandatory</td>
+                </tr>
+                <tr>
+                  <td>Location</td>
+                  <td>Work location of the user</td>
+                  <td>Mandatory</td>
+                </tr>
+                <tr>
+                  <td>Capability</td>
+                  <td>Capability group the user belongs to</td>
+                  <td>Mandatory</td>
+                </tr>
+                <tr>
+                  <td>Franchise</td>
+                  <td>Franchise the user belongs to</td>
+                  <td>Mandatory</td>
+                </tr>
+                <tr>
+                  <td>Resource Type</td>
+                  <td>Type of resource (from User Status list)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td>NatWest DOJ</td>
+                  <td>Date of joining NatWest (YYYY-MM-DD)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td>SOW Start Date</td>
+                  <td>SOW start date (YYYY-MM-DD)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td>SOW End Date</td>
+                  <td>SOW end date (YYYY-MM-DD)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td>SOW ID</td>
+                  <td>Statement of Work ID</td>
+                  <td>Optional</td>
                 </tr>
               </tbody>
             </table>
@@ -59,7 +109,7 @@ export default function UploadUsersPage() {
 
           <p className="text-muted">
             * Please use the downloaded template only. Do not rename, delete,
-            reorder, or add columns. All fields are mandatory.
+            reorder, or add columns. First 8 mandatory, last 5 optional.
           </p>
         </div>
       </div>
