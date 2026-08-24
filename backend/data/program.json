@@ -1,1 +1,164 @@
- 
+[
+  {
+    "id": "prog-001",
+    "name": "CDD Baseline",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": "f9eec64c-53ae-401d-8831-1eeab0421c7a",
+    "description": "CDD Baseline programme focused on customer due diligence and compliance baseline activities.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-002",
+    "name": "Customer Adoption Team",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": null,
+    "description": "Customer Adoption Team driving end-user onboarding and engagement across digital platforms.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-003",
+    "name": "DLR",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": null,
+    "description": "DLR programme delivering data lake and reporting capabilities.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-004",
+    "name": "DLS",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": null,
+    "description": "DLS programme enabling data lake standardisation and integration workstreams.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-005",
+    "name": "Data lake Standardized",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": null,
+    "description": "Data Lake Standardized programme focused on unified data lake architecture and governance.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-006",
+    "name": "EDB (Everyday Banking) / SFT ( Small feature Team)",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": null,
+    "description": "EDB and Small Feature Team programme supporting everyday banking product development and rapid feature delivery.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-007",
+    "name": "EDB XCT CHAPS/EBA Alerting",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": null,
+    "description": "EDB XCT CHAPS/EBA Alerting programme delivering payment alerting and cross-border transaction monitoring.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-008",
+    "name": "ETD & SFT POCs",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": null,
+    "description": "ETD and SFT Proof of Concepts programme exploring emerging technology and small feature innovations.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-009",
+    "name": "Exits(Exodus)",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": null,
+    "description": "Exits (Exodus) programme managing structured wind-down and offboarding of legacy systems and client relationships.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-010",
+    "name": "GenAI Gateway",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": null,
+    "description": "GenAI Gateway programme building secure and scalable generative AI infrastructure and access controls.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-011",
+    "name": "ISO 20022",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": null,
+    "description": "ISO 20022 programme delivering migration to the global financial messaging standard across payment rails.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-012",
+    "name": "ISO Payment(DLS)",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": null,
+    "description": "ISO Payment (DLS) programme implementing ISO 20022 payment standards within the data lake ecosystem.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-013",
+    "name": "Kepler",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": null,
+    "description": "Kepler programme driving strategic data and analytics platform transformation.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-014",
+    "name": "Leapfrog",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": null,
+    "description": "Leapfrog programme accelerating next-generation technology adoption and digital transformation initiatives.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-015",
+    "name": "SFT/EDB Team (Projects: Travel Account / XCT CHAPS/ PIMS)",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": null,
+    "description": "SFT/EDB Team covering Travel Account, XCT CHAPS and PIMS projects under the Small Feature Team model.",
+    "date": "2026-08-24",
+    "isActive": true
+  },
+  {
+    "id": "prog-016",
+    "name": "Single Pane of Glass",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": "f9eec64c-53ae-401d-8831-1eeab0421c7a",
+    "description": "ksabckjasncjknsacj",
+    "date": "2026-08-25",
+    "isActive": true
+  },
+  {
+    "name": "NA",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": "",
+    "description": "",
+    "date": "2026-08-24",
+    "isActive": true,
+    "id": "08f9b162-3e57-4943-b045-7967f248d7d1"
+  },
+  {
+    "name": "CDD Baseline",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": "f9eec64c-53ae-401d-8831-1eeab0421c7a",
+    "description": "new changes added for cdd baseline",
+    "date": "2026-08-25",
+    "isActive": true,
+    "id": "4ef7ae1e-791e-4131-be5d-c41ab380e5d8"
+  }
+]

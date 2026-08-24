@@ -4,6 +4,7 @@ import { LOCATION_OPTIONS, GENDER_OPTIONS } from "../../utils/userConfig";
 
 const UserForm = ({ user, onClose }) => {
   const [capabilities, setCapabilities] = useState([]);
+  const [allFranchises, setAllFranchises] = useState([]);
   const [franchises, setFranchises] = useState([]);
   const [userStatuses, setUserStatuses] = useState([]);
   const [form, setForm] = useState({
@@ -32,28 +33,36 @@ const UserForm = ({ user, onClose }) => {
   const careerLevels = Array.from({ length: 12 }, (_, i) => `Level ${i + 1}`);
   const statuses = ["Active", "Inactive"];
 
-  // Fetch capabilities and user statuses
+  // Fetch capabilities, all franchises, and user statuses once on mount
   useEffect(() => {
-    api.get("/capabilities").then(res => setCapabilities(res.data));
+    api.get("/capabilities").then(res => setCapabilities(Array.isArray(res.data) ? res.data : []));
+    api.get("/franchises").then(res => {
+      const list = Array.isArray(res.data) ? res.data : res.data?.franchises || [];
+      setAllFranchises(list);
+    });
     api.get("/user-statuses").then(res => setUserStatuses(res.data)).catch(() => {});
   }, []);
 
-  // Set form when editing a user
+  // When editing, filter franchises for the existing capabilityId
   useEffect(() => {
     if (user) {
-      setForm({ ...user, password: "" }); // don't prefill password
-      if (user.capabilityId) {
-        api.get(`/franchises/filter?capabilityId=${user.capabilityId}`)
-          .then(res => setFranchises(res.data));
-      }
+      setForm({ ...user, password: "" });
     }
   }, [user]);
 
-  const handleCapabilityChange = async (e) => {
+  // Keep franchise list in sync with selected capability (client-side filter — no extra API call)
+  useEffect(() => {
+    if (form.capabilityId) {
+      setFranchises(allFranchises.filter(f => f.capabilityId === form.capabilityId));
+    } else {
+      setFranchises(allFranchises);
+    }
+  }, [form.capabilityId, allFranchises]);
+
+  const handleCapabilityChange = (e) => {
     const capabilityId = e.target.value;
     setForm({ ...form, capabilityId, franchiseId: "" });
-    const res = await api.get(`/franchises/filter?capabilityId=${capabilityId}`);
-    setFranchises(res.data);
+    // franchise list updates automatically via the useEffect above
   };
 
   const handleChange = (e) => {

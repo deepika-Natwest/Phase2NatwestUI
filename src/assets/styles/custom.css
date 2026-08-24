@@ -133,11 +133,8 @@ body.nav-pos-bottom.public-nav-active #root {
   flex-direction: column;
   flex: 1;
   min-height: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   padding-right: 3px;
-  scrollbar-color: rgba(255,255,255,.38) transparent;
-  scrollbar-width: thin;
 }
 
 .publicSidebarLinks::-webkit-scrollbar {
@@ -193,12 +190,34 @@ body.nav-pos-bottom.public-nav-active #root {
   display: none;
 }
 
-/* Make expand button full-width and prominent when collapsed */
+/* ── COLLAPSE / EXPAND BUTTON — sidebar-native style ── */
+.navCollapseBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.82);
+  border-radius: 7px;
+  padding: 4px 10px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1.4;
+  min-width: 30px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.navCollapseBtn:hover {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border-color: rgba(255,255,255,0.45);
+}
+
+/* Make expand button wider when collapsed */
 .publicSidebar.collapsed .navCollapseBtn {
   width: 100%;
   text-align: center;
   padding: 5px 4px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -488,11 +507,62 @@ body.nav-pos-bottom .publicSidebarUser {
   margin-left: 8px;
 }
 
+/* ── SIDEBAR DRAG HANDLE (grip strip) ── */
+.sidebarNavPosBox {
+  padding: 4px 4px 2px;
+  flex-shrink: 0;
+}
+
+body.nav-pos-top .sidebarNavPosBox,
+body.nav-pos-bottom .sidebarNavPosBox {
+  margin-top: 0;
+  margin-left: 4px;
+  padding: 0 2px;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+.sidebarDragHandle {
+  cursor: grab;
+  padding: 6px 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.38;
+  transition: opacity 0.18s;
+  user-select: none;
+  color: #fff;
+  letter-spacing: 4px;
+  font-size: 15px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.sidebarDragHandle:hover {
+  opacity: 0.75;
+}
+.sidebarDragHandle:active {
+  cursor: grabbing;
+  opacity: 0.95;
+}
+
+body.nav-pos-top .sidebarDragHandle,
+body.nav-pos-bottom .sidebarDragHandle {
+  border-top: none;
+  border-left: 1px solid rgba(255,255,255,0.15);
+  padding: 4px 8px;
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+
+/* Hide when collapsed */
+.publicSidebar.collapsed .sidebarNavPosBox {
+  display: none;
+}
+
 /* ── SIDEBAR SEARCH BAR ── */
 .sidebarSearchBox {
   padding: 8px 4px;
-  /* Left/Right: push search to bottom of column, above user section */
-  margin-top: auto;
+  /* Left/Right: directly below position button (no extra margin-top) */
+  margin-top: 0;
 }
 
 .sidebarSearchInput {
@@ -516,11 +586,11 @@ body.nav-pos-bottom .publicSidebarUser {
   background: rgba(255,255,255,0.18);
 }
 
-/* Top/Bottom: push search to the right of nav items */
+/* Top/Bottom: search sits right after position button, same row */
 body.nav-pos-top .sidebarSearchBox,
 body.nav-pos-bottom .sidebarSearchBox {
   margin-top: 0;
-  margin-left: auto;
+  margin-left: 0;
   width: 200px;
   padding: 0 4px;
   align-self: center;
@@ -529,6 +599,82 @@ body.nav-pos-bottom .sidebarSearchBox {
 /* Hide search when sidebar is collapsed */
 .publicSidebar.collapsed .sidebarSearchBox {
   display: none;
+}
+
+/* ── GLOBAL SEARCH RESULTS DROPDOWN ── */
+/* position:fixed is set via inline style in Header.jsx (sidebar has overflow:hidden) */
+.sidebarSearchResults {
+  max-height: 420px;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.22);
+  z-index: 9999;
+  padding: 6px 0 4px;
+}
+
+.sidebarSearchResultsHeader {
+  font-size: 11px;
+  color: #555;
+  padding: 8px 14px 6px;
+  border-bottom: 1px solid #ececec;
+  background: #fafafa;
+  border-radius: 12px 12px 0 0;
+}
+
+.sidebarSearchResultGroup {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 6px 14px 5px 11px; /* left reduced to show 3px border nicely */
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sidebarSearchResultItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 14px 8px 11px;
+  cursor: pointer;
+  transition: background 0.13s;
+  border-bottom: 1px solid #f4f4f4;
+}
+
+.sidebarSearchResultLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1c1c2d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebarSearchResultSub {
+  font-size: 11px;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebarSearchResultsClear {
+  text-align: center;
+  font-size: 11px;
+  color: #aaa;
+  padding: 8px 0 6px;
+  cursor: pointer;
+  border-top: 1px solid #ececec;
+  margin-top: 2px;
+  letter-spacing: 0.03em;
+}
+
+.sidebarSearchResultsClear:hover {
+  color: #dc3545;
+  background: #fff1f2;
 }
 
 /* Responsive: on mobile, force left sidebar regardless of position */

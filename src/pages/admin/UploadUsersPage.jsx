@@ -1,6 +1,32 @@
 import React from "react";
+import * as XLSX from "xlsx";
 import Layout from "../../components/admin/Layout";
 import UploadUsersSection from "../../features/users/UploadUsersSection";
+
+const TEMPLATE_HEADERS = [
+  "Name", "Enterprise ID", "Email", "Role", "Career Level",
+  "Location", "Capability", "Franchise",
+  "Resource Type", "NatWest DOJ", "SOW Start Date", "SOW End Date", "SOW ID",
+];
+
+function downloadTemplate() {
+  try {
+    const ws = XLSX.utils.aoa_to_sheet([TEMPLATE_HEADERS]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Users");
+    const base64 = XLSX.write(wb, { bookType: "xlsx", type: "base64" });
+    const a = document.createElement("a");
+    a.href = "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," + base64;
+    a.download = "User_Upload_Template.xlsx";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (err) {
+    console.error("Template download failed:", err);
+    alert("Download failed: " + err.message);
+  }
+}
 
 export default function UploadUsersPage() {
   return (
@@ -17,13 +43,9 @@ export default function UploadUsersPage() {
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h4>Excel Upload Format</h4>
 
-            <a
-              href="/User_Upload_Template.xlsx"
-              download
-              className="btn btn-primary"
-            >
+            <button className="btn btn-primary" onClick={downloadTemplate}>
               Download Template
-            </a>
+            </button>
           </div>
 
           <p>Please follow the below format while uploading:</p>

@@ -1,119 +1,145 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Layout from "../../components/admin/Layout";
-import {
-  getPrograms,
-  createProgram,
-  updateProgram,
-  deleteProgram,
-} from "../../features/programs/programService";
-import { getCapabilities } from "../../features/capabilities/capabilityService";
-import { getFranchises } from "../../features/franchises/franchiseService";
+import { createProgram, deleteProgram } from "../../features/programs/programService";
 import { getUserRole } from "../../utils/tokenUtils";
 import { hasAnyRole } from "../../utils/roleUtils";
 import { ROLES } from "../../constants/roles";
+import api from "../../services/api";
+
+const today = new Date().toISOString().split("T")[0];
 
 function AddProgram() {
   const role = getUserRole();
 
-  // ── Data ──────────────────────────────────────────────────────────────────
   const [programs, setPrograms] = useState([]);
   const [capabilities, setCapabilities] = useState([]);
   const [franchises, setFranchises] = useState([]);
+  const [users, setUsers] = useState([]);
 
-  // ── Single add / edit modal ────────────────────────────────────────────────
   const [modalOpen, setModalOpen] = useState(false);
-  const [currentItem, setCurrentItem] = useState(null);
   const [formData, setFormData] = useState({
-    name: "",
-    capabilityId: "",
-    franchiseId: "",
-    isActive: true,
+    name: "", capabilityId: "", franchiseId: "",
+    description: "", date: today, isActive: true,
   });
 
-  // ── Bulk select ────────────────────────────────────────────────────────────
   const [selectedIds, setSelectedIds] = useState(new Set());
   const [deleting, setDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
-  // ── Bulk edit ──────────────────────────────────────────────────────────────
-  const [bulkEditOpen, setBulkEditOpen] = useState(false);
-  const [bulkEditData, setBulkEditData] = useState({
-    capabilityId: "",
-    franchiseId: "",
-    isActive: "",
-  });
-  const [bulkEditing, setBulkEditing] = useState(false);
+  const [detailProgram, setDetailProgram] = useState(null);
 
   const selectAllRef = useRef(null);
 
-  // ── Load data ──────────────────────────────────────────────────────────────
-  const loadData = async () => {
-    try {
-      const [p, c, f] = await Promise.all([
-        getPrograms(),
-        getCapabilities(),
-        getFranchises(),
-      ]);
-      setPrograms(p.data);
-      setCapabilities(c.data);
-      setFranchises(f.data);
-    } catch (err) {
-      console.error(err);
-    }
+  const loadData = () => {
+    const toArr = (d, key) =>
+      Array.isArray(d) ? d : (key && Array.isArray(d?.[key]) ? d[key] : Array.isArray(d?.data) ? d.data : []);
+
+    api.get("/programs")
+      .then((res) => setPrograms(toArr(res.data, "programs")))
+      .catch((err) => console.error("Programs load failed:", err));
+    api.get("/capabilities")
+      .then((res) => setCapabilities(toArr(res.data, "capabilities")))
+      .catch((err) => console.error("Capabilities load failed:", err));
+    api.get("/franchises")
+      .then((res) => setFranchises(toArr(res.data, "franchises")))
+      .catch((err) => console.error("Franchises load failed:", err));
+    api.get("/users?limit=1000")
+      .then((res) => setUsers(toArr(res.data, "users").filter((u) => u.role?.toUpperCase() !== "ADMIN")))
+      .catch((err) => console.error("Users load failed:", err));
   };
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  useEffect(() => { loadData(); }, []);
 
-  // ── Bulk-select helpers ────────────────────────────────────────────────────
-  const allSelected =
-    programs.length > 0 && selectedIds.size === programs.length;
-  const someSelected =
-    selectedIds.size > 0 && selectedIds.size < programs.length;
+  // Group programs by name; within each group sort newest first
+  const groupedPrograms = useMemo(() => {
+    const groups = {};
+    programs.forEach((p) => {
+      const key = p.name.toLowerCase().trim();
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(p);
+    });
+    Object.values(groups).forEach((arr) =>
+      arr.sort((a, b) => (b.date || "").localeCompare(a.date || ""))
+    );
+    // Flatten: each entry tagged with isLatest + history index
+    return Object.values(groups).flatMap((arr) =>
+      arr.map((p, i) => ({ ...p, isLatest: i === 0, historyIndex: i + 1, totalHistory: arr.length }))
+    );
+  }, [programs]);
+
+  // Unmanaged programs from Teams
+  const managedNames = useMemo(
+    () => new Set(programs.map((p) => p.name.toLowerCase().trim())),
+    [programs]
+  );
+  const unmanagedPrograms = useMemo(
+    () =>
+      [...new Set(
+        users
+          .filter((u) => u.role?.toUpperCase() !== "ADMIN" && u.projectName)
+          .map((u) => u.projectName)
+      )].filter((name) => !managedNames.has(name.toLowerCase().trim())),
+    [users, managedNames]
+  );
+
+  const isEffectivelyActive = (p) => {
+    if (p.isActive === false) return false;
+    if (!p.capabilityId && !p.franchiseId) return false;
+    return true;
+  };
+
+  const getStatusBadge = (p) => {
+    if (!p.capabilityId && !p.franchiseId)
+      return <span className="badge bg-secondary">Unconfigured</span>;
+    if (p.isActive === false)
+      return <span className="badge bg-danger">Inactive</span>;
+    return <span className="badge bg-success">Active</span>;
+  };
+
+  // Bulk select (over all programs, not grouped)
+  const allSelected = programs.length > 0 && selectedIds.size === programs.length;
+  const someSelected = selectedIds.size > 0 && selectedIds.size < programs.length;
   const selectedCount = selectedIds.size;
 
   useEffect(() => {
-    if (selectAllRef.current) {
-      selectAllRef.current.indeterminate = someSelected;
-    }
+    if (selectAllRef.current) selectAllRef.current.indeterminate = someSelected;
   }, [someSelected]);
 
-  const toggleSelectAll = () => {
-    if (allSelected) {
-      setSelectedIds(new Set());
-    } else {
-      setSelectedIds(new Set(programs.map((p) => p.id)));
-    }
-  };
+  const toggleSelectAll = () =>
+    setSelectedIds(allSelected ? new Set() : new Set(programs.map((p) => p.id)));
 
   const toggleOne = (id) => {
     const next = new Set(selectedIds);
-    if (next.has(id)) next.delete(id);
-    else next.add(id);
+    if (next.has(id)) next.delete(id); else next.add(id);
     setSelectedIds(next);
   };
 
-  // ── Single add / edit ──────────────────────────────────────────────────────
-  const openModal = (item = null) => {
-    setCurrentItem(item);
-    setFormData(
-      item
-        ? {
-            name: item.name || "",
-            capabilityId: item.capabilityId || "",
-            franchiseId: item.franchiseId || "",
-            isActive: item.isActive ?? true,
-          }
-        : { name: "", capabilityId: "", franchiseId: "", isActive: true }
-    );
+  const [priorComments, setPriorComments] = useState([]);
+
+  const openModal = (prefillName = "") => {
+    setFormData({ name: prefillName, capabilityId: "", franchiseId: "", description: "", date: today, isActive: true });
+    setPriorComments([]);
     setModalOpen(true);
   };
 
-  const closeModal = () => {
-    setModalOpen(false);
-    setCurrentItem(null);
+  // Pre-fill BU/SBU/status from latest entry; description always blank; show old comments
+  const openEditModal = (latestEntry) => {
+    const allEntries = programs
+      .filter((p) => p.name.toLowerCase().trim() === latestEntry.name.toLowerCase().trim())
+      .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    setFormData({
+      name:         latestEntry.name,
+      capabilityId: latestEntry.capabilityId || "",
+      franchiseId:  latestEntry.franchiseId  || "",
+      description:  "",
+      date:         today,
+      isActive:     latestEntry.isActive ?? true,
+    });
+    setPriorComments(allEntries);
+    setModalOpen(true);
   };
+
+  const closeModal = () => { setModalOpen(false); setPriorComments([]); };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -122,17 +148,9 @@ function AddProgram() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = {
-      ...formData,
-      isActive:
-        formData.isActive === true || formData.isActive === "true",
-    };
+    const payload = { ...formData, isActive: formData.isActive === true || formData.isActive === "true" };
     try {
-      if (currentItem) {
-        await updateProgram(currentItem.id, payload);
-      } else {
-        await createProgram(payload);
-      }
+      await createProgram(payload);
       closeModal();
       await loadData();
     } catch (err) {
@@ -142,17 +160,15 @@ function AddProgram() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this program?")) return;
+    if (!window.confirm("Delete this entry?")) return;
     try {
       await deleteProgram(id);
       await loadData();
     } catch (err) {
-      console.error(err);
       alert(err.response?.data?.message || "Could not delete program");
     }
   };
 
-  // ── Bulk delete ────────────────────────────────────────────────────────────
   const handleBulkDelete = async () => {
     setDeleting(true);
     try {
@@ -165,51 +181,15 @@ function AddProgram() {
     }
   };
 
-  // ── Bulk edit ──────────────────────────────────────────────────────────────
-  const handleBulkEdit = async () => {
-    const rawChanges = Object.fromEntries(
-      Object.entries(bulkEditData).filter(([, v]) => v !== "")
-    );
-    if (!Object.keys(rawChanges).length) {
-      setBulkEditOpen(false);
-      return;
-    }
-    const changes = { ...rawChanges };
-    if (changes.isActive !== undefined) {
-      changes.isActive = changes.isActive === "true";
-    }
-    setBulkEditing(true);
-    try {
-      await Promise.all(
-        [...selectedIds].map((id) => updateProgram(id, changes))
-      );
-      setSelectedIds(new Set());
-      setBulkEditOpen(false);
-      await loadData();
-    } finally {
-      setBulkEditing(false);
-    }
-  };
+  const filteredFormFranchises = franchises.filter((f) => f.capabilityId === formData.capabilityId);
 
-  // ── Derived filtered lists ─────────────────────────────────────────────────
-  const filteredFormFranchises = franchises.filter(
-    (f) => f.capabilityId === formData.capabilityId
-  );
-
-  const bulkFilteredFranchises = bulkEditData.capabilityId
-    ? franchises.filter((f) => f.capabilityId === bulkEditData.capabilityId)
-    : franchises;
-
-  // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <Layout>
       {/* Page header */}
       <div className="d-flex justify-content-between align-items-center titleBox">
         <h2>Program Manager</h2>
         {hasAnyRole(role, [ROLES.ADMIN, ROLES.EDITOR]) && (
-          <button className="btn btn-primary" onClick={() => openModal()}>
-            Add Program
-          </button>
+          <button className="btn btn-primary" onClick={() => openModal()}>+ Add Program Entry</button>
         )}
       </div>
 
@@ -218,103 +198,112 @@ function AddProgram() {
         <div className="searchHeadBox p-3 d-flex align-items-center gap-2">
           <span className="me-2 fw-semibold">{selectedCount} selected</span>
           {hasAnyRole(role, [ROLES.ADMIN]) && (
-            <button
-              className="btn btn-danger btn-sm"
-              onClick={() => setConfirmDelete(true)}
-            >
+            <button className="btn btn-danger btn-sm" onClick={() => setConfirmDelete(true)}>
               Delete Selected ({selectedCount})
             </button>
           )}
-          {hasAnyRole(role, [ROLES.ADMIN, ROLES.EDITOR]) && (
-            <button
-              className="btn btn-warning btn-sm"
-              onClick={() => {
-                setBulkEditData({ capabilityId: "", franchiseId: "", isActive: "" });
-                setBulkEditOpen(true);
-              }}
-            >
-              Edit Selected ({selectedCount})
-            </button>
-          )}
         </div>
       )}
 
-      {/* Bulk delete confirmation bar */}
+      {/* Bulk delete confirmation */}
       {confirmDelete && (
         <div className="searchHeadBox p-3 d-flex align-items-center gap-2">
           <span className="text-danger fw-bold me-2">
-            Permanently delete {selectedCount} program(s)? This cannot be undone.
+            Permanently delete {selectedCount} entr{selectedCount === 1 ? "y" : "ies"}? This cannot be undone.
           </span>
-          <button
-            className="btn btn-danger btn-sm"
-            disabled={deleting}
-            onClick={handleBulkDelete}
-          >
+          <button className="btn btn-danger btn-sm" disabled={deleting} onClick={handleBulkDelete}>
             {deleting ? "Deleting..." : "Confirm Delete"}
           </button>
-          <button
-            className="btn btn-secondary btn-sm"
-            onClick={() => setConfirmDelete(false)}
-          >
-            Cancel
-          </button>
+          <button className="btn btn-secondary btn-sm" onClick={() => setConfirmDelete(false)}>Cancel</button>
         </div>
       )}
 
-      {/* Table */}
+      {/* Unmanaged programs from Teams */}
+      {unmanagedPrograms.length > 0 && hasAnyRole(role, [ROLES.ADMIN, ROLES.EDITOR]) && (
+        <div className="adminContent px-4 pt-3 pb-0">
+          <div className="alert alert-warning mb-2">
+            <strong>{unmanagedPrograms.length}</strong> program(s) found in Teams data but not yet configured.
+          </div>
+          <table className="table table-bordered table-sm mb-4" style={{ fontSize: "13px" }}>
+            <thead style={{ backgroundColor: "#fff3cd" }}>
+              <tr>
+                <th>#</th>
+                <th>Program Name (from Teams)</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {unmanagedPrograms.map((name, idx) => (
+                <tr key={name}>
+                  <td>{idx + 1}</td>
+                  <td><strong>{name}</strong></td>
+                  <td>
+                    <button className="btn btn-sm btn-outline-primary" onClick={() => openModal(name)}>
+                      Add Entry
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Main programs table — all entries, grouped by name, newest first */}
       <div className="adminContent p-4">
-        <table className="table table-bordered table-striped">
+        <p className="text-muted small mb-2">
+          Each row is an immutable entry. New entries are added on top. Latest entry per program is used on the public site.
+        </p>
+        <table className="table table-bordered">
           <thead>
             <tr>
               <th style={{ width: 40 }}>
-                <input
-                  type="checkbox"
-                  ref={selectAllRef}
-                  checked={allSelected}
-                  onChange={toggleSelectAll}
-                />
+                <input type="checkbox" ref={selectAllRef} checked={allSelected} onChange={toggleSelectAll} />
               </th>
-              <th>Name</th>
+              <th>Program Name</th>
+              <th>Entry</th>
               <th>BU (Capability)</th>
               <th>SBU (Franchise)</th>
-              <th>Active</th>
-              <th width="150">Actions</th>
+              <th>Description</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {programs.map((p) => (
-              <tr key={p.id}>
+            {groupedPrograms.length === 0 && (
+              <tr><td colSpan="9" className="text-center text-muted py-3">No program entries yet.</td></tr>
+            )}
+            {groupedPrograms.map((p) => (
+              <tr key={p.id} style={p.isLatest ? {} : { backgroundColor: "#fafafa", color: "#888" }}>
                 <td>
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.has(p.id)}
-                    onChange={() => toggleOne(p.id)}
-                  />
+                  <input type="checkbox" checked={selectedIds.has(p.id)} onChange={() => toggleOne(p.id)} />
                 </td>
-                <td>{p.name}</td>
-                <td>
-                  {capabilities.find((c) => c.id === p.capabilityId)?.name || "—"}
+                <td className="fw-semibold">
+                  {p.name}
+                  {p.isLatest && p.totalHistory > 1 && (
+                    <span className="badge bg-primary ms-2" style={{ fontSize: "10px" }}>Latest</span>
+                  )}
                 </td>
-                <td>
-                  {franchises.find((f) => f.id === p.franchiseId)?.name || "—"}
+                <td className="text-center">
+                  <span className="badge bg-secondary" style={{ fontSize: "10px" }}>
+                    #{p.historyIndex} / {p.totalHistory}
+                  </span>
                 </td>
-                <td>{p.isActive ? "Yes" : "No"}</td>
-                <td>
-                  {hasAnyRole(role, [ROLES.ADMIN, ROLES.EDITOR]) && (
-                    <button
-                      className="btn btn-sm btn-warning me-2"
-                      onClick={() => openModal(p)}
-                    >
-                      Edit
-                    </button>
+                <td>{capabilities.find((c) => c.id === p.capabilityId)?.name || "—"}</td>
+                <td>{franchises.find((f) => f.id === p.franchiseId)?.name || "—"}</td>
+                <td style={{ maxWidth: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                  {p.description || "—"}
+                </td>
+                <td style={{ whiteSpace: "nowrap" }}>{p.date || "—"}</td>
+                <td>{getStatusBadge(p)}</td>
+                <td style={{ whiteSpace: "nowrap" }}>
+                  <button className="btn btn-sm btn-info me-1 text-white" onClick={() => setDetailProgram(p)}>Details</button>
+                  {p.isLatest && hasAnyRole(role, [ROLES.ADMIN, ROLES.EDITOR]) && (
+                    <button className="btn btn-sm btn-warning me-1" onClick={() => openEditModal(p)}>Edit</button>
                   )}
                   {hasAnyRole(role, [ROLES.ADMIN]) && (
-                    <button
-                      className="btn btn-sm btn-danger"
-                      onClick={() => handleDelete(p.id)}
-                    >
-                      Delete
-                    </button>
+                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(p.id)}>Delete</button>
                   )}
                 </td>
               </tr>
@@ -323,99 +312,103 @@ function AddProgram() {
         </table>
       </div>
 
-      {/* ── Add / Edit Modal ─────────────────────────────────────────────────── */}
+      {/* Add Program Entry Modal */}
       {modalOpen && (
         <div className="modal show fade d-block" tabIndex="-1" role="dialog">
-          <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content">
               <form onSubmit={handleSubmit}>
                 <div className="modal-header">
                   <h5 className="modal-title">
-                    {currentItem ? "Edit Program" : "Add Program"}
+                    {priorComments.length > 0 ? `Add Update — ${formData.name}` : "Add Program Entry"}
                   </h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={closeModal}
-                  />
+                  <button type="button" className="btn-close" onClick={closeModal} />
                 </div>
                 <div className="modal-body">
-                  <div className="mb-3">
-                    <label className="form-label">Program Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                    />
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">Program Name</label>
+                      <input type="text" name="name" className="form-control"
+                        value={formData.name} onChange={handleChange} required />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">Date</label>
+                      <input type="date" name="date" className="form-control"
+                        value={formData.date} onChange={handleChange} />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">BU (Capability)</label>
+                      <select name="capabilityId" className="form-control"
+                        value={formData.capabilityId}
+                        onChange={(e) => setFormData({ ...formData, capabilityId: e.target.value, franchiseId: "" })}>
+                        <option value="">Select Capability</option>
+                        {capabilities.map((c) => (
+                          <option key={c.id} value={c.id}>{c.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">SBU (Franchise)</label>
+                      <select name="franchiseId" className="form-control"
+                        value={formData.franchiseId} onChange={handleChange}>
+                        <option value="">Select Franchise</option>
+                        {filteredFormFranchises.map((f) => (
+                          <option key={f.id} value={f.id}>{f.name}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                   <div className="mb-3">
-                    <label className="form-label">BU (Capability)</label>
-                    <select
-                      name="capabilityId"
-                      className="form-control"
-                      value={formData.capabilityId}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          capabilityId: e.target.value,
-                          franchiseId: "",
-                        })
-                      }
-                      required
-                    >
-                      <option value="">Select Capability</option>
-                      {capabilities.map((c) => (
-                        <option key={c.id} value={c.id}>
-                          {c.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">SBU (Franchise)</label>
-                    <select
-                      name="franchiseId"
-                      className="form-control"
-                      value={formData.franchiseId}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select Franchise</option>
-                      {filteredFormFranchises.map((f) => (
-                        <option key={f.id} value={f.id}>
-                          {f.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="mb-3 form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      name="isActive"
-                      id="isActiveCheck"
-                      checked={!!formData.isActive}
-                      onChange={handleChange}
-                    />
-                    <label className="form-check-label" htmlFor="isActiveCheck">
-                      Active
+                    <label className="form-label">
+                      New Comment / Update
+                      {priorComments.length > 0 && (
+                        <span className="text-muted fw-normal ms-2" style={{ fontSize: "12px" }}>
+                          (previous comments shown below for reference)
+                        </span>
+                      )}
                     </label>
+                    <textarea name="description" className="form-control" rows={3}
+                      value={formData.description} onChange={handleChange}
+                      placeholder="Add a new comment or update note for this entry..." />
+                  </div>
+
+                  {/* Prior comments — read-only reference */}
+                  {priorComments.length > 0 && (
+                    <div className="mb-3">
+                      <div className="text-muted fw-semibold mb-2" style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.8px" }}>
+                        Previous Comments
+                      </div>
+                      <div style={{ maxHeight: "200px", overflowY: "auto", display: "flex", flexDirection: "column", gap: "10px" }}>
+                        {priorComments.map((entry, idx) => (
+                          <div key={entry.id || idx} style={{
+                            borderLeft: `3px solid ${idx === 0 ? "#4a148c" : "#dee2e6"}`,
+                            paddingLeft: "12px",
+                            opacity: idx === 0 ? 1 : 0.7,
+                          }}>
+                            <div style={{ fontSize: "11px", fontWeight: 700, color: idx === 0 ? "#4a148c" : "#888", marginBottom: "2px" }}>
+                              {entry.date || "No date"}
+                              {idx === 0 && <span className="badge ms-2" style={{ background: "#4a148c", fontSize: "9px" }}>Latest</span>}
+                            </div>
+                            <div style={{ fontSize: "13px", color: "#444", whiteSpace: "pre-line" }}>
+                              {entry.description || <em className="text-muted">No description</em>}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mb-3 form-check">
+                    <input type="checkbox" className="form-check-input" name="isActive"
+                      id="isActiveCheck" checked={!!formData.isActive} onChange={handleChange} />
+                    <label className="form-check-label" htmlFor="isActiveCheck">Active</label>
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={closeModal}
-                  >
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn btn-success">
-                    Save
-                  </button>
+                  <button type="button" className="btn btn-secondary" onClick={closeModal}>Cancel</button>
+                  <button type="submit" className="btn btn-success">Save Entry</button>
                 </div>
               </form>
             </div>
@@ -423,107 +416,86 @@ function AddProgram() {
         </div>
       )}
 
-      {/* ── Bulk Edit Modal ──────────────────────────────────────────────────── */}
-      {bulkEditOpen && (
-        <div className="modal show fade d-block" tabIndex="-1" role="dialog">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">
-                  Edit Selected Programs ({selectedCount})
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => setBulkEditOpen(false)}
-                />
-              </div>
-              <div className="modal-body">
-                <p className="text-muted small mb-3">
-                  Only filled fields will be updated. Leave blank to keep existing values.
-                </p>
-                <div className="mb-3">
-                  <label className="form-label">BU (Capability)</label>
-                  <select
-                    className="form-control"
-                    value={bulkEditData.capabilityId}
-                    onChange={(e) =>
-                      setBulkEditData({
-                        ...bulkEditData,
-                        capabilityId: e.target.value,
-                        franchiseId: "",
-                      })
-                    }
-                  >
-                    <option value="">— keep existing —</option>
-                    {capabilities.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
+      {/* Program Detail Modal */}
+      {detailProgram && (() => {
+        const capName = capabilities.find((c) => c.id === detailProgram.capabilityId)?.name || "—";
+        const frName  = franchises.find((f) => f.id === detailProgram.franchiseId)?.name  || "—";
+        const members = users.filter(
+          (u) => u.role?.toUpperCase() !== "ADMIN" &&
+                 u.projectName?.toLowerCase().trim() === detailProgram.name.toLowerCase().trim()
+        );
+        return (
+          <div className="modal show fade d-block" tabIndex="-1" role="dialog">
+            <div className="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+              <div className="modal-content">
+                <div className="modal-header" style={{ background: "linear-gradient(135deg, #4a148c, #6a1b9a)", color: "#fff" }}>
+                  <h5 className="modal-title text-white fw-bold">{detailProgram.name}</h5>
+                  <div className="ms-3">{getStatusBadge(detailProgram)}</div>
+                  <button type="button" className="btn-close btn-close-white ms-auto" onClick={() => setDetailProgram(null)} />
+                </div>
+                <div className="modal-body px-4 py-4">
+                  <div className="row g-3 mb-4">
+                    {[
+                      { label: "BU (Capability)", value: capName, icon: "🏢" },
+                      { label: "SBU (Franchise)",  value: frName,  icon: "🔖" },
+                      { label: "Date",             value: detailProgram.date || "—", icon: "📅" },
+                      { label: "Team Size",        value: members.length, icon: "👥" },
+                    ].map(({ label, value, icon }) => (
+                      <div className="col-md-3" key={label}>
+                        <div className="border rounded p-3 text-center bg-light h-100">
+                          <div style={{ fontSize: "1.6rem" }}>{icon}</div>
+                          <div className="text-muted small mt-1" style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.8px" }}>{label}</div>
+                          <div className="fw-bold mt-1">{value}</div>
+                        </div>
+                      </div>
                     ))}
-                  </select>
+                  </div>
+                  {detailProgram.description && (
+                    <div className="mb-4">
+                      <div className="text-muted fw-bold mb-2" style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "1px" }}>Description</div>
+                      <p className="border rounded p-3 bg-light mb-0" style={{ lineHeight: 1.75, whiteSpace: "pre-line" }}>
+                        {detailProgram.description}
+                      </p>
+                    </div>
+                  )}
+                  <div className="text-muted fw-bold mb-2" style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "1px" }}>
+                    Team Members ({members.length})
+                  </div>
+                  {members.length === 0 ? (
+                    <div className="text-muted fst-italic">No team members have this program assigned.</div>
+                  ) : (
+                    <div className="table-responsive" style={{ maxHeight: "300px", overflowY: "auto" }}>
+                      <table className="table table-bordered table-sm table-hover align-middle mb-0">
+                        <thead style={{ position: "sticky", top: 0, zIndex: 1, backgroundColor: "#f8f9fa" }}>
+                          <tr>
+                            <th>#</th><th>Name</th><th>Enterprise ID</th>
+                            <th>Career Level</th><th>Location</th><th>Line Manager</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {members.map((m, i) => (
+                            <tr key={m.id || i}>
+                              <td>{i + 1}</td>
+                              <td className="fw-semibold">{m.name}</td>
+                              <td>{m.enterpriseId || "—"}</td>
+                              <td>{m.careerLevel || "—"}</td>
+                              <td>{m.location || "—"}</td>
+                              <td>{m.lineManager || "—"}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </div>
-                <div className="mb-3">
-                  <label className="form-label">SBU (Franchise)</label>
-                  <select
-                    className="form-control"
-                    value={bulkEditData.franchiseId}
-                    onChange={(e) =>
-                      setBulkEditData({
-                        ...bulkEditData,
-                        franchiseId: e.target.value,
-                      })
-                    }
-                  >
-                    <option value="">— keep existing —</option>
-                    {bulkFilteredFranchises.map((f) => (
-                      <option key={f.id} value={f.id}>
-                        {f.name}
-                      </option>
-                    ))}
-                  </select>
+                <div className="modal-footer">
+                  <button className="btn btn-secondary" onClick={() => setDetailProgram(null)}>Close</button>
                 </div>
-                <div className="mb-3">
-                  <label className="form-label">Active Status</label>
-                  <select
-                    className="form-control"
-                    value={bulkEditData.isActive}
-                    onChange={(e) =>
-                      setBulkEditData({
-                        ...bulkEditData,
-                        isActive: e.target.value,
-                      })
-                    }
-                  >
-                    <option value="">— keep existing —</option>
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
-                  </select>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setBulkEditOpen(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  disabled={bulkEditing}
-                  onClick={handleBulkEdit}
-                >
-                  {bulkEditing
-                    ? "Applying..."
-                    : `Apply to ${selectedCount} program(s)`}
-                </button>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </Layout>
   );
 }

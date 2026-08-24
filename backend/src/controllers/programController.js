@@ -1,64 +1,63 @@
-const fs = require("fs");
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
+const { readJSON, writeJSON } = require("../utils/fileHelper");
 
-const filePath = path.join(
-  __dirname,
-  "../data/program.json"
-);
+const filePath = path.join(__dirname, "../../data/program.json");
 
 const getPrograms = (req, res) => {
   try {
-    const data = JSON.parse(
-      fs.readFileSync(filePath, "utf8")
-    );
-
-    res.json(data);
+    res.json(readJSON(filePath));
   } catch (err) {
-    res.status(500).json({
-      error: "Unable to load programs",
-    });
+    res.status(500).json({ error: "Unable to load programs" });
   }
 };
 
 const saveProgram = (req, res) => {
   try {
-    const newProgram = req.body;
-
-    const programs = JSON.parse(
-      fs.readFileSync(filePath, "utf8")
-    );
-
+    const programs = readJSON(filePath);
+    const newProgram = { ...req.body };
     if (newProgram.id) {
-      const index = programs.findIndex(
-        (p) => p.id === newProgram.id
-      );
-
-      if (index !== -1) {
-        programs[index] = newProgram;
-      }
+      const index = programs.findIndex((p) => String(p.id) === String(newProgram.id));
+      if (index !== -1) programs[index] = newProgram;
+      else programs.push(newProgram);
     } else {
-      newProgram.id = Date.now();
-
+      newProgram.id = uuidv4();
       programs.push(newProgram);
     }
-
-    fs.writeFileSync(
-      filePath,
-      JSON.stringify(programs, null, 2)
-    );
-
-    res.json({
-      success: true,
-      message: "Program saved",
-    });
+    writeJSON(filePath, programs);
+    res.json({ success: true, message: "Program saved", program: newProgram });
   } catch (err) {
-    res.status(500).json({
-      error: "Save failed",
-    });
+    console.error("saveProgram error:", err);
+    res.status(500).json({ error: "Save failed" });
   }
 };
 
-module.exports = {
-  getPrograms,
-  saveProgram,
+const updateProgram = (req, res) => {
+  try {
+    const id = req.params.id;
+    const programs = readJSON(filePath);
+    const index = programs.findIndex((p) => String(p.id) === String(id));
+    if (index === -1) return res.status(404).json({ error: "Program not found" });
+    programs[index] = { ...programs[index], ...req.body, id: programs[index].id };
+    writeJSON(filePath, programs);
+    res.json({ success: true, message: "Program updated", program: programs[index] });
+  } catch (err) {
+    console.error("updateProgram error:", err);
+    res.status(500).json({ error: "Update failed" });
+  }
 };
+
+const deleteProgram = (req, res) => {
+  try {
+    const id = req.params.id;
+    const programs = readJSON(filePath);
+    const filtered = programs.filter((p) => String(p.id) !== String(id));
+    writeJSON(filePath, filtered);
+    res.json({ success: true, message: "Program deleted" });
+  } catch (err) {
+    console.error("deleteProgram error:", err);
+    res.status(500).json({ error: "Delete failed" });
+  }
+};
+
+module.exports = { getPrograms, saveProgram, updateProgram, deleteProgram };

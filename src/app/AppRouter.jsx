@@ -86,6 +86,7 @@ function AppRouter() {
         <Route path="/admin/deliverables" element={<ProtectedRoute roles={["ADMIN","EDITOR","VIEWER"]}><DeliverablePage /></ProtectedRoute>} />
         <Route path="/admin/upload-users" element={<UploadUsersPage />} />
         <Route path="/add-program" element={<ProtectedRoute roles={["ADMIN","EDITOR"]}><AddProgram /></ProtectedRoute>}/>
+        <Route path="/admin/programs" element={<ProtectedRoute roles={["ADMIN","EDITOR","VIEWER"]}><AddProgram /></ProtectedRoute>}/>
       </Routes>
     </BrowserRouter>
   );

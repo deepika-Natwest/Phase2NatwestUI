@@ -673,9 +673,11 @@ const dashboardStyles = `
 
   .pricing-dashboard-header h1 {
     margin: 0;
-    font-size: 26px;
-    font-weight: 700;
-    color: #ffffff;
+    font-family: 'Raleway', sans-serif;
+    font-size: 2.7rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #ffffff !important;
   }
 
   .pricing-dashboard-header p {

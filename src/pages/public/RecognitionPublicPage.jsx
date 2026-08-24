@@ -142,10 +142,16 @@ function RecognitionPublicPage() {
       {/* Header */}
       <div className="recog-detailed-heading p-3 mb-5">
         <div className="container">
-          <div className="row w100">
-            
+          <div className="row w100 align-items-center">
 
-            <div className="col-2 mt-3">
+            {/* Title — left */}
+            <div className="col-6 d-flex align-items-center">
+              <span className="recog-main-side-line trophy-emoji">🏆</span>
+              <span className="recog-main-title ms-2">Recognitions</span>
+            </div>
+
+            {/* Filters — right */}
+            <div className="col-3 mt-3">
               <select
                 className="form-select"
                 value={month}
@@ -154,15 +160,13 @@ function RecognitionPublicPage() {
                 <option value="">All Months</option>
                 {Array.from({ length: 12 }, (_, i) => (
                   <option key={i + 1} value={i + 1}>
-                    {new Date(0, i).toLocaleString("default", {
-                      month: "long",
-                    })}
+                    {new Date(0, i).toLocaleString("default", { month: "long" })}
                   </option>
                 ))}
               </select>
             </div>
 
-            <div className="col-2 mt-3">
+            <div className="col-3 mt-3">
               <select
                 className="form-select"
                 value={year}
@@ -170,12 +174,11 @@ function RecognitionPublicPage() {
               >
                 <option value="">All Years</option>
                 {years.map((y) => (
-                  <option key={y} value={y}>
-                    {y}
-                  </option>
+                  <option key={y} value={y}>{y}</option>
                 ))}
               </select>
             </div>
+
           </div>
         </div>
       </div>

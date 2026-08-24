@@ -1,3 +1,19 @@
+/* ── ACCENTURE DESIGN TOKENS ── */
+:root {
+  --ac-purple-deep:  #3b0764;
+  --ac-purple-dark:  #4c1d95;
+  --ac-purple-mid:   #6d28d9;
+  --ac-purple-light: #9255CE;
+  --ac-gold:         #FFA835;
+  --ac-pink:         #FA3DCC;
+  --ac-radius-card:  1.4rem;
+  --ac-radius-sm:    0.75rem;
+  --ac-shadow-card:  0 8px 32px rgba(90, 40, 125, 0.12);
+  --ac-shadow-hover: 0 20px 48px rgba(90, 40, 125, 0.28);
+  --ac-ease:         cubic-bezier(0.4, 0, 0.2, 1);
+  --ac-transition:   0.35s var(--ac-ease);
+}
+
 .homeBanner {
   background: url(../img/bgHome.png);
   background-position: bottom;
@@ -82,14 +98,17 @@
 
 
 .serviceBox {
-  background: #F2F2F2;
-  padding: 4rem 0 0rem 0;
+  background:
+    linear-gradient(rgba(248, 240, 255, 0.92), rgba(248, 240, 255, 0.92)),
+    url(../img/bgHome.png) center / cover;
+  padding: 4rem 0 0 0;
 }
 
 .serviceBox h2 {
   font-size: 2.8rem;
   font-weight: 700;
   letter-spacing: -1px;
+  color: var(--ac-purple-deep);
 }
 
 .aboutImg {
@@ -168,19 +187,19 @@
   font-size: 1 rem;
 }
 
-/* 🌈 ANIMATED BORDER */
+/* 🌈 ANIMATED BORDER — Accenture purple/gold */
 .serviceItem::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: 2rem;
   padding: 2px;
-  /* thickness of border */
   background: linear-gradient(270deg,
-      #6c63ff,
-      #00c6ff,
-      #00ffcc,
-      #6c63ff);
+      var(--ac-gold),
+      var(--ac-pink),
+      var(--ac-purple-light),
+      #5A1CCB,
+      var(--ac-gold));
   background-size: 300% 300%;
   animation: borderAnimation 6s linear infinite;
 
@@ -534,15 +553,17 @@
   height: 85vh;
 }
 
-/* GRADIENT TEXT */
+/* GRADIENT TEXT — Accenture gold/pink/purple */
 .gradientText {
   font-size: clamp(1.5rem, 2.6vw, 2.2rem);
   font-weight: 800;
-  background: linear-gradient(90deg, #6c63ff, #00c6ff, #6c63ff);
-  background-size: 200% auto;
+  background: linear-gradient(90deg, var(--ac-gold), var(--ac-pink), var(--ac-purple-light), var(--ac-gold));
+  background-size: 300% auto;
   color: transparent;
   -webkit-background-clip: text;
-  animation: gradientMove 4s linear infinite;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 5s linear infinite;
 }
 
 /* SUBTITLE */
@@ -719,29 +740,26 @@
 
 /* Each box */
 .servicesGrid div {
-  height: 110px;                /* ✅ fixed height (uniform boxes) */
-  border: 1px solid #ccc;
+  height: 110px;
+  border: 1px solid rgba(109, 40, 217, 0.22);
   border-radius: 10px;
-  background: #fff;
-
+  background: rgba(255, 255, 255, 0.80);
+  color: var(--ac-purple-deep);
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-
   padding: 10px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-
   transition: all 0.3s ease;
 }
 
-/* ✅ Hover effect (optional but recommended) */
 .servicesGrid div:hover {
   transform: translateY(-4px);
-  border-color: #e60028;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  border-color: #7c3aed;
+  box-shadow: 0 8px 24px rgba(109, 40, 217, 0.18);
 }
 .serviceItem.horizontal {
   position: relative;
@@ -792,4 +810,73 @@
 .serviceItem::before,
 .serviceItem::after {
   pointer-events: none;  /* ✅ THIS FIXES CLICK */
+}
+
+/* ── ACCOUNT OVERVIEW — 4 THEME CARDS ── */
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.theme-card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.10);
+  background: #fff;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.theme-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.16);
+}
+
+.theme-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 22px;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.theme-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.theme-metrics {
+  padding: 16px 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.theme-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.95rem;
+}
+
+.theme-metric:last-child {
+  border-bottom: none;
+}
+
+.theme-metric span {
+  color: #555;
+  font-weight: 500;
+}
+
+.theme-metric strong {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #1c1c2d;
 }

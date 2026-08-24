@@ -1,10 +1,12 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Lexend Deca', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #eef0ff;
+  color: #2d2d4e;
 }
 
 code {
@@ -12,6 +14,7 @@ code {
     monospace;
 }
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700;800;900&display=swap');
 
 h1, h2, h3, h4, h5, h6{
     font-family: "Lexend Deca", sans-serif !important;
@@ -53,6 +56,7 @@ h1, h2, h3, h4, h5, h6{
   75% { transform: rotate(7deg);}
 }
 .recog-main-title {
+  font-family: 'Raleway', sans-serif;
   font-size: 2.7rem;
   font-weight: 900;
   color: #ffffff !important;
@@ -418,6 +422,101 @@ h1, h2, h3, h4, h5, h6{
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
   border-color: #5e2ced;
 }
-.leadershipCard .card-subtitle{
-   color: #5e2ced !important;
+.leadershipCard .card-subtitle {
+  color: #5e2ced !important;
+}
+
+/* ═══════════════════════════════════════════════════
+   GLOBAL CONTENT TYPOGRAPHY — consistent across all tabs
+   Sidebar nav = 1.1rem → content sits at 14px baseline
+   ═══════════════════════════════════════════════════ */
+
+/* Headings inside content (not the page-level gradient headers) */
+h4 { font-size: 1.05rem; font-weight: 700; }
+h5 { font-size: 0.95rem; font-weight: 700; }
+h6 { font-size: 0.875rem; font-weight: 600; }
+
+/* Paragraphs & body copy */
+p, li {
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* Tables — consistent, readable, slightly compact */
+.table th {
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #3c3c6e;
+}
+.table td {
+  font-size: 13.5px !important;
+  vertical-align: middle;
+}
+
+/* Form controls */
+.form-control,
+.form-select,
+input[type="text"],
+input[type="date"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+  font-size: 13.5px !important;
+}
+
+/* Form labels */
+label, .form-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #3c3c6e;
+}
+
+/* Buttons */
+.btn {
+  font-size: 13px !important;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* Badges */
+.badge {
+  font-size: 11px !important;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* Card body text */
+.card-body, .card-text {
+  font-size: 14px;
+}
+.card-title {
+  font-size: 15px !important;
+  font-weight: 700;
+}
+
+/* Alert / info boxes */
+.alert {
+  font-size: 13.5px;
+}
+
+/* Small helper text */
+.text-muted, small, .small {
+  font-size: 12px !important;
+}
+
+/* Modal */
+.modal-title {
+  font-size: 1rem !important;
+  font-weight: 700;
+}
+.modal-body {
+  font-size: 14px;
+}
+
+/* Dropdown & select option */
+option {
+  font-size: 13.5px;
 }
