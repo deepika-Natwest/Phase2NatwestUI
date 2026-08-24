@@ -1,0 +1,137 @@
+
+.loginPage{
+    min-height: 100vh;
+}
+.height-inherit{
+    height: inherit !important;
+}
+.headerBox {
+    background: #5A287D;
+    background: linear-gradient(0deg, rgba(90, 40, 125, 1) 0%, rgba(65, 17, 99, 1) 100%);
+    padding: 0.2rem 1rem;
+    margin: 0;
+    height: 62px;
+    color: #fff;
+    -webkit-box-shadow: 5px 5px 30px 10px rgba(00,00,00,0.1);
+    box-shadow: 5px 5px 30px 10px rgba(00,00,00,0.1);
+    border-bottom: 1px solid #fff;
+    position: fixed !important;
+}
+.navbar-expand-lg .navbar-nav{
+    margin: 0 auto;
+}
+.headerBox .nav-link{
+    color: #ad79d1;
+    font-weight: 600;
+    padding: 1rem 1.5rem !important;
+    border-bottom: 3px solid #5a287d;
+    font-size: 1.1rem;
+}
+.headerBox .nav-link:focus, .headerBox  .nav-link:hover{
+    color: #fff;
+    border-bottom: 3px solid #fff;
+}
+.headerBox .navbar-text{ color: #fff;}
+.searchHeadBox{
+    background: #fafafa;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+/* ✅ FIXED HEADER (DO NOT USE STICKY) */
+.headerBox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 62px;
+  z-index: 9999;
+}
+/* ✅ CONTENT OFFSET */
+.app-content {
+  padding-top: 62px;
+}
+/* NAV CONTAINER */
+.navbar-nav {
+  position: relative;
+}
+
+/* NAV LINKS */
+.navbar-nav .nav-link {
+  position: relative;
+  padding: 8px 16px;
+  margin: 0 6px;
+  font-weight: 500;
+  transition: all 0.4s ease;
+  z-index: 1;
+}
+
+/* 🌊 SOFT MOVING BACKGROUND */
+.navbar-nav .nav-link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  
+  background: linear-gradient(90deg, #5A1CCB -2.17%, #815EDC 100%);
+  background-size: 100% 10%;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
+
+/* ✨ SHOW BACKGROUND ON HOVER */
+.navbar-nav .nav-link:hover::before {
+  opacity: 1;
+  animation: waveMove 3s linear infinite;
+}
+
+/* 🚀 FLOAT EFFECT */
+.navbar-nav .nav-link:hover {
+  transform: translateY(-3px) scale(1.05);
+  color: #fff;
+}
+
+/* 💡 ACTIVE LINK (pill always visible) */
+.nav-link.active {
+  background: linear-gradient(120deg, #6c63ff, #00c6ff);
+  color: #fff !important;
+  box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3);
+}
+
+/* 🎯 LOGOUT BUTTON (soft glass style) */
+.navbar-text button {
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.navbar-text button:hover {
+  background: rgba(108, 99, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* KEYFRAME */
+@keyframes waveMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.footerBg{
+    background: #171717;
+    color: #818181;
+}
+
+/* ✅ ACTIVE NAV LINK (CURRENT PAGE) */
+.headerBox .nav-link.active {
+  color: #fff !important;
+  border-bottom: 3px solid #fff;
+  background: linear-gradient(120deg, #6c63ff, #00c6ff);
+  box-shadow: 0 8px 20px rgba(108, 99, 255, 0.35);
+  transform: translateY(-1px);
+}
+/* ✅ DISABLE WAVE ANIMATION ON ACTIVE LINK */
+.navbar-nav .nav-link.active::before {
+  opacity: 0;
+}
+.teamHeading{
+  margin-top: 80px !important;
+}

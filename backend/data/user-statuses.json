@@ -1,0 +1,26 @@
+[
+  {
+    "id": "e2a5e357-0194-4d4f-be0c-749d2bb4d2bb",
+    "name": "Active-Billable"
+  },
+  {
+    "id": "caeb1edc-7a9c-4d10-9067-e04d830138ec",
+    "name": "Planned Release"
+  },
+  {
+    "id": "ea5f0287-7599-416d-bfcb-88472d21f2ba",
+    "name": "Onboarding Pending"
+  },
+  {
+    "id": "5f731913-c328-4b61-8784-bc7de0ceada0",
+    "name": "Account/Support/Others"
+  },
+  {
+    "id": "4e763bc1-4117-4418-a6ee-b43e4541c80a",
+    "name": "Active -Billable/Pool"
+  },
+  {
+    "id": "a6ef7654-44cc-4105-be78-826603398f1e",
+    "name": "Attrition"
+  }
+]

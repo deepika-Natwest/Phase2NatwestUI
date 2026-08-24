@@ -1,0 +1,145 @@
+[
+  {
+    "id": "101a7b2c-5d4e-4f61-9a10-11ab22cd33ef",
+    "managementLevel": "Leadership Team",
+    "name": "Ujjwal Jyoti",
+    "designation": "Client Account Lead",
+    "location": "Gurugram",
+    "shortDescription": "Leads the technology vision and drives innovation initiatives across the organization.",
+    "profilePic": "leadership/9adec5b59706d1febc51e9a3da71638a",
+    "createdAt": "2026-03-13T07:25:10.120Z",
+    "updatedAt": "2026-04-10T11:22:43.283Z"
+  },
+  {
+    "id": "102b6c1d-6e5f-4a72-bb21-22bc33de44fa",
+    "managementLevel": "Leadership Team",
+    "name": "Kedharnath Sivajirao",
+    "designation": "Delivery Lead",
+    "location": "Bangalore",
+    "shortDescription": "Oversees operational strategy and ensures effective execution of company goals.",
+    "profilePic": "leadership/42472e4f5513082256b6eb2ed6e7638b",
+    "createdAt": "2026-03-13T07:27:44.540Z",
+    "updatedAt": "2026-04-10T11:24:48.114Z"
+  },
+  {
+    "id": "103c5d0e-7f60-4b83-8c32-33cd44ef55ab",
+    "managementLevel": "Leadership Team",
+    "name": "Shilpi Jain",
+    "designation": "Client Engagament Lead",
+    "location": "Gurugram",
+    "shortDescription": "Responsible for financial strategy, planning, and corporate governance.",
+    "profilePic": "leadership/9e7bba9f004472daeea8b5a177b579a0",
+    "createdAt": "2026-03-13T07:29:20.870Z",
+    "updatedAt": "2026-04-10T11:14:12.873Z"
+  },
+  {
+    "id": "201d4e9f-8a71-4c94-9d43-44de55fa66bc",
+    "managementLevel": "Senior Delivery Leads",
+    "name": "Suman Dahiya",
+    "designation": "D&A+ Sr. Delivery Lead",
+    "location": "Gurugram",
+    "shortDescription": "Oversees large-scale client delivery programs and ensures successful execution.",
+    "profilePic": "leadership/3223c14f690032a23f7b8dcf4cf81829",
+    "createdAt": "2026-03-13T07:33:52.330Z",
+    "updatedAt": "2026-04-10T11:15:02.235Z"
+  },
+  {
+    "id": "202e3f8a-9b82-4da5-ae54-55ef66ab77cd",
+    "managementLevel": "Senior Delivery Leads",
+    "name": "Sukhwant Singh",
+    "designation": "Enterprise Engg. Sr. Delivery Lead",
+    "location": "Gurugram",
+    "shortDescription": "Manages enterprise delivery programs and ensures high-quality project outcomes.",
+    "profilePic": "leadership/e28206ee4096fc63598fca8ab86cc95a",
+    "createdAt": "2026-03-13T07:36:20.900Z",
+    "updatedAt": "2026-04-10T11:15:13.843Z"
+  },
+  {
+    "id": "203f4a9b-ac93-4eb6-bf65-66fa77bc88de",
+    "managementLevel": "Senior Delivery Leads",
+    "name": "Teena Kashyap",
+    "designation": "Treasury & Market, Sr. Delivery Lead",
+    "location": "Gurugram",
+    "shortDescription": "Leads cross-functional delivery teams for global enterprise clients.",
+    "profilePic": "leadership/b2e32eafb3aaa102f69b9aa8eb27e3bd",
+    "createdAt": "2026-03-13T07:38:12.220Z",
+    "updatedAt": "2026-05-24T11:17:57.728Z"
+  },
+  {
+    "id": "204a5b0c-bda4-4fc7-c076-77ab88cd99ef",
+    "managementLevel": "Senior Delivery Leads",
+    "name": "Aayush Sharma",
+    "designation": "Infra Sr. Delivery Lead",
+    "location": "Gurugram",
+    "shortDescription": "Ensures smooth delivery operations and manages key client relationships.",
+    "profilePic": "leadership/6dcd9ab99803b4b35ee39cadd9afb171",
+    "createdAt": "2026-03-13T07:40:01.650Z",
+    "updatedAt": "2026-04-10T11:15:30.948Z"
+  },
+  {
+    "id": "205b6c1d-ceb5-4fd8-d187-88bc99de00fa",
+    "managementLevel": "Senior Delivery Leads",
+    "name": "Priya Vivek",
+    "designation": "UKIA, Sr. Delivery Lead",
+    "location": "Bangalore",
+    "shortDescription": "Drives digital transformation programs and ensures timely project delivery.",
+    "profilePic": "leadership/bd244a672a8afc28b61861aaa88ccb19",
+    "createdAt": "2026-03-13T07:41:44.100Z",
+    "updatedAt": "2026-04-10T11:23:07.805Z"
+  },
+  {
+    "id": "301c7d2e-dfc6-4fe9-e298-99cd00ef11ab",
+    "managementLevel": "Growth Team",
+    "name": "Krishan Soni",
+    "designation": "Sr. Sales Manager",
+    "location": "Gurugram",
+    "shortDescription": "Leads enterprise sales initiatives and manages key strategic accounts.",
+    "profilePic": "leadership/54cb53b94fcc52861253a112b4d1a924",
+    "createdAt": "2026-03-13T07:43:12.320Z",
+    "updatedAt": "2026-04-10T11:15:55.611Z"
+  },
+  {
+    "id": "302d8e3f-ead7-40fa-f3a9-a0de11fa22bc",
+    "managementLevel": "Growth Team",
+    "name": "Vinay Bagul",
+    "designation": "Sr. Sales Manager",
+    "location": "Mumbai",
+    "shortDescription": "Responsible for expanding regional enterprise sales and partnerships.",
+    "profilePic": "leadership/e389c2f89a0f3c610d0b803cc61b9cdf",
+    "createdAt": "2026-03-13T07:45:55.540Z",
+    "updatedAt": "2026-04-10T11:16:12.112Z"
+  },
+  {
+    "id": "303e9f40-fbe8-41ab-04ba-b1ef22ab33cd",
+    "managementLevel": "Growth Team",
+    "name": "Gunjan Tanwar",
+    "designation": "Sales Manager",
+    "location": "Gurugram",
+    "shortDescription": "Focuses on strategic client acquisition and revenue growth.",
+    "profilePic": "leadership/e73c39918c6fc11ba6df2679b38d6eb8",
+    "createdAt": "2026-03-13T07:48:10.780Z",
+    "updatedAt": "2026-04-10T11:26:05.480Z"
+  },
+  {
+    "id": "f6b112dd-c678-4c42-8c78-4bc3b706fe51",
+    "name": "Sharon Lewis",
+    "managementLevel": "Leadership Team",
+    "designation": "Delivery Lead Architect",
+    "location": "Bangalore",
+    "shortDescription": "Delivery Lead Architect",
+    "profilePic": "leadership/b5b1e103ed5b5c6fb9ec0bf53c2f5f10",
+    "createdAt": "2026-04-10T04:34:12.482Z",
+    "updatedAt": "2026-04-10T11:14:41.712Z"
+  },
+  {
+    "id": "4631222d-dfd7-4381-8c59-e57aba7fb40f",
+    "name": "Amita Sharma",
+    "managementLevel": "Senior Delivery Leads",
+    "designation": "FRAL Sr. Delivery Lead",
+    "location": "Gurugram",
+    "shortDescription": "",
+    "profilePic": "leadership/71131d5e67ad4747283f444e6dab87aa",
+    "createdAt": "2026-05-24T11:18:49.815Z",
+    "updatedAt": "2026-05-24T11:29:57.031Z"
+  }
+]

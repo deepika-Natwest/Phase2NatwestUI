@@ -1,0 +1,43 @@
+[
+  {
+    "id": "6a1b47e5-dbae-40f4-a013-da229ef3a103",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": "f9eec64c-53ae-401d-8831-1eeab0421c7a",
+    "category": "New Functionality",
+    "aiBased": true,
+    "projectName": "Leapfrog Program",
+    "description": "NatWest Responsible AI Team (Leapfrog Program) has recently achieved a successful go-live of AWS COMET (Partner AI App) - an enhanced unified and cohesive platform for ML experimentation, Production monitoring, and Gen AI observability across Kepler(D&A AI Platform).\nWith this milestone, NatWest becomes the first customer globally to adopt the latest AWS Comet capabilities, setting a new industry benchmark in AI governance.\n\nKey Business Impacts:\n•\tActs as a key enabler for EU AI Act Compliance\n•\tStrengthens NatWest’s enterprise AI Governance Model\n•\tEstablishes a unified, enterprise-ready approach to managing the ML & GenAI lifecycle\n•\tEnhances transparency, monitoring, and operational readiness across AI system",
+    "resources": [
+      "1251db0c-1c43-4d93-bd08-69ac39db2e64",
+      "72edf7dd-4380-46b6-b1ef-0dd1beb0a1a8"
+    ],
+    "createdAt": "2026-04-10T11:46:57.027Z",
+    "deliveryTitle": "Implementing AWS COMET",
+    "newFunctionality": "Responsible AI",
+    "costSavingAmount": "",
+    "timeHours": "",
+    "timeMinutes": "",
+    "costSavingCurrency": null,
+    "improvementType": "",
+    "percentage": ""
+  },
+  {
+    "id": "95f0792b-a9c6-4f04-a71e-738a77f1c11d",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": "524ae53c-342e-4ea5-bfd3-1554cb836621",
+    "category": "Cost Saving",
+    "aiBased": false,
+    "projectName": "Hubble",
+    "description": "Rajesh has been working on Hubble migration project:\n•\tHubble is an analytical store sourcing data from multiple sources i.e. (Kafka, Oracle, MongoDB etc.), processes it with StreamSet engines for further consumption\n•\tHubble migration to AWS was initiated due to the approaching end-of-support for the Hadoop (HDFS) platform\n•\tRajesh joined team with limited familiarity of the bank’s architecture and the Hubble platform and still successfully delivered the migration within the planned 6-month timeline\n•\tCoordinated with Kafka, Snowflake, Oracle, Firewall, and Infrastructure teams to ensure smooth implementation\n•\tEnsured all deployments aligned with the bank’s strict security, networking, and access control policies, which was a key challenge throughout the project\n•\tAddressed VPC IP exhaustion during deployment by adding a new CIDR range, creating new subnets, and moving selected resources without service impact\n•\tRecommended AWS S3 bucket replication instead of AWS Backup, achieving required resiliency while saving approximately £24,000 per month",
+    "resources": [
+      "9f0980ba-a939-44a5-8ac0-6ccabaaed6fa"
+    ],
+    "createdAt": "2026-04-10T11:50:45.252Z",
+    "deliveryTitle": "Hubble migration to AWS",
+    "costSavingAmount": "24000",
+    "costSavingCurrency": "EUR",
+    "timeHours": null,
+    "timeMinutes": null,
+    "newFunctionality": null
+  }
+]

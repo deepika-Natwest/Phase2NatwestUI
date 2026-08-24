@@ -1,0 +1,30 @@
+[
+  {
+    "id": "cbb99b0a-5179-4050-8859-680a4113237f",
+    "name": "FRAL"
+  },
+  {
+    "id": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "name": "D&A+"
+  },
+  {
+    "id": "316bb331-35d0-4dcc-b514-2295d096d8f4",
+    "name": "IRB"
+  },
+  {
+    "id": "d8018d81-f0a6-4863-bc7c-20996cd27eff",
+    "name": "A&E+"
+  },
+  {
+    "id": "a499ef6f-4f92-495f-bd25-47bb9968097d",
+    "name": "Treasury & Markets"
+  },
+  {
+    "id": "244586ee-3f8e-4978-9ffb-2333ed10a976",
+    "name": "Murex"
+  },
+  {
+    "id": "74ed2fbc-91aa-49b2-9db3-b79c88e3286c",
+    "name": "Infra"
+  }
+]

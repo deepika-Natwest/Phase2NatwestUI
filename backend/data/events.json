@@ -1,0 +1,26 @@
+[
+  {
+    "id": "c3c5c7f1-9f7c-4f02-a8c6-1f6b77b1c1a1",
+    "eventName": "Natwest Q1 Townhall",
+    "date": "2026-01-28",
+    "tag": "star",
+    "location": "Gurugram",
+    "description": "Natwest Global Townhall",
+    "status": "Completed",
+    "eventImage": "2a804762d8971e53e2cf2ef8a1ec471f",
+    "createdAt": "2026-03-12T10:08:33.037Z",
+    "updatedAt": "2026-04-10T11:41:59.955Z"
+  },
+  {
+    "id": "c6065062-7573-4a7f-b2b0-92e05a0fd86a",
+    "eventName": "Natwest Q2 Townhall",
+    "date": "2026-05-07",
+    "tag": "",
+    "location": "Gurugram",
+    "description": "",
+    "status": "Completed",
+    "eventImage": "2a804762d8971e53e2cf2ef8a1ec471f",
+    "createdAt": "2026-05-24T10:31:55.797Z",
+    "updatedAt": "2026-05-24T10:32:08.937Z"
+  }
+]
