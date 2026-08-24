@@ -43,6 +43,7 @@ function Header() {
   const dragZoneRef = useRef(null);
   const navWrapRef    = useRef(null);
   const moreButtonRef = useRef(null);
+  const moreDropRef   = useRef(null);
   const [visibleCount, setVisibleCount] = useState(NAV_ITEMS.length);
   const [moreOpen,     setMoreOpen]     = useState(false);
   const [moreDropPos,  setMoreDropPos]  = useState({});
@@ -270,8 +271,10 @@ function Header() {
     const measure = () => {
       const firstItem = el.querySelector(".nav-item");
       const itemH = firstItem ? firstItem.offsetHeight + 4 : 44; // +4 for gap
-      const count = Math.floor(el.clientHeight / itemH);
-      setVisibleCount(Math.min(NAV_ITEMS.length, Math.max(1, count)));
+      const raw = Math.floor(el.clientHeight / itemH);
+      // If all items fit, no More button needed; otherwise reserve 1 slot for the More button itself
+      const count = raw >= NAV_ITEMS.length ? NAV_ITEMS.length : Math.max(1, raw - 1);
+      setVisibleCount(count);
     };
     const ro = new ResizeObserver(measure);
     ro.observe(el);
@@ -279,11 +282,13 @@ function Header() {
     return () => ro.disconnect();
   }, [isVertical, collapsed]);
 
-  // Close "More" dropdown on outside click
+  // Close "More" dropdown on outside click — exclude the dropdown portal itself
   useEffect(() => {
     if (!moreOpen) return;
     const h = (e) => {
-      if (moreButtonRef.current && !moreButtonRef.current.contains(e.target)) setMoreOpen(false);
+      const inButton = moreButtonRef.current?.contains(e.target);
+      const inDrop   = moreDropRef.current?.contains(e.target);
+      if (!inButton && !inDrop) setMoreOpen(false);
     };
     document.addEventListener("mousedown", h);
     return () => document.removeEventListener("mousedown", h);
@@ -415,7 +420,7 @@ function Header() {
 
         {/* "More" overflow dropdown — portal into body */}
         {moreOpen && overflowItems.length > 0 && ReactDOM.createPortal(
-          <div style={{
+          <div ref={moreDropRef} style={{
             ...moreDropPos,
             background: "linear-gradient(160deg, #3a0f58, #5a287d)",
             borderRadius: 12,

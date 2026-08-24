@@ -346,34 +346,57 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
 }
 
+/* ── ACCOUNT OVERVIEW SECTION — full-width purple backdrop ── */
+.accOverviewSection {
+  background: linear-gradient(135deg, #7b44a8 0%, #9b64c8 45%, #7e4ab0 100%);
+  padding: 0 0 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle radial glow in the centre */
+.accOverviewSection::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 60%;
+  background: radial-gradient(ellipse at center, rgba(200,160,255,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
 /* Stats Row */
 .fs-stats {
-  border: 2px solid #000;
+  border: 1.5px solid rgba(255,255,255,0.22);
+  border-radius: 12px;
   padding: 0;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(4px);
 }
 
 .stat-box {
-  margin: 3rem -0.6rem 3rem 0;
-  border-right: 1px solid #000;
+  margin: 2.2rem -0.6rem 2.2rem 0;
+  border-right: 1px solid rgba(255,255,255,0.2);
   text-align: center;
 }
 
 .stat-box strong {
-  font-size: 65px;
+  font-size: 58px;
   line-height: 1;
   font-weight: 800;
-
+  color: #fff;
+  text-shadow: 0 0 24px rgba(180,130,255,0.5);
 }
 
 .stat-box p {
-  color: #141515;
+  color: rgba(255,255,255,0.72);
   text-transform: capitalize;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1;
   margin-bottom: 0;
-  font-size: 24px;
+  font-size: 20px;
 }
-
 
 .accOverview {
   padding: 4rem 0 0 0;
@@ -385,9 +408,10 @@
   font-weight: 800;
   line-height: 1;
   text-transform: capitalize;
-  color: #141515;
-  margin-bottom: 4rem;
+  color: #fff !important;
+  margin-bottom: 3rem;
   text-align: center;
+  text-shadow: 0 2px 18px rgba(160,100,255,0.35);
 }
 
 .accBox {
@@ -816,53 +840,70 @@
 .theme-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
+  gap: 28px;
   margin-top: 2.5rem;
   margin-bottom: 3rem;
 }
 
 .theme-card {
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.10);
-  background: #fff;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  background: rgba(255,255,255,0.97);
+  border: 1.5px solid rgba(255,255,255,0.55);
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.22),
+    0 0 0 0 rgba(160,100,255,0);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
 }
 
 .theme-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.16);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 20px 52px rgba(0,0,0,0.3),
+    0 0 0 3px rgba(200,160,255,0.45);
 }
 
 .theme-card-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 18px 22px;
+  gap: 14px;
+  padding: 22px 24px;
   color: #fff;
-  font-size: 1.15rem;
+  font-size: 1.18rem;
   font-weight: 700;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.4px;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.18);
+  position: relative;
+}
+
+/* Shine sweep on header */
+.theme-card-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255,255,255,0.14) 0%, transparent 60%);
+  pointer-events: none;
 }
 
 .theme-icon {
-  font-size: 1.6rem;
+  font-size: 1.85rem;
   line-height: 1;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
 }
 
 .theme-metrics {
-  padding: 16px 22px 20px;
+  padding: 18px 24px 22px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0;
 }
 
 .theme-metric {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 11px 0;
+  border-bottom: 1px solid #ece8ff;
   font-size: 0.95rem;
 }
 
@@ -871,12 +912,13 @@
 }
 
 .theme-metric span {
-  color: #555;
+  color: #6b4f8a;
   font-weight: 500;
 }
 
 .theme-metric strong {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 800;
-  color: #1c1c2d;
+  color: #3d1260;
+  letter-spacing: -0.3px;
 }

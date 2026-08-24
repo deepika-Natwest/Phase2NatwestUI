@@ -295,7 +295,7 @@ function ProjectProgramPage() {
         {showDescPopup && (
           <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
             backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center",
-            alignItems: "center", zIndex: 9999 }}
+            alignItems: "center", zIndex: 100000 }}
             onClick={() => setShowDescPopup(false)}>
             <div style={{ background: "#fff", width: "600px", maxWidth: "92%", padding: "28px",
               borderRadius: "10px", boxShadow: "0 4px 28px rgba(0,0,0,0.3)", maxHeight: "82vh", overflowY: "auto" }}
@@ -347,7 +347,7 @@ function ProjectProgramPage() {
 
         {/* Employee popup */}
         {showEmployees && (
-          <div className="modal fade show" style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }} tabIndex="-1">
+          <div className="modal fade show" style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)", zIndex: 100000 }} tabIndex="-1">
             <div className="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
               <div className="modal-content">
                 <div className="modal-header">

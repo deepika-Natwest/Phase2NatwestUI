@@ -348,9 +348,40 @@ body.nav-pos-bottom.public-nav-active #root {
   100% { background-position: 200% 50%; }
 }
 
-.footerBg{
-    background: #171717;
-    color: #818181;
+.footerBg {
+  background: linear-gradient(0deg, #2e0a4a 0%, #3d1260 100%);
+  color: rgba(255,255,255,0.55);
+  font-size: 12.5px;
+}
+.footerInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 18px;
+}
+.footerDivider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  margin-bottom: 14px;
+}
+.footerContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.footerCopy, .footerCredit {
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.2px;
+}
+.footerCopy strong, .footerCredit strong {
+  color: rgba(255,255,255,0.88);
+  font-weight: 600;
+}
+.footerDot {
+  color: rgba(255,255,255,0.25);
+  font-size: 16px;
+  line-height: 1;
 }
 
 /* ✅ ACTIVE NAV LINK (CURRENT PAGE) */
