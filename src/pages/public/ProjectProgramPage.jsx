@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import api from "../../services/api";
@@ -15,12 +16,23 @@ function ProjectProgramPage() {
   const [showEmployees, setShowEmployees] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedEmployees, setSelectedEmployees] = useState([]);
+  const [programSearch, setProgramSearch] = useState("");
+
+  const [searchParams] = useSearchParams();
+  const highlightProgram = searchParams.get("highlight");
+  const highlightRef = useRef(null);
 
   useEffect(() => {
     Promise.all([fetchUsers(), api.get("/programs")])
       .then(([, programsResponse]) => setPrograms(Array.isArray(programsResponse.data) ? programsResponse.data : []))
       .catch((err) => console.error("Error fetching programs:", err));
   }, []);
+
+  useEffect(() => {
+    if (highlightProgram && highlightRef.current) {
+      highlightRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [highlightProgram, projectRows]);
 
   const fetchUsers = async () => {
     try {
@@ -175,6 +187,14 @@ function ProjectProgramPage() {
     });
   }, [projectRows, selectedBU, selectedSBU]);
 
+  const displayedRows = useMemo(() => {
+    if (!programSearch) return filteredPrograms;
+    const query = programSearch.toLowerCase();
+    return filteredPrograms.filter((item) =>
+      item.projectName?.toLowerCase().includes(query)
+    );
+  }, [filteredPrograms, programSearch]);
+
   const handleBUChange = (e) => {
     setSelectedBU(e.target.value);
     setSelectedSBU("");
@@ -254,57 +274,83 @@ function ProjectProgramPage() {
         )}
 
         {!loading && !error && (
-          <div className="table-responsive">
-            <table className="table table-bordered table-hover table-striped align-middle">
-              <thead className="table-light">
-                <tr>
-                  <th style={{ width: "60px" }}>#</th>
-                  <th>BU</th>
-                  <th>SBU</th>
-                  <th>Program / Project</th>
-                  <th style={{ minWidth: "350px" }}>Description</th>
-                  <th className="text-center">Employees</th>
-                  <th>Line Managers</th>
-                </tr>
-              </thead>
+          <>
+            <div className="mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search by program name..."
+                style={{ maxWidth: "300px" }}
+                value={programSearch}
+                onChange={(e) => setProgramSearch(e.target.value)}
+              />
+            </div>
 
-              <tbody>
-                {filteredPrograms.length > 0 ? (
-                  filteredPrograms.map((item, index) => (
-                    <tr key={`${item.bu}-${item.sbu}-${item.projectName}-${index}`}>
-                      <td>{index + 1}</td>
-                      <td>{item.bu}</td>
-                      <td>{item.sbu}</td>
-                      <td className="fw-semibold">{item.projectName}</td>
-                      <td>{item.description}</td>
+            <div className="table-responsive">
+              <table className="table table-bordered table-hover table-striped align-middle">
+                <thead className="table-light">
+                  <tr>
+                    <th style={{ width: "60px" }}>#</th>
+                    <th>BU</th>
+                    <th>SBU</th>
+                    <th>Program / Project</th>
+                    <th style={{ minWidth: "350px" }}>Description</th>
+                    <th className="text-center">Employees</th>
+                    <th>Line Managers</th>
+                  </tr>
+                </thead>
 
-                      <td className="text-center">
-                        <button
-                          type="button"
-                          className="btn btn-link p-0 fw-bold text-decoration-none"
-                          onClick={() => openEmployeePopup(item)}
+                <tbody>
+                  {displayedRows.length > 0 ? (
+                    displayedRows.map((item, index) => {
+                      const isHighlighted =
+                        highlightProgram &&
+                        item.projectName?.toLowerCase() === highlightProgram.toLowerCase();
+                      return (
+                        <tr
+                          key={`${item.bu}-${item.sbu}-${item.projectName}-${index}`}
+                          ref={isHighlighted ? highlightRef : null}
+                          style={
+                            isHighlighted
+                              ? { backgroundColor: "#fff3cd", outline: "2px solid #ffc107" }
+                              : undefined
+                          }
                         >
-                          {item.employees.length}
-                        </button>
-                      </td>
+                          <td>{index + 1}</td>
+                          <td>{item.bu}</td>
+                          <td>{item.sbu}</td>
+                          <td className="fw-semibold">{item.projectName}</td>
+                          <td>{item.description}</td>
 
-                      <td>
-                        {item.lineManagers.length > 0
-                          ? item.lineManagers.join(", ")
-                          : "NA"}
+                          <td className="text-center">
+                            <button
+                              type="button"
+                              className="btn btn-link p-0 fw-bold text-decoration-none"
+                              onClick={() => openEmployeePopup(item)}
+                            >
+                              {item.employees.length}
+                            </button>
+                          </td>
+
+                          <td>
+                            {item.lineManagers.length > 0
+                              ? item.lineManagers.join(", ")
+                              : "NA"}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="7" className="text-center py-4">
+                        No Records Found
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="7" className="text-center py-4">
-                      No Records Found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
 
         {showEmployees && (

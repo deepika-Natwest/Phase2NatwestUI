@@ -370,6 +370,50 @@ for (let i = 1; i < SBUwisezbillableHC.length; i++) {
                   ))}
                 </div>
               </div>
+
+              {/* SBU Heat-map Table */}
+              <div className="pricing-card mt-4">
+                <h4>Sub SBU wise Billable HC — Summary Table</h4>
+                <div style={{ overflowX: "auto" }}>
+                  <table className="table table-bordered table-sm mb-0" style={{ fontSize: "13px" }}>
+                    <thead style={{ backgroundColor: "#4A148C", color: "#fff" }}>
+                      <tr>
+                        <th>#</th>
+                        <th>BU / Group</th>
+                        <th>Sub SBU</th>
+                        <th style={{ textAlign: "right" }}>Billable HC</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {SBUwisezbillableHC.map((entry, idx) => {
+                        const allValues = SBUwisezbillableHC.map(e => e.value);
+                        const min = Math.min(...allValues);
+                        const max = Math.max(...allValues);
+                        const ratio = max === min ? 1 : (entry.value - min) / (max - min);
+                        // Interpolate green (high) → yellow (mid) → red (low)
+                        const r = Math.round(ratio < 0.5 ? 255 : 255 * (1 - (ratio - 0.5) * 2));
+                        const g = Math.round(ratio < 0.5 ? 255 * ratio * 2 : 255);
+                        const bgColor = `rgba(${r}, ${g}, 80, 0.25)`;
+                        return (
+                          <tr key={idx} style={{ backgroundColor: bgColor }}>
+                            <td>{idx + 1}</td>
+                            <td>{entry.group || "—"}</td>
+                            <td><strong>{entry.name}</strong></td>
+                            <td style={{ textAlign: "right", fontWeight: "bold" }}>{entry.value}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div className="d-flex gap-3 mt-2 align-items-center" style={{ fontSize: "12px" }}>
+                <span>Color scale:</span>
+                <span style={{ background: "rgba(255,80,80,0.35)", padding: "2px 10px", borderRadius: "4px" }}>Low</span>
+                <span style={{ background: "rgba(255,255,80,0.35)", padding: "2px 10px", borderRadius: "4px" }}>Medium</span>
+                <span style={{ background: "rgba(80,255,80,0.35)", padding: "2px 10px", borderRadius: "4px" }}>High</span>
+              </div>
+
             </div>
 
         {/* Row 4 */}

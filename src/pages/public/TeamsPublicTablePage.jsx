@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import api from "../../services/api";
@@ -7,17 +8,15 @@ function TeamsPublicTablePage() {
   const [users, setUsers] = useState([]);
   const [loadedUserIds, setLoadedUserIds] = useState(new Set()); // ✅ Track unique users
 
+  const navigate = useNavigate();
+
   const [capabilitiesMap, setCapabilitiesMap] = useState({});
   const [franchisesMap, setFranchisesMap] = useState({});
-  const [programsMap, setProgramsMap] = useState({});
   const [selectedCap, setSelectedCap] = useState("");
   const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-
-  const [selectedProject, setSelectedProject] = useState("");
-const [showPopup, setShowPopup] = useState(false);
 
   const [filters, setFilters] = useState({
     franchiseId: [],
@@ -73,10 +72,9 @@ const [showPopup, setShowPopup] = useState(false);
   useEffect(() => {
     const fetchMaster = async () => {
       try {
-        const [capsRes, frRes, programsRes] = await Promise.all([
+        const [capsRes, frRes] = await Promise.all([
           api.get("/capabilities"),
           api.get("/franchises"),
-          api.get("/programs"),
         ]);
 
         const capMap = {};
@@ -90,12 +88,6 @@ const [showPopup, setShowPopup] = useState(false);
           frMap[f.id] = f.name;
         });
         setFranchisesMap(frMap);
-
-        const programsMapData = {};
-        (programsRes.data || []).forEach((program) => {
-          programsMapData[program.name] = program.description;
-        });
-        setProgramsMap(programsMapData);
       } catch (err) {
         console.error("Failed to load master data:", err);
       }
@@ -264,6 +256,24 @@ const [showPopup, setShowPopup] = useState(false);
           </div>
 
           <div className="d-flex gap-3 align-items-start">
+            {/* Name Search */}
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by name..."
+              style={{ minWidth: "160px" }}
+              value={nameSearch}
+              onChange={(e) => setNameSearch(e.target.value)}
+            />
+            {/* Enterprise ID Search */}
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by EID..."
+              style={{ minWidth: "130px" }}
+              value={enterpriseIdSearch}
+              onChange={(e) => setEnterpriseIdSearch(e.target.value)}
+            />
             {/* BU */}
             <select
               className="form-select"
@@ -399,21 +409,18 @@ const [showPopup, setShowPopup] = useState(false);
                     <td>{user.enterpriseId}</td>
                     <td>{user.careerLevel}</td>
                     <td>{user.location}</td>
-                   <td>
-  <span
-    style={{
-      color: "#0d6efd",
-      cursor: "pointer",
-      textDecoration: "underline",
-    }}
-    onClick={() => {
-      setSelectedProject(user.projectName);
-      setShowPopup(true);
-    }}
-  >
-    {user.projectName}
-  </span>
-</td>
+                    <td>
+                      <span
+                        style={{
+                          color: "#0d6efd",
+                          cursor: "pointer",
+                          textDecoration: "underline",
+                        }}
+                        onClick={() => navigate(`/programs?highlight=${encodeURIComponent(user.projectName || "")}`)}
+                      >
+                        {user.projectName}
+                      </span>
+                    </td>
 
                     <td>{user.lineManager}</td>
                   </tr>
@@ -436,52 +443,6 @@ const [showPopup, setShowPopup] = useState(false);
           </div>
         )}
       </div>
-{showPopup && (
-  <div
-    style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      background: "rgba(0,0,0,0.5)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 9999,
-    }}
-  >
-    <div
-      style={{
-        background: "#fff",
-        width: "500px",
-        maxWidth: "90%",
-        padding: "20px",
-        borderRadius: "8px",
-        boxShadow: "0 4px 15px rgba(0,0,0,0.3)",
-      }}
-    >
-      <h4>{selectedProject}</h4>
-
-      <hr />
-
-      <p style={{ whiteSpace: "pre-line" }}>
-        {programsMap[selectedProject] ||
-          "Description not available."}
-      </p>
-
-      <div style={{ textAlign: "right" }}>
-        <button
-          className="btn btn-primary"
-          onClick={() => setShowPopup(false)}
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
       <Footer />
     </>
   );

@@ -221,35 +221,75 @@ Security acts as a central risk‑control layer that combines people, processes,
 
                   <div className="servicesGrid">
 
-                    <div onClick={() => setActiveService(services.find(s => s.key === "markets"))}>
+                    <div
+                      onClick={() => setActiveService(services.find(s => s.key === "markets"))}
+                      style={{ cursor: "pointer" }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = "#f3e5f5"}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = ""}
+                    >
                       NatWest Markets
                     </div>
 
-                    <div onClick={() => setActiveService(services.find(s => s.key === "treasury"))}>
+                    <div
+                      onClick={() => setActiveService(services.find(s => s.key === "treasury"))}
+                      style={{ cursor: "pointer" }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = "#f3e5f5"}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = ""}
+                    >
                       Treasury
                     </div>
 
-                    <div onClick={() => setActiveService(services.find(s => s.key === "rbsi"))}>
+                    <div
+                      onClick={() => setActiveService(services.find(s => s.key === "rbsi"))}
+                      style={{ cursor: "pointer" }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = "#f3e5f5"}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = ""}
+                    >
                       RBSI
                     </div>
 
-                    <div onClick={() => setActiveService(services.find(s => s.key === "bas"))}>
+                    <div
+                      onClick={() => setActiveService(services.find(s => s.key === "bas"))}
+                      style={{ cursor: "pointer" }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = "#f3e5f5"}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = ""}
+                    >
                       BAS
                     </div>
 
-                    <div onClick={() => setActiveService(services.find(s => s.key === "architecture"))}>
+                    <div
+                      onClick={() => setActiveService(services.find(s => s.key === "architecture"))}
+                      style={{ cursor: "pointer" }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = "#f3e5f5"}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = ""}
+                    >
                       Architecture & Engineering
                     </div>
 
-                    <div onClick={() => setActiveService(services.find(s => s.key === "fincrime"))}>
+                    <div
+                      onClick={() => setActiveService(services.find(s => s.key === "fincrime"))}
+                      style={{ cursor: "pointer" }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = "#f3e5f5"}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = ""}
+                    >
                       Economic Crime & Fraud
                     </div>
 
-                    <div onClick={() => setActiveService(services.find(s => s.key === "infra-security"))}>
+                    <div
+                      onClick={() => setActiveService(services.find(s => s.key === "infra-security"))}
+                      style={{ cursor: "pointer" }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = "#f3e5f5"}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = ""}
+                    >
                       Infrastructure & Security
                     </div>
 
-                    <div onClick={() => setActiveService(services.find(s => s.key === "fral"))}>
+                    <div
+                      onClick={() => setActiveService(services.find(s => s.key === "fral"))}
+                      style={{ cursor: "pointer" }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = "#f3e5f5"}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = ""}
+                    >
                       FRAL
                     </div>
 
