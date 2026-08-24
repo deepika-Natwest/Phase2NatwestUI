@@ -27,11 +27,11 @@ h1, h2, h3, h4, h5, h6{
 
 /* Main Top Heading Row */
 .recog-detailed-heading {
-  display: flex;
-  align-items: center;
   margin-bottom: 20px;
-  background: #eef0ff;
-  margin-top: 60px;
+  background: linear-gradient(135deg, #4a148c, #6a1b9a, #8e24aa);
+  margin-top: 0;
+  padding: 1.5rem 0;
+  color: white;
 }
 .recog-main-side-line {
   width: 72px;
@@ -55,7 +55,7 @@ h1, h2, h3, h4, h5, h6{
 .recog-main-title {
   font-size: 2.7rem;
   font-weight: 900;
-  color: #25185c;
+  color: #ffffff !important;
   letter-spacing: 2px;
 }
 .recog-main-underline {

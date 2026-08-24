@@ -28,7 +28,9 @@ function EditCapabilityPage() {
 
   return (
     <Layout>
-      <h2>Edit Capability</h2>
+      <div className="d-flex justify-content-between align-items-center titleBox">
+        <h2>Edit Capability</h2>
+      </div>
       <CapabilityForm initialData={name} onSubmit={handleSubmit} />
     </Layout>
   );

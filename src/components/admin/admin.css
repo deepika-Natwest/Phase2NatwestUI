@@ -22,12 +22,22 @@
     background: #3c1053 !important;
 }
 .titleBox{
-    background: #f3f3f3 !important;
+    background: linear-gradient(135deg, #4a148c, #6a1b9a, #8e24aa) !important;
     padding: 1.5rem;
-    border-bottom: 1px solid #e3e3e3;
+    border-bottom: none;
+    margin-bottom: 1rem;
 }
 .titleBox h2{
     font-weight: 700 !important;
+    color: #ffffff !important;
+    margin: 0;
+}
+.titleBox .btn{
+    border-color: rgba(255,255,255,0.6);
+    color: #ffffff;
+}
+.titleBox .btn:hover{
+    background: rgba(255,255,255,0.15);
 }
 .searchBox{
     background: #f9f9f9 !important;

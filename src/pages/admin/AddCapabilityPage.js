@@ -14,7 +14,9 @@ function AddCapabilityPage() {
 
   return (
     <Layout>
-      <h2>Add Capability</h2>
+      <div className="d-flex justify-content-between align-items-center titleBox">
+        <h2>Add Capability</h2>
+      </div>
       <CapabilityForm onSubmit={handleSubmit} />
     </Layout>
   );

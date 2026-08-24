@@ -28,12 +28,6 @@ function ProjectProgramPage() {
       .catch((err) => console.error("Error fetching programs:", err));
   }, []);
 
-  useEffect(() => {
-    if (highlightProgram && highlightRef.current) {
-      highlightRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  }, [highlightProgram, projectRows]);
-
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -164,6 +158,12 @@ function ProjectProgramPage() {
     return Object.values(grouped);
   }, [users, programDescriptions]);
 
+  useEffect(() => {
+    if (highlightProgram && highlightRef.current) {
+      highlightRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [highlightProgram, projectRows]);
+
   const buOptions = useMemo(() => {
     return [...new Set(projectRows.map((item) => item.bu).filter(Boolean))].sort();
   }, [projectRows]);
@@ -216,48 +216,44 @@ function ProjectProgramPage() {
     <>
       <Header />
 
+      <div className="recog-detailed-heading">
+        <div className="container">
+          <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex align-items-center">
+              <span className="recog-main-side-line trophy-emoji">👥</span>
+              <span className="recog-main-title ms-2">Project / Programs</span>
+            </div>
+
+            <div className="d-flex gap-3 align-items-start">
+              <select
+                className="form-select"
+                style={{ minWidth: "160px" }}
+                value={selectedBU}
+                onChange={handleBUChange}
+              >
+                <option value="">All BUs</option>
+                {buOptions.map((bu) => (
+                  <option key={bu} value={bu}>{bu}</option>
+                ))}
+              </select>
+
+              <select
+                className="form-select"
+                style={{ minWidth: "160px" }}
+                value={selectedSBU}
+                onChange={(e) => setSelectedSBU(e.target.value)}
+              >
+                <option value="">All SBUs</option>
+                {sbuOptions.map((sbu) => (
+                  <option key={sbu} value={sbu}>{sbu}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="container my-4">
-        <div className="d-flex justify-content-between align-items-center mb-4 teamHeading">
-          <div className="d-flex align-items-center">
-            <span className="recog-main-side-line trophy-emoji">👥</span>
-            <span className="recog-main-title ms-2">Project / Programs</span>
-          </div>
-        </div>
-
-        <div className="row mb-4">
-          <div className="col-md-3 mb-2">
-            <label className="form-label fw-bold">Business Unit</label>
-            <select
-              className="form-select"
-              value={selectedBU}
-              onChange={handleBUChange}
-            >
-              <option value="">All BUs</option>
-              {buOptions.map((bu) => (
-                <option key={bu} value={bu}>
-                  {bu}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="col-md-3 mb-2">
-            <label className="form-label fw-bold">Sub Business Unit</label>
-            <select
-              className="form-select"
-              value={selectedSBU}
-              onChange={(e) => setSelectedSBU(e.target.value)}
-            >
-              <option value="">All SBUs</option>
-              {sbuOptions.map((sbu) => (
-                <option key={sbu} value={sbu}>
-                  {sbu}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
         {loading && (
           <div className="text-center my-4">
             <div className="spinner-border text-primary" role="status">

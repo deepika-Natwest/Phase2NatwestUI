@@ -245,68 +245,54 @@ function TeamsPublicTablePage() {
     <>
       <Header />
 
-      <div className="container my-4">
-        {/* Header */}
-        <div className="d-flex justify-content-between align-items-center mb-4 teamHeading">
-          <div className="d-flex align-items-center">
-            <span className="recog-main-side-line trophy-emoji">👥</span>
-            <span className="recog-main-title ms-2">
-              Team Portal: {selectedCap ? capabilitiesMap[selectedCap] : "All"}
-            </span>
-          </div>
+      {/* Full-width gradient header */}
+      <div className="recog-detailed-heading">
+        <div className="container">
+          <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex align-items-center">
+              <span className="recog-main-side-line trophy-emoji">👥</span>
+              <span className="recog-main-title ms-2">
+                Team Portal: {selectedCap ? capabilitiesMap[selectedCap] : "All"}
+              </span>
+            </div>
 
-          <div className="d-flex gap-3 align-items-start">
-            {/* Name Search */}
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search by name..."
-              style={{ minWidth: "160px" }}
-              value={nameSearch}
-              onChange={(e) => setNameSearch(e.target.value)}
-            />
-            {/* Enterprise ID Search */}
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search by EID..."
-              style={{ minWidth: "130px" }}
-              value={enterpriseIdSearch}
-              onChange={(e) => setEnterpriseIdSearch(e.target.value)}
-            />
-            {/* BU */}
-            <select
-              className="form-select"
-              style={{ minWidth: "180px" }}
-              value={selectedCap}
-              onChange={(e) => setSelectedCap(e.target.value)}
-            >
-              <option value="">BU</option>
-              {dropdownCapabilities.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
+            <div className="d-flex gap-3 align-items-start">
+              {/* BU */}
+              <select
+                className="form-select"
+                style={{ minWidth: "180px" }}
+                value={selectedCap}
+                onChange={(e) => setSelectedCap(e.target.value)}
+              >
+                <option value="">BU</option>
+                {dropdownCapabilities.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
 
-            {/* SBU + count */}
-            <div>
-              <MultiFilterDropdown
-                field="franchiseId"
-                label="SBU"
-                options={Object.entries(franchisesMap).map(([id, name]) => ({
-                  value: id,
-                  label: name,
-                }))}
-              />
+              {/* SBU + count */}
+              <div>
+                <MultiFilterDropdown
+                  field="franchiseId"
+                  label="SBU"
+                  options={Object.entries(franchisesMap).map(([id, name]) => ({
+                    value: id,
+                    label: name,
+                  }))}
+                />
 
-              <div className="mt-3 text-center fw-semibold small text-muted">
-                Team Size: {filteredUsers.length}
+                <div className="mt-3 text-center fw-semibold small text-muted">
+                  Team Size: {filteredUsers.length}
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
+      <div className="container my-4">
         {/* Table */}
         <div className="table-responsive">
           <table className="table table-bordered table-striped table-hover align-middle">
@@ -330,9 +316,7 @@ function TeamsPublicTablePage() {
                     className="form-control form-control-sm mt-1"
                     placeholder="Search ID"
                     value={enterpriseIdSearch}
-                    onChange={(e) =>
-                      setEnterpriseIdSearch(e.target.value)
-                    }
+                    onChange={(e) => setEnterpriseIdSearch(e.target.value)}
                   />
                 </th>
 
@@ -416,7 +400,7 @@ function TeamsPublicTablePage() {
                           cursor: "pointer",
                           textDecoration: "underline",
                         }}
-                        onClick={() => navigate(`/programs?highlight=${encodeURIComponent(user.projectName || "")}`)}
+                        onClick={() => navigate(`/program?highlight=${encodeURIComponent(user.projectName || "")}`)}
                       >
                         {user.projectName}
                       </span>

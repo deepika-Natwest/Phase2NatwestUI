@@ -52,12 +52,42 @@
   z-index: 9999;
 }
 
-body.public-nav-active #root {
-  padding-left: 232px;
+/* LEFT (default) */
+body.nav-pos-left.public-nav-active #root {
+  padding-left: var(--public-nav-width);
+  padding-right: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+body.nav-pos-left.public-nav-active.public-nav-collapsed #root {
+  padding-left: var(--public-nav-collapsed-width);
 }
 
-body.public-nav-active.public-nav-collapsed #root {
-  padding-left: 72px;
+/* RIGHT */
+body.nav-pos-right.public-nav-active #root {
+  padding-right: var(--public-nav-width);
+  padding-left: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+body.nav-pos-right.public-nav-active.public-nav-collapsed #root {
+  padding-right: var(--public-nav-collapsed-width);
+}
+
+/* TOP */
+body.nav-pos-top.public-nav-active #root {
+  padding-top: 62px;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+}
+
+/* BOTTOM */
+body.nav-pos-bottom.public-nav-active #root {
+  padding-bottom: 62px;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
 }
 
 .publicSidebar {
@@ -151,14 +181,43 @@ body.public-nav-active.public-nav-collapsed #root {
   object-position: left;
 }
 
-.publicSidebar.collapsed .nav-link {
-  font-size: 0;
-  text-align: center;
-  padding: 13px 4px !important;
+/* Collapsed top bar — stack logo above expand button */
+.publicSidebar.collapsed .publicSidebarTop {
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
-.publicSidebar.collapsed .nav-link::first-letter {
-  font-size: 1rem;
+/* Hide position cycle button when collapsed */
+.publicSidebar.collapsed .navPositionBtn {
+  display: none;
+}
+
+/* Make expand button full-width and prominent when collapsed */
+.publicSidebar.collapsed .navCollapseBtn {
+  width: 100%;
+  text-align: center;
+  padding: 5px 4px;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Nav links: show full label or abbreviation */
+.publicSidebar .nav-abbr { display: none; }
+.publicSidebar .nav-full { display: inline; }
+
+.publicSidebar.collapsed .nav-link {
+  text-align: center;
+  padding: 10px 4px !important;
+}
+
+.publicSidebar.collapsed .nav-full { display: none; }
+.publicSidebar.collapsed .nav-abbr {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .publicSidebar.collapsed .nav-link:hover {
@@ -175,7 +234,14 @@ body.public-nav-active.public-nav-collapsed #root {
 
 .publicSidebar.collapsed .navbar-text {
   overflow: hidden;
-  font-size: 0;
+}
+.publicSidebar.collapsed .publicSidebarUser {
+  align-items: center;
+}
+.publicSidebar.collapsed .publicSidebarUser .ms-2 {
+  margin-left: 0 !important;
+  font-size: 0.65rem;
+  padding: 3px 4px;
 }
 
 @media (max-width: 767.98px) {
@@ -299,4 +365,210 @@ body.public-nav-active.public-nav-collapsed #root {
 .publicSidebar.collapsed .navbar-nav .nav-link:hover,
 .publicSidebar.collapsed .navbar-nav .nav-link.active {
   transform: none;
+}
+
+/* ── RIGHT sidebar ── */
+body.nav-pos-right .publicSidebar {
+  left: auto;
+  right: 0;
+  border-right: none;
+  border-left: 1px solid rgba(255,255,255,.18);
+  box-shadow: -8px 0 24px rgba(39,17,64,.18);
+}
+
+/* Reverse top bar so buttons are on LEFT (content side), away from scrollbar */
+body.nav-pos-right .publicSidebar .publicSidebarTop {
+  flex-direction: row-reverse;
+}
+
+/* When collapsed on right, stack vertically and align content to left */
+body.nav-pos-right .publicSidebar.collapsed .publicSidebarTop {
+  flex-direction: column;
+  align-items: flex-start;
+}
+body.nav-pos-right .publicSidebar.collapsed .navCollapseBtn {
+  width: auto;
+  text-align: left;
+}
+
+body.nav-pos-right .publicSidebar .nav-link:hover {
+  transform: translateX(-3px);
+}
+body.nav-pos-right .publicSidebar.collapsed .nav-link:hover {
+  transform: none;
+}
+
+/* ── TOP navbar ── */
+body.nav-pos-top .publicSidebar {
+  left: 0; right: 0; top: 0; bottom: auto;
+  width: 100%; height: auto; min-height: 62px;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 16px;
+  border-right: none;
+  border-bottom: 1px solid rgba(255,255,255,.18);
+  box-shadow: 0 4px 16px rgba(39,17,64,.18);
+}
+body.nav-pos-top .publicSidebarTop {
+  margin-bottom: 0;
+  flex: 0 0 auto;
+}
+body.nav-pos-top .publicSidebarLinks {
+  flex-direction: row;
+  overflow-y: visible;
+  overflow-x: auto;
+  flex: 1;
+  padding-right: 0;
+  align-items: center;
+}
+body.nav-pos-top .publicSidebarLinks .navbar-nav {
+  flex-direction: row;
+  gap: 2px;
+}
+body.nav-pos-top .publicSidebarLinks .nav-link {
+  padding: 8px 12px !important;
+  border-radius: 6px;
+  font-size: .9rem;
+}
+body.nav-pos-top .publicSidebarLinks .nav-link:hover {
+  transform: translateY(-2px);
+}
+body.nav-pos-top .publicSidebarUser {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  border-top: none;
+  border-left: 1px solid rgba(255,255,255,.18);
+  padding: 0 0 0 12px;
+  margin-left: 8px;
+}
+
+/* ── BOTTOM navbar ── */
+body.nav-pos-bottom .publicSidebar {
+  left: 0; right: 0; bottom: 0; top: auto;
+  width: 100%; height: auto; min-height: 62px;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 16px;
+  border-right: none;
+  border-top: 1px solid rgba(255,255,255,.18);
+  box-shadow: 0 -4px 16px rgba(39,17,64,.18);
+}
+body.nav-pos-bottom .publicSidebarTop {
+  margin-bottom: 0;
+  flex: 0 0 auto;
+}
+body.nav-pos-bottom .publicSidebarLinks {
+  flex-direction: row;
+  overflow-y: visible;
+  overflow-x: auto;
+  flex: 1;
+  padding-right: 0;
+  align-items: center;
+}
+body.nav-pos-bottom .publicSidebarLinks .navbar-nav {
+  flex-direction: row;
+  gap: 2px;
+}
+body.nav-pos-bottom .publicSidebarLinks .nav-link {
+  padding: 8px 12px !important;
+  border-radius: 6px;
+  font-size: .9rem;
+}
+body.nav-pos-bottom .publicSidebarLinks .nav-link:hover {
+  transform: translateY(-2px);
+}
+body.nav-pos-bottom .publicSidebarUser {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  border-top: none;
+  border-left: 1px solid rgba(255,255,255,.18);
+  padding: 0 0 0 12px;
+  margin-left: 8px;
+}
+
+/* ── SIDEBAR SEARCH BAR ── */
+.sidebarSearchBox {
+  padding: 8px 4px;
+  /* Left/Right: push search to bottom of column, above user section */
+  margin-top: auto;
+}
+
+.sidebarSearchInput {
+  width: 100%;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.1);
+  color: #ffffff;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.sidebarSearchInput::placeholder {
+  color: rgba(255,255,255,0.55);
+}
+
+.sidebarSearchInput:focus {
+  border-color: rgba(255,255,255,0.65);
+  background: rgba(255,255,255,0.18);
+}
+
+/* Top/Bottom: push search to the right of nav items */
+body.nav-pos-top .sidebarSearchBox,
+body.nav-pos-bottom .sidebarSearchBox {
+  margin-top: 0;
+  margin-left: auto;
+  width: 200px;
+  padding: 0 4px;
+  align-self: center;
+}
+
+/* Hide search when sidebar is collapsed */
+.publicSidebar.collapsed .sidebarSearchBox {
+  display: none;
+}
+
+/* Responsive: on mobile, force left sidebar regardless of position */
+@media (max-width: 767.98px) {
+  body.nav-pos-top .publicSidebar,
+  body.nav-pos-bottom .publicSidebar,
+  body.nav-pos-right .publicSidebar {
+    left: 0; right: auto; top: 0; bottom: auto;
+    width: var(--public-nav-collapsed-width);
+    height: 100vh;
+    flex-direction: column;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    box-shadow: 8px 0 24px rgba(39,17,64,.18);
+  }
+  body.nav-pos-top.public-nav-active #root,
+  body.nav-pos-bottom.public-nav-active #root,
+  body.nav-pos-right.public-nav-active #root {
+    padding-left: var(--public-nav-collapsed-width);
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+  }
+  body.nav-pos-top .publicSidebarLinks,
+  body.nav-pos-bottom .publicSidebarLinks {
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  body.nav-pos-top .publicSidebarLinks .navbar-nav,
+  body.nav-pos-bottom .publicSidebarLinks .navbar-nav {
+    flex-direction: column;
+  }
+  body.nav-pos-top .publicSidebarUser,
+  body.nav-pos-bottom .publicSidebarUser {
+    flex-direction: column;
+    border-top: 1px solid rgba(255,255,255,.18);
+    border-left: none;
+    padding: 12px 4px 0;
+    margin-left: 0;
+  }
 }

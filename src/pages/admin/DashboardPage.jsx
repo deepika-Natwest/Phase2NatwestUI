@@ -20,7 +20,7 @@ function DashboardPage() {
 
   return (
     <Layout>
-      <div className="d-flex justify-content-between align-items-center mb-3 titleBox">
+      <div className="d-flex justify-content-between align-items-center titleBox">
         <h2>Admin Dashboard</h2>
       </div>
 

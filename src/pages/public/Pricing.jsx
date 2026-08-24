@@ -654,7 +654,7 @@ const dashboardStyles = `
 
   .pricing-dashboard {
     min-height: calc(100vh - 120px);
-    padding: 96px 24px 24px;
+    padding: 0 0 24px;
     background: #f5f7fb;
     font-family: "Roboto", Arial, sans-serif;
     color: #1f2937;
@@ -666,19 +666,22 @@ const dashboardStyles = `
     align-items: center;
     margin-bottom: 24px;
     gap: 16px;
+    background: linear-gradient(135deg, #4a148c, #6a1b9a, #8e24aa);
+    padding: 24px 32px;
+    border-radius: 0;
   }
 
   .pricing-dashboard-header h1 {
     margin: 0;
     font-size: 26px;
     font-weight: 700;
-    color: #1f2937;
+    color: #ffffff;
   }
 
   .pricing-dashboard-header p {
     margin: 6px 0 0;
     font-size: 14px;
-    color: #6b7280;
+    color: rgba(255, 255, 255, 0.85);
   }
 
   .pricing-header-actions {
@@ -726,6 +729,7 @@ const dashboardStyles = `
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
     overflow: hidden;
     min-width: 0;
+    margin: 24px;
   }
 
   .report-table-wrapper {
@@ -887,7 +891,7 @@ const dashboardStyles = `
 
   @media (max-width: 768px) {
     .pricing-dashboard {
-      padding: 110px 16px 16px;
+      padding: 0 0 16px;
     }
 
     .pricing-dashboard-header {
