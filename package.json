@@ -25,6 +25,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:backend": "cd backend-python && .\\.venv\\Scripts\\uvicorn main:app --host 0.0.0.0 --port 5000 --reload",
+    "start:python": "cd backend-python && .\\.venv\\Scripts\\uvicorn main:app --host 0.0.0.0 --port 5000 --reload",
+    "test:python": "cd backend-python && .\\.venv\\Scripts\\pytest tests/ -v",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

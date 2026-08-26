@@ -9,7 +9,7 @@ from file_helper import read_json, write_json
 from dependencies import get_current_user
 
 router = APIRouter()
-_PIC_DIR = UPLOAD_DIR / "profile-pics"
+_PIC_DIR = UPLOAD_DIR / "users"
 
 
 def _hash_password(plain: str) -> str:
@@ -25,6 +25,7 @@ def _save(file: UploadFile, folder: Path) -> str:
     return name
 
 
+@router.get("")
 @router.get("/")
 def get_users(
     search: Optional[str] = Query(None),

@@ -28,12 +28,13 @@
   display: flex;
   flex-direction: column;
   width: min(360px, calc(100vw - 24px));
-  height: min(520px, calc(100vh - 60px));
+  height: min(520px, calc(100vh - 24px));
+  max-height: calc(100vh - 24px);
   overflow: hidden;
   border: 1px solid #c9b8e0;
   border-radius: 16px;
   background: #fff;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
   animation: chatbot-pop 0.18s ease-out;
 }
 
@@ -53,6 +54,46 @@
   font-weight: 700;
 }
 
+.chatbot-header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.chatbot-badge {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.chatbot-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chatbot-action-btn {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chatbot-action-btn:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
 .chatbot-close {
   width: 30px;
   height: 30px;
@@ -68,6 +109,53 @@
 .chatbot-close:hover,
 .chatbot-close:focus-visible {
   background: rgba(255, 255, 255, 0.18);
+}
+
+.chatbot-suggestions {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #e1d8f0;
+  border-radius: 12px;
+}
+
+.chatbot-suggestions-title {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6c4a8e;
+  margin-bottom: 8px;
+}
+
+.chatbot-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chatbot-chip {
+  background: #f0e8f8;
+  color: #5a287d;
+  border: 1px solid #d4c2ea;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chatbot-chip:hover:not(:disabled) {
+  background: #5a287d;
+  color: #fff;
+  border-color: #5a287d;
+  transform: translateY(-1px);
+}
+
+.chatbot-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .chatbot-messages {

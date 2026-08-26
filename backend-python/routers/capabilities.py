@@ -11,6 +11,7 @@ class CapabilityBody(BaseModel):
     name: str
 
 
+@router.get("")
 @router.get("/")
 def get_all():
     return read_json(DATA_DIR / "capabilities.json")

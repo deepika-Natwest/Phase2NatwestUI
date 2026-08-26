@@ -12,6 +12,7 @@ class StatusBody(BaseModel):
     name: str
 
 
+@router.get("")
 @router.get("/")
 def get_all():
     return read_json(_FILE)

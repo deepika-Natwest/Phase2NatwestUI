@@ -5,6 +5,7 @@ from file_helper import read_json
 router = APIRouter()
 
 
+@router.get("")
 @router.get("/")
 def get_pricing():
     pricing = read_json(DATA_DIR / "pricing.json")

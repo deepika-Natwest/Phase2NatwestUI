@@ -2,9 +2,11 @@ import uuid
 import io
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 import openpyxl
+import bcrypt as _bcrypt
 from config import DATA_DIR
 from file_helper import read_json, write_json
 from dependencies import require_roles
+from services.rag_service import invalidate_knowledge_base_cache
 
 router = APIRouter()
 
@@ -66,7 +68,7 @@ async def upload_users(
             users.append({
                 "id": str(uuid.uuid4()),
                 "name": name, "enterpriseId": enterprise_id,
-                "password": enterprise_id,
+                "password": _bcrypt.hashpw(enterprise_id.encode(), _bcrypt.gensalt()).decode(),
                 "role": role, "careerLevel": career_level,
                 "location": location, "resourceType": resource_type,
                 "natwestDoj": natwest_doj, "sowStartDate": sow_start,
@@ -75,4 +77,12 @@ async def upload_users(
             created += 1
 
     write_json(DATA_DIR / "users.json", users)
-    return {"message": f"Upload complete. Created: {created}, Updated: {upserted}"}
+    invalidate_knowledge_base_cache()
+    total = created + upserted
+    return {
+        "message": f"Upload complete. Created: {created}, Updated: {upserted}",
+        "createdCount": created,
+        "updatedCount": upserted,
+        "count": total,
+        "errors": [],
+    }

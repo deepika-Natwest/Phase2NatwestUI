@@ -14,9 +14,9 @@ JWT_EXPIRES_IN_HOURS = 1
 
 CORS_ORIGINS = [o.strip() for o in os.getenv("CORS_ORIGIN", "http://localhost:3000").split(",")]
 
-# Point at the same data/uploads as the Node.js backend
-DATA_DIR = _root / "backend" / "data"
-UPLOAD_DIR = _root / "backend" / "uploads"
+# Data and upload directories
+DATA_DIR = Path(__file__).parent / "data"
+UPLOAD_DIR = Path(__file__).parent / "uploads"
 
 # LLM
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")

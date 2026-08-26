@@ -11,6 +11,7 @@ def get_public_dashboard():
     return read_json(DATA_DIR / "public-dashboard.json")
 
 
+@router.get("")
 @router.get("/")
 def get_admin_dashboard(user: dict = Depends(get_current_user)):
-    return f"Welcome {user.get('username')} to Admin Dashboard"
+    return {"message": f"Welcome {user.get('username')} to Admin Dashboard"}

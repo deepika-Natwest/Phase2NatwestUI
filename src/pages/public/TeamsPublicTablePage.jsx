@@ -6,16 +6,12 @@ import api from "../../services/api";
 
 function TeamsPublicTablePage() {
   const [users, setUsers] = useState([]);
-  const [loadedUserIds, setLoadedUserIds] = useState(new Set());
   const navigate = useNavigate();
 
   const [capabilitiesMap, setCapabilitiesMap] = useState({});
   const [franchisesMap, setFranchisesMap] = useState({});
   const [selectedCap, setSelectedCap] = useState("");
   const [loading, setLoading] = useState(true);
-
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
 
   const [filters, setFilters] = useState({
     franchiseId: [],
@@ -39,19 +35,12 @@ function TeamsPublicTablePage() {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [openDropdown]);
 
-  const fetchUsers = async (pageNum = 1, append = false) => {
+  const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await api.get(`/users?page=${pageNum}&limit=50`);
-      const newUsers = Array.isArray(res.data) ? res.data : res.data.users || [];
-      const uniqueNewUsers = newUsers.filter((u) => !loadedUserIds.has(u.id));
-      setLoadedUserIds((prev) => {
-        const updated = new Set(prev);
-        uniqueNewUsers.forEach((u) => updated.add(u.id));
-        return updated;
-      });
-      setUsers((prev) => append ? [...prev, ...uniqueNewUsers] : uniqueNewUsers);
-      setHasMore(uniqueNewUsers.length > 0);
+      const res = await api.get("/users?limit=2000");
+      const userList = Array.isArray(res.data) ? res.data : res.data.users || [];
+      setUsers(userList);
     } catch (err) {
       console.error("Failed to load users:", err);
     } finally {
@@ -86,13 +75,7 @@ function TeamsPublicTablePage() {
     fetchMaster();
   }, []);
 
-  useEffect(() => { fetchUsers(1, false); }, []);
-
-  const loadMore = () => {
-    const nextPage = page + 1;
-    setPage(nextPage);
-    fetchUsers(nextPage, true);
-  };
+  useEffect(() => { fetchUsers(); }, []);
 
   const uniqueValues = (key) =>
     Array.from(new Set(users.map((u) => u[key]).filter(Boolean)));
@@ -174,7 +157,7 @@ function TeamsPublicTablePage() {
     );
   };
 
-  if (loading && page === 1) {
+  if (loading) {
     return (
       <>
         <Header />
@@ -306,13 +289,7 @@ function TeamsPublicTablePage() {
           </table>
         </div>
 
-        {hasMore && (
-          <div className="text-center mt-3">
-            <button className="btn btn-primary" onClick={loadMore} disabled={loading}>
-              {loading ? "Loading..." : "Load More"}
-            </button>
-          </div>
-        )}
+
       </div>
 
       <Footer />

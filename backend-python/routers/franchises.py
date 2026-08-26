@@ -30,6 +30,7 @@ def filter_by_capability(
     return items
 
 
+@router.get("")
 @router.get("/")
 def get_all(capabilityId: Optional[str] = Query(None)):
     items = read_json(DATA_DIR / "franchises.json")

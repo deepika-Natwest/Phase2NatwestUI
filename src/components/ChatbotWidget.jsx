@@ -37,31 +37,46 @@ function clampToViewport(x, y) {
   };
 }
 
-// Smart panel position: appears near the button, stays inside viewport
+// Smart panel position: appears near the button, stays strictly inside viewport
 function getPanelStyle(bx, by) {
   const VW = window.innerWidth;
   const VH = window.innerHeight;
-  const spaceBelow = VH - (by + BTN_H);
-  const spaceAbove = by;
+  const effectivePanelH = Math.min(PANEL_H, VH - EDGE * 2);
+  const effectivePanelW = Math.min(PANEL_W, VW - EDGE * 2);
 
-  const top    = spaceBelow >= PANEL_H + EDGE ? by + BTN_H + 8 : null;
-  const bottom = top === null ? VH - by + 8 : null;
-  let   left   = bx + BTN_W / 2 - PANEL_W / 2;               // centre-align with button
-  left = clamp(left, EDGE, VW - PANEL_W - EDGE);
+  // Position above the launcher if launcher is in bottom half, else below
+  let top = (by > VH / 2) ? by - effectivePanelH - 10 : by + BTN_H + 10;
+  top = clamp(top, EDGE, VH - effectivePanelH - EDGE);
 
-  return top !== null
-    ? { position: "fixed", top, left, zIndex: 110000 }
-    : { position: "fixed", bottom, left, zIndex: 110000 };
+  let left = bx + BTN_W / 2 - effectivePanelW / 2;
+  left = clamp(left, EDGE, VW - effectivePanelW - EDGE);
+
+  return {
+    position: "fixed",
+    top: `${Math.round(top)}px`,
+    left: `${Math.round(left)}px`,
+    zIndex: 110000,
+  };
 }
+
+const INITIAL_MESSAGE = {
+  role: "assistant",
+  text: "Hi! Ask me about people, teams, leadership, events, capabilities, deliverables, pricing metrics, or program data in this app.",
+};
+
+const SUGGESTION_PROMPTS = [
+  { label: "👥 Noida Team", prompt: "Who are all the users in Noida?" },
+  { label: "💼 Leadership", prompt: "Show me all leadership team members" },
+  { label: "📊 D&A Grand Total", prompt: "What is the grand total for D&A?" },
+  { label: "🚀 AI Deliverables", prompt: "Show me all AI-based deliverables" },
+];
 
 function ChatbotWidget() {
   const [pos,     setPos]     = useState(() => loadPos() || defaultPos());
   const [isOpen,  setIsOpen]  = useState(false);
   const [question, setQuestion] = useState("");
   const [loading,  setLoading]  = useState(false);
-  const [messages, setMessages] = useState([
-    { role: "assistant", text: "Ask me about the people, teams, leadership, events, capabilities, deliveries, or program data shown in this app." },
-  ]);
+  const [messages, setMessages] = useState([INITIAL_MESSAGE]);
 
   const posRef      = useRef(pos);
   const messagesEnd = useRef(null);
@@ -142,24 +157,45 @@ function ChatbotWidget() {
     window.addEventListener("touchend",  onEnd);
   }, []);
 
-  // ── Chat submit ───────────────────────────────────────────────────────────
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const trimmed = question.trim();
-    if (!trimmed) return;
+  // ── Chat submit & Send ───────────────────────────────────────────────────
+  const sendQuery = async (queryText) => {
+    const trimmed = queryText.trim();
+    if (!trimmed || loading) return;
 
-    setMessages(prev => [...prev, { role: "user", text: trimmed }]);
+    const userMsg = { role: "user", text: trimmed };
+    const nextMessages = [...messages, userMsg];
+    setMessages(nextMessages);
     setQuestion("");
     setLoading(true);
 
+    // Build context from recent history (last 6 turns, ignoring welcome greeting)
+    const historyPayload = nextMessages
+      .filter(m => m !== INITIAL_MESSAGE)
+      .slice(-6)
+      .map(m => ({ role: m.role, text: m.text }));
+
     try {
-      const res = await api.post("/chatbot/ask", { question: trimmed });
+      const res = await api.post("/chatbot/ask", {
+        question: trimmed,
+        history: historyPayload,
+      });
       setMessages(prev => [...prev, { role: "assistant", text: res.data.answer }]);
     } catch {
-      setMessages(prev => [...prev, { role: "assistant", text: "I could not answer from the current app data. Please try a more specific question." }]);
+      setMessages(prev => [
+        ...prev,
+        {
+          role: "assistant",
+          text: "I could not answer from the current app data. Please try a more specific question.",
+        },
+      ]);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await sendQuery(question);
   };
 
   const handleKeyDown = (e) => {
@@ -167,6 +203,10 @@ function ChatbotWidget() {
       e.preventDefault();
       e.currentTarget.form?.requestSubmit();
     }
+  };
+
+  const handleResetChat = () => {
+    setMessages([INITIAL_MESSAGE]);
   };
 
   // ── Render ────────────────────────────────────────────────────────────────
@@ -205,16 +245,32 @@ function ChatbotWidget() {
       {isOpen && ReactDOM.createPortal(
         <div className="chatbot-panel" style={panelStyle}>
           <div className="chatbot-header">
-            <span>NatWest AI Assistant</span>
-            <button
-              type="button"
-              onClick={() => setIsOpen(false)}
-              className="chatbot-close"
-              aria-label="Close AI assistant"
-              title="Close"
-            >
-              &times;
-            </button>
+            <div className="chatbot-header-title">
+              <span className="chatbot-badge">AI</span>
+              <span>NatWest Assistant</span>
+            </div>
+            <div className="chatbot-header-actions">
+              {messages.length > 1 && (
+                <button
+                  type="button"
+                  onClick={handleResetChat}
+                  className="chatbot-action-btn"
+                  title="Clear conversation"
+                  aria-label="Clear conversation"
+                >
+                  ↺ Reset
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="chatbot-close"
+                aria-label="Close AI assistant"
+                title="Close"
+              >
+                &times;
+              </button>
+            </div>
           </div>
 
           <div className="chatbot-messages" aria-live="polite">
@@ -227,6 +283,26 @@ function ChatbotWidget() {
                 <div className="chatbot-message-text">{msg.text}</div>
               </div>
             ))}
+            
+            {messages.length === 1 && (
+              <div className="chatbot-suggestions">
+                <span className="chatbot-suggestions-title">Suggested questions:</span>
+                <div className="chatbot-chips">
+                  {SUGGESTION_PROMPTS.map((item, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      className="chatbot-chip"
+                      onClick={() => sendQuery(item.prompt)}
+                      disabled={loading}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {loading && <div className="chatbot-thinking">Thinking...</div>}
             <div ref={messagesEnd} />
           </div>
@@ -259,3 +335,4 @@ function ChatbotWidget() {
 }
 
 export default ChatbotWidget;
+

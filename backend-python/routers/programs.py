@@ -7,6 +7,7 @@ from file_helper import read_json, write_json
 router = APIRouter()
 
 
+@router.get("")
 @router.get("/")
 def get_all():
     return read_json(DATA_DIR / "program.json")
