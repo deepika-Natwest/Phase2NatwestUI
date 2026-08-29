@@ -7,7 +7,8 @@ import { LOCATION_OPTIONS, CAREER_LEVELS } from "../../utils/userConfig";
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-const isAdmin = (u) => u.role?.toUpperCase() === "ADMIN";
+// Protect by role OR by the fixed admin ID ("1") in case role is ever corrupted
+const isAdmin = (u) => u.id === "1" || (u.role || "").toUpperCase() === "ADMIN";
 
 const CAREER_LEVEL_OPTIONS = CAREER_LEVELS || Array.from({ length: 12 }, (_, i) => `Level ${i + 1}`);
 
@@ -23,6 +24,7 @@ const UserPage = () => {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editUser, setEditUser] = useState(null);
+  const [deleteError, setDeleteError] = useState("");
 
   // ── bulk-select state ──────────────────────────────────────────────────────
   const [selectedIds, setSelectedIds] = useState(new Set());
@@ -36,7 +38,6 @@ const UserPage = () => {
     franchiseId: "",
     careerLevel: "",
     location: "",
-    status: "",
     resourceType: "",
   });
   const [bulkEditing, setBulkEditing] = useState(false);
@@ -94,6 +95,8 @@ const UserPage = () => {
   };
 
   const toggleOne = (id) => {
+    const u = users.find((u) => u.id === id);
+    if (!u || isAdmin(u)) return; // never add admin IDs
     setSelectedIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {
@@ -108,16 +111,47 @@ const UserPage = () => {
   // ── bulk delete ────────────────────────────────────────────────────────────
   const handleBulkDelete = async () => {
     setDeleting(true);
+    setDeleteError("");
+
+    const tryDeleteBatch = async (ids) => {
+      const failedIds = [];
+      for (const id of ids) {
+        try {
+          await api.delete(`/users/${id}`);
+        } catch (err) {
+          const status = err?.response?.status;
+          // 403 = admin protection, 404 = already deleted — neither is a real failure
+          if (status !== 403 && status !== 404) failedIds.push(id);
+        }
+      }
+      return failedIds;
+    };
+
     try {
-      // safety net: exclude admin users even if somehow selected
+      // Safety net: never delete admin users even if somehow selected
       const safeIds = [...selectedIds].filter((id) => {
+        if (id === "1") return false;
         const u = users.find((u) => u.id === id);
         return u && !isAdmin(u);
       });
-      await Promise.all(safeIds.map((id) => api.delete(`/users/${id}`)));
+
+      // First pass — sequential to avoid concurrent write race conditions
+      let failedIds = await tryDeleteBatch(safeIds);
+
+      // Auto-retry failed IDs once after a short pause (handles transient file locks)
+      if (failedIds.length > 0) {
+        await new Promise((resolve) => setTimeout(resolve, 1200));
+        failedIds = await tryDeleteBatch(failedIds);
+      }
+
       setSelectedIds(new Set());
       setConfirmDelete(false);
       await fetchUsers();
+      if (failedIds.length > 0)
+        setDeleteError(`${failedIds.length} user(s) could not be deleted after retry. Please try again.`);
+    } catch (err) {
+      setDeleteError("Delete failed: " + (err?.message || "Unknown error"));
+      await fetchUsers().catch(() => {});
     } finally {
       setDeleting(false);
     }
@@ -211,7 +245,6 @@ const UserPage = () => {
                   franchiseId: "",
                   careerLevel: "",
                   location: "",
-                  status: "",
                   resourceType: "",
                 });
                 setBulkEditOpen(true);
@@ -245,6 +278,14 @@ const UserPage = () => {
           </div>
         )}
 
+        {/* ── Delete error banner ── */}
+        {deleteError && (
+          <div className="alert alert-danger d-flex justify-content-between align-items-center mb-2">
+            <span>{deleteError}</span>
+            <button className="btn-close btn-sm" onClick={() => setDeleteError("")} />
+          </div>
+        )}
+
         {/* ── Table ── */}
         <table className="table table-bordered">
           <thead>
@@ -265,7 +306,6 @@ const UserPage = () => {
               <th>Enterprise ID</th>
               <th>Role</th>
               <th>Franchise</th>
-              <th>Status</th>
               <th>Resource Type</th>
               <th>NatWest DOJ</th>
               <th>SOW ID</th>
@@ -277,27 +317,28 @@ const UserPage = () => {
           <tbody>
             {filteredUsers.length === 0 ? (
               <tr>
-                <td colSpan="12" className="text-center text-muted">
+                <td colSpan="11" className="text-center text-muted">
                   No users found.
                 </td>
               </tr>
             ) : (
               filteredUsers.map((u) => (
-                <tr key={u.id}>
+                <tr key={u.id} style={isAdmin(u) ? { background: "#f8f0ff" } : undefined}>
                   <td>
-                    <input
-                      type="checkbox"
-                      checked={selectedIds.has(u.id)}
-                      onChange={() => toggleOne(u.id)}
-                      disabled={isAdmin(u)}
-                      title={isAdmin(u) ? "Admin user cannot be deleted" : undefined}
-                    />
+                    {isAdmin(u) ? (
+                      <span title="System admin — cannot be selected">🔒</span>
+                    ) : (
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.has(u.id)}
+                        onChange={() => toggleOne(u.id)}
+                      />
+                    )}
                   </td>
                   <td>{u.name}</td>
                   <td>{u.enterpriseId}</td>
                   <td>{u.role}</td>
                   <td>{getFranchiseName(u.franchiseId)}</td>
-                  <td>{u.status}</td>
                   <td>{u.resourceType || "-"}</td>
                   <td>{u.natwestDoj || "-"}</td>
                   <td>{u.sowId || "-"}</td>
@@ -468,25 +509,6 @@ const UserPage = () => {
                             {loc}
                           </option>
                         ))}
-                      </select>
-                    </div>
-
-                    {/* Status */}
-                    <div className="col-6">
-                      <label className="form-label">Status</label>
-                      <select
-                        className="form-select"
-                        value={bulkEditData.status}
-                        onChange={(e) =>
-                          setBulkEditData((prev) => ({
-                            ...prev,
-                            status: e.target.value,
-                          }))
-                        }
-                      >
-                        <option value="">— keep existing —</option>
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
                       </select>
                     </div>
 

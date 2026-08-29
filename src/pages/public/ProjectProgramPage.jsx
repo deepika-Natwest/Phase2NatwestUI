@@ -59,8 +59,9 @@ function ProjectProgramPage() {
     }
   };
 
-  const getBU          = (u) => u.bu || u.businessUnit || u.franchise || u.franchiseName || u.franchiseId || "NA";
-  const getSBU         = (u) => u.sbu || u.subBusinessUnit || u.capability || u.capabilityName || u.capabilityId || "NA";
+  // BU = Capability (higher level); SBU = Franchise (sub-level)
+  const getBU  = (u) => capabilities.find((c) => c.id === u.capabilityId)?.name || "NA";
+  const getSBU = (u) => franchises.find((f) => f.id === u.franchiseId)?.name   || "NA";
   const getProjectName = (u) => u.projectName || u.project || u.programName || u.program || u.projectProgram || "NA";
   const getEmployeeName= (u) => u.name || u.employeeName || u.fullName || u.employeeFullName || u.userName || "NA";
   const getEnterpriseId= (u) => u.enterpriseId || u.enterpriseID || u.eid || u.email || "NA";
@@ -68,10 +69,10 @@ function ProjectProgramPage() {
   const getLocation    = (u) => u.location || u.baseLocation || u.officeLocation || "NA";
   const getLineManager = (u) => u.lineManager || u.nwgLineManager || u.manager || u.peopleLead || u.supervisor || "NA";
 
-  const isEffectivelyActive = (prog) => {
-    if (prog.isActive === false) return false;
+  // Active = has ≥1 user assigned; ignores stored isActive flag
+  const isEffectivelyActive = (prog, assignedNames) => {
     if (!prog.capabilityId && !prog.franchiseId) return false;
-    return true;
+    return assignedNames.has(prog.name.toLowerCase().trim());
   };
 
   // Build a lookup: program name (lowercased) → array of enriched entries sorted newest first
@@ -92,10 +93,16 @@ function ProjectProgramPage() {
   }, [programs, capabilities, franchises]);
 
   const projectRows = useMemo(() => {
+    const nonAdminUsers = users.filter((u) => u.role?.toUpperCase() !== "ADMIN");
+    // Build assigned names from user data so isEffectivelyActive gets the right set
+    const assignedNames = new Set(
+      nonAdminUsers
+        .map((u) => getProjectName(u).toLowerCase().trim())
+        .filter((n) => n && n !== "na")
+    );
+
     const grouped = {};
-    users
-      .filter((u) => u.role?.toUpperCase() !== "ADMIN")
-      .forEach((user) => {
+    nonAdminUsers.forEach((user) => {
         const projectName = getProjectName(user);
         const entries     = programMap[projectName.toLowerCase().trim()] || [];
         const adminProg   = entries[0]; // latest entry
@@ -109,7 +116,7 @@ function ProjectProgramPage() {
           grouped[key] = {
             bu, sbu, projectName,
             description: adminProg?.description || user.description || user.projectDescription || "Project description will be updated soon.",
-            isActive: adminProg ? isEffectivelyActive(adminProg) : true,
+            isActive: adminProg ? isEffectivelyActive(adminProg, assignedNames) : true,
             history: entries,  // all entries sorted newest first
             employees:    [],
             lineManagers: [],
@@ -120,6 +127,28 @@ function ProjectProgramPage() {
         if (manager && manager !== "NA" && !grouped[key].lineManagers.includes(manager))
           grouped[key].lineManagers.push(manager);
       });
+
+    // Programs in admin list with no users assigned → mark as inactive
+    Object.entries(programMap).forEach(([programKey, entries]) => {
+      if (!assignedNames.has(programKey)) {
+        const adminProg = entries[0];
+        const bu  = adminProg?.capabilityName || "NA";
+        const sbu = adminProg?.franchiseName  || "NA";
+        const name = adminProg?.name || programKey;
+        const key  = `${bu}__${sbu}__${name}`;
+        if (!grouped[key]) {
+          grouped[key] = {
+            bu, sbu,
+            projectName: name,
+            description: adminProg?.description || "",
+            isActive: false,
+            history: entries,
+            employees: [],
+            lineManagers: [],
+          };
+        }
+      }
+    });
 
     return Object.values(grouped);
   }, [users, programMap]);

@@ -114,6 +114,12 @@ def update_user(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
+    # Protect admin by role OR fixed ID — prevents role changes even if role field is corrupted
+    if (user.get("id") == "1" or str(user.get("role", "")).lower() == "admin") and (
+        role is not None and role.lower() != "admin"
+    ):
+        raise HTTPException(status_code=403, detail="Cannot change role of an admin user")
+
     for field, val in {
         "name": name, "enterpriseId": enterpriseId, "gender": gender,
         "location": location, "careerLevel": careerLevel, "lineManager": lineManager,
@@ -143,6 +149,40 @@ def update_user(
 
 @router.delete("/{user_id}")
 def delete_user(user_id: str, _user: dict = Depends(get_current_user)):
+    # Hard-block the system admin by ID before touching the file
+    if user_id == "1":
+        raise HTTPException(status_code=403, detail="Admin users cannot be deleted")
+
     users = read_json(DATA_DIR / "users.json")
+    target = next((u for u in users if u["id"] == user_id), None)
+    # Also block any user whose role is admin (covers additional admin accounts)
+    if target and str(target.get("role", "")).lower() == "admin":
+        raise HTTPException(status_code=403, detail="Admin users cannot be deleted")
+
+    # Best-effort: preserve the user's program in program.json so the Program
+    # tab continues to show it as Inactive. Wrapped in try/except so a file-lock
+    # or OS error here never blocks the actual user deletion below.
+    if target:
+        try:
+            project_name = (target.get("projectName") or "").strip()
+            if project_name:
+                programs = read_json(DATA_DIR / "program.json")
+                already_there = any(
+                    (p.get("name") or "").strip().lower() == project_name.lower()
+                    for p in programs
+                )
+                if not already_there:
+                    programs.append({
+                        "id": str(uuid.uuid4()),
+                        "name": project_name,
+                        "capabilityId": target.get("capabilityId", ""),
+                        "franchiseId": target.get("franchiseId", ""),
+                        "isActive": False,
+                        "description": "",
+                    })
+                    write_json(DATA_DIR / "program.json", programs)
+        except Exception:
+            pass  # non-critical — user deletion proceeds regardless
+
     write_json(DATA_DIR / "users.json", [u for u in users if u["id"] != user_id])
     return {"message": "Deleted"}

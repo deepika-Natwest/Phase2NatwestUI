@@ -23,19 +23,59 @@
   transform: scale(0.97);
 }
 
-/* Panel — position set as inline style via portal */
+/* Panel — position/size set as inline style via portal */
 .chatbot-panel {
   display: flex;
   flex-direction: column;
-  width: min(360px, calc(100vw - 24px));
-  height: min(520px, calc(100vh - 24px));
-  max-height: calc(100vh - 24px);
   overflow: hidden;
   border: 1px solid #c9b8e0;
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
   animation: chatbot-pop 0.18s ease-out;
+  position: relative; /* needed so resize handles are positioned inside */
+}
+
+/* Resize handles */
+.chatbot-resize {
+  position: absolute;
+  z-index: 1;
+}
+
+.chatbot-resize-e {
+  right: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 6px;
+  cursor: ew-resize;
+}
+
+.chatbot-resize-s {
+  bottom: 0;
+  left: 12px;
+  right: 12px;
+  height: 6px;
+  cursor: ns-resize;
+}
+
+.chatbot-resize-se {
+  right: 0;
+  bottom: 0;
+  width: 16px;
+  height: 16px;
+  cursor: se-resize;
+}
+
+.chatbot-resize-se::after {
+  content: "";
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #c9b8e0;
+  border-bottom: 2px solid #c9b8e0;
+  border-radius: 1px;
 }
 
 @keyframes chatbot-pop {
@@ -109,6 +149,30 @@
 .chatbot-close:hover,
 .chatbot-close:focus-visible {
   background: rgba(255, 255, 255, 0.18);
+}
+
+.chatbot-cat-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.chatbot-back-btn {
+  background: none;
+  border: 1px solid #c4a8e0;
+  color: #5a287d;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.chatbot-back-btn:hover {
+  background: #f0e8f8;
 }
 
 .chatbot-suggestions {
@@ -253,4 +317,9 @@
 .chatbot-submit:disabled {
   background: #adb5bd;
   cursor: not-allowed;
+}
+
+.chatbot-panel--minimized {
+  height: auto !important;
+  min-height: 0 !important;
 }

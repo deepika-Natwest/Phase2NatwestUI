@@ -160,5 +160,50 @@
     "date": "2026-08-25",
     "isActive": true,
     "id": "4ef7ae1e-791e-4131-be5d-c41ab380e5d8"
+  },
+  {
+    "id": "62c70351-b84f-4db3-ab06-f0f36031580a",
+    "name": "Genesis - Data pipleline",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": "f9eec64c-53ae-401d-8831-1eeab0421c7a",
+    "description": "",
+    "date": "2026-08-27",
+    "isActive": true
+  },
+  {
+    "id": "fa89a541-849f-4342-bd28-c1c29b5f51ae",
+    "name": "Sentinal",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": "f9eec64c-53ae-401d-8831-1eeab0421c7a",
+    "description": "",
+    "date": "2026-08-27",
+    "isActive": true
+  },
+  {
+    "id": "b0f03991-7794-4832-8eb6-4a40cd362bbc",
+    "name": "FCCM",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": "9f331d19-6ac4-4e6c-8a99-3e575ba2efdf",
+    "description": "",
+    "date": "2026-08-27",
+    "isActive": true
+  },
+  {
+    "id": "23c41f5a-5639-40fa-84c1-52d08510e112",
+    "name": "Genesis - streamlit app",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": "f9eec64c-53ae-401d-8831-1eeab0421c7a",
+    "description": "",
+    "date": "2026-08-27",
+    "isActive": true
+  },
+  {
+    "id": "f44f5c73-7cc7-421b-9e66-07166259695c",
+    "name": "PB Mobile Integration",
+    "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92",
+    "franchiseId": "9f331d19-6ac4-4e6c-8a99-3e575ba2efdf",
+    "description": "",
+    "date": "2026-08-27",
+    "isActive": true
   }
 ]

@@ -82,18 +82,26 @@ function AddProgram() {
     [users, managedNames]
   );
 
+  // Status is derived entirely from user assignments (ignores stored isActive flag):
+  // • Has ≥1 user assigned  → Active
+  // • No users assigned     → Inactive
+  // • No BU/SBU configured  → Unconfigured
+  const assignedProgramNames = useMemo(
+    () => new Set(users.map((u) => (u.projectName || "").toLowerCase().trim()).filter(Boolean)),
+    [users]
+  );
+
   const isEffectivelyActive = (p) => {
-    if (p.isActive === false) return false;
     if (!p.capabilityId && !p.franchiseId) return false;
-    return true;
+    return assignedProgramNames.has(p.name.toLowerCase().trim());
   };
 
   const getStatusBadge = (p) => {
     if (!p.capabilityId && !p.franchiseId)
       return <span className="badge bg-secondary">Unconfigured</span>;
-    if (p.isActive === false)
-      return <span className="badge bg-danger">Inactive</span>;
-    return <span className="badge bg-success">Active</span>;
+    if (assignedProgramNames.has(p.name.toLowerCase().trim()))
+      return <span className="badge bg-success">Active</span>;
+    return <span className="badge bg-danger">Inactive</span>;
   };
 
   // Bulk select (over all programs, not grouped)

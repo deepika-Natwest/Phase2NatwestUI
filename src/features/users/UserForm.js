@@ -19,7 +19,6 @@ const UserForm = ({ user, onClose }) => {
     lineManager: "",
     projectName: "",
     role: "",
-    status: "",
     profilePic: null,
     shortDescription: "",
     resourceType: "",
@@ -29,9 +28,17 @@ const UserForm = ({ user, onClose }) => {
     sowId: "",
   });
 
+  const toDate = (v) => (v ? String(v).slice(0, 10) : "");
+
+  const normalizeLevel = (v) => {
+    if (!v) return "";
+    const s = String(v).trim();
+    const m = s.match(/\d+/);
+    return m ? `Level ${m[0]}` : s;
+  };
+
   const roles = ["admin", "viewer", "editor"];
   const careerLevels = Array.from({ length: 12 }, (_, i) => `Level ${i + 1}`);
-  const statuses = ["Active", "Inactive"];
 
   // Fetch capabilities, all franchises, and user statuses once on mount
   useEffect(() => {
@@ -43,12 +50,21 @@ const UserForm = ({ user, onClose }) => {
     api.get("/user-statuses").then(res => setUserStatuses(res.data)).catch(() => {});
   }, []);
 
-  // When editing, filter franchises for the existing capabilityId
+  // When editing, populate form and normalise values so selects match their options
   useEffect(() => {
     if (user) {
-      setForm({ ...user, password: "" });
+      const rawRT = user.resourceType || "";
+      const rtKey = (s) => String(s).trim().toLowerCase().replace(/\s*-\s*/g, "-");
+      const matchedStatus = userStatuses.find((s) => rtKey(s.name) === rtKey(rawRT));
+      setForm({
+        ...user,
+        password: "",
+        careerLevel: normalizeLevel(user.careerLevel),
+        resourceType: matchedStatus ? matchedStatus.name : rawRT,
+      });
     }
-  }, [user]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, userStatuses]);
 
   // Keep franchise list in sync with selected capability (client-side filter — no extra API call)
   useEffect(() => {
@@ -251,32 +267,18 @@ const UserForm = ({ user, onClose }) => {
                 />
               </div>
 
-              {/* Role & Status */}
-              <div className="row">
-                <div className="mb-3 col">
-                  <label>Role</label>
-                  <select
-                    name="role"
-                    className="form-control"
-                    value={form.role}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Role</option>
-                    {roles.map(r => <option key={r} value={r}>{r}</option>)}
-                  </select>
-                </div>
-                <div className="mb-3 col">
-                  <label>Status</label>
-                  <select
-                    name="status"
-                    className="form-control"
-                    value={form.status}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Status</option>
-                    {statuses.map(s => <option key={s} value={s}>{s}</option>)}
-                  </select>
-                </div>
+              {/* Role */}
+              <div className="mb-3">
+                <label>Role</label>
+                <select
+                  name="role"
+                  className="form-control"
+                  value={form.role}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Role</option>
+                  {roles.map(r => <option key={r} value={r}>{r}</option>)}
+                </select>
               </div>
 
               {/* Profile Pic */}
@@ -314,7 +316,7 @@ const UserForm = ({ user, onClose }) => {
                 {/* NatWest DOJ */}
                 <div className="col-md-6 mb-3">
                   <label>NatWest DOJ</label>
-                  <input type="date" name="natwestDoj" className="form-control" value={form.natwestDoj || ""} onChange={handleChange} />
+                  <input type="date" name="natwestDoj" className="form-control" value={toDate(form.natwestDoj)} onChange={handleChange} />
                 </div>
 
                 {/* SOW ID */}
@@ -326,13 +328,13 @@ const UserForm = ({ user, onClose }) => {
                 {/* SOW Start Date */}
                 <div className="col-md-6 mb-3">
                   <label>SOW Start Date</label>
-                  <input type="date" name="sowStartDate" className="form-control" value={form.sowStartDate || ""} onChange={handleChange} />
+                  <input type="date" name="sowStartDate" className="form-control" value={toDate(form.sowStartDate)} onChange={handleChange} />
                 </div>
 
                 {/* SOW End Date */}
                 <div className="col-md-6 mb-3">
                   <label>SOW End Date</label>
-                  <input type="date" name="sowEndDate" className="form-control" value={form.sowEndDate || ""} onChange={handleChange} />
+                  <input type="date" name="sowEndDate" className="form-control" value={toDate(form.sowEndDate)} onChange={handleChange} />
                 </div>
               </div>
 

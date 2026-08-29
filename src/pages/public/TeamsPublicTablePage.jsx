@@ -114,10 +114,11 @@ function TeamsPublicTablePage() {
   const dropdownCapabilities = Object.entries(capabilitiesMap).map(([id, name]) => ({ id, name }));
 
   // All SBUs from admin franchises; fall back to user-derived values if map is empty
-  const franchiseOptions =
+  const franchiseOptions = (
     Object.keys(franchisesMap).length > 0
       ? Object.entries(franchisesMap).map(([id, name]) => ({ value: id, label: name }))
-      : uniqueValues("franchiseId").map((v) => ({ value: v, label: v }));
+      : uniqueValues("franchiseId").map((v) => ({ value: v, label: v }))
+  ).sort((a, b) => a.label.localeCompare(b.label));
 
   const MultiFilterDropdown = ({ field, label, options }) => {
     const selectedCount = filters[field]?.length || 0;
@@ -234,7 +235,13 @@ function TeamsPublicTablePage() {
                   Level
                   <div className="mt-1">
                     <MultiFilterDropdown field="careerLevel" label="Level"
-                      options={uniqueValues("careerLevel").map((lvl) => ({ value: lvl, label: lvl }))} />
+                      options={uniqueValues("careerLevel")
+                        .sort((a, b) => {
+                          const na = parseInt(a.replace(/\D/g, ""), 10);
+                          const nb = parseInt(b.replace(/\D/g, ""), 10);
+                          return (isNaN(na) || isNaN(nb)) ? a.localeCompare(b) : na - nb;
+                        })
+                        .map((lvl) => ({ value: lvl, label: lvl }))} />
                   </div>
                 </th>
 
@@ -242,7 +249,7 @@ function TeamsPublicTablePage() {
                   Location
                   <div className="mt-1">
                     <MultiFilterDropdown field="location" label="Location"
-                      options={uniqueValues("location").map((loc) => ({ value: loc, label: loc }))} />
+                      options={uniqueValues("location").sort((a, b) => a.localeCompare(b)).map((loc) => ({ value: loc, label: loc }))} />
                   </div>
                 </th>
 
@@ -250,7 +257,7 @@ function TeamsPublicTablePage() {
                   Project/Program
                   <div className="mt-1">
                     <MultiFilterDropdown field="projectName" label="Project"
-                      options={uniqueValues("projectName").map((p) => ({ value: p, label: p }))} />
+                      options={uniqueValues("projectName").sort((a, b) => a.localeCompare(b)).map((p) => ({ value: p, label: p }))} />
                   </div>
                 </th>
 
@@ -258,7 +265,7 @@ function TeamsPublicTablePage() {
                   NWG Line Manager
                   <div className="mt-1">
                     <MultiFilterDropdown field="lineManager" label="Manager"
-                      options={uniqueValues("lineManager").map((m) => ({ value: m, label: m }))} />
+                      options={uniqueValues("lineManager").sort((a, b) => a.localeCompare(b)).map((m) => ({ value: m, label: m }))} />
                   </div>
                 </th>
               </tr>

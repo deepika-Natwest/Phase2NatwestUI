@@ -7,6 +7,7 @@ const TEMPLATE_HEADERS = [
   "Name", "Enterprise ID", "Email", "Role", "Career Level",
   "Location", "Capability", "Franchise",
   "Resource Type", "NatWest DOJ", "SOW Start Date", "SOW End Date", "SOW ID",
+  "Project / Program", "NWG Line Manager",
 ];
 
 function downloadTemplate() {
@@ -125,13 +126,88 @@ export default function UploadUsersPage() {
                   <td>Statement of Work ID</td>
                   <td>Optional</td>
                 </tr>
+                <tr>
+                  <td>Project / Program</td>
+                  <td>Project or program the user is assigned to (linked to Teams tab)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td>NWG Line Manager</td>
+                  <td>NatWest line manager for the user (linked to Teams tab)</td>
+                  <td>Optional</td>
+                </tr>
               </tbody>
             </table>
           </div>
 
           <p className="text-muted">
             * Please use the downloaded template only. Do not rename, delete,
-            reorder, or add columns. First 8 mandatory, last 5 optional.
+            reorder, or add columns. First 8 mandatory, last 7 optional.
+          </p>
+
+          {/* Example Row */}
+          <h5 className="mt-4 mb-3">Format Example</h5>
+          <div className="table-responsive">
+            <table className="table table-bordered table-sm" style={{ fontSize: "0.82rem" }}>
+              <thead className="table-dark">
+                <tr>
+                  <th>Name</th>
+                  <th>Enterprise ID</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Career Level</th>
+                  <th>Location</th>
+                  <th>Capability</th>
+                  <th>Franchise</th>
+                  <th>Resource Type</th>
+                  <th>NatWest DOJ</th>
+                  <th>SOW Start Date</th>
+                  <th>SOW End Date</th>
+                  <th>SOW ID</th>
+                  <th style={{ background: "#4a235a", color: "#fff" }}>Project / Program</th>
+                  <th style={{ background: "#4a235a", color: "#fff" }}>NWG Line Manager</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>John Smith</td>
+                  <td>jsmith01</td>
+                  <td>john.smith@accenture.com</td>
+                  <td>editor</td>
+                  <td>Level 7</td>
+                  <td>Bangalore</td>
+                  <td>Digital &amp; Cloud</td>
+                  <td>Data Engineering</td>
+                  <td>Permanent</td>
+                  <td>2023-04-01</td>
+                  <td>2024-01-01</td>
+                  <td>2025-12-31</td>
+                  <td>SOW-2024-001</td>
+                  <td style={{ background: "#f5eeff" }}>NatWest Modernisation</td>
+                  <td style={{ background: "#f5eeff" }}>Priya Sharma</td>
+                </tr>
+                <tr>
+                  <td>Aisha Patel</td>
+                  <td>apatel02</td>
+                  <td>aisha.patel@accenture.com</td>
+                  <td>viewer</td>
+                  <td>Level 9</td>
+                  <td>Mumbai</td>
+                  <td>Risk &amp; Compliance</td>
+                  <td>Regulatory Reporting</td>
+                  <td>Contractor</td>
+                  <td>2022-07-15</td>
+                  <td>2023-06-01</td>
+                  <td>2024-05-31</td>
+                  <td>SOW-2023-042</td>
+                  <td style={{ background: "#f5eeff" }}>Risk Transformation</td>
+                  <td style={{ background: "#f5eeff" }}>Rahul Mehta</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="text-muted" style={{ fontSize: "0.82rem" }}>
+            * Highlighted columns (Project / Program &amp; NWG Line Manager) are the newly added fields and appear in the Teams tab.
           </p>
         </div>
       </div>

@@ -10,7 +10,7 @@ load_dotenv(Path(__file__).parent / ".env", override=False)
 PORT = int(os.getenv("PORT", "5000"))
 JWT_SECRET = os.getenv("JWT_SECRET", "mySuperSecretKey123")
 JWT_ALGORITHM = "HS256"
-JWT_EXPIRES_IN_HOURS = 1
+JWT_EXPIRES_IN_HOURS = 8
 
 CORS_ORIGINS = [o.strip() for o in os.getenv("CORS_ORIGIN", "http://localhost:3000").split(",")]
 

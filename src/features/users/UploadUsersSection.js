@@ -5,7 +5,8 @@ import api from "../../services/api";
 const ALL_HEADERS = [
   "Name", "Enterprise ID", "Email", "Role", "Career Level",
   "Location", "Capability", "Franchise",
-  "Resource Type", "NatWest DOJ", "SOW Start Date", "SOW End Date", "SOW ID"
+  "Resource Type", "NatWest DOJ", "SOW Start Date", "SOW End Date", "SOW ID",
+  "Project / Program", "NWG Line Manager",
 ];
 
 const MANDATORY_FIELDS = [
@@ -177,9 +178,12 @@ export default function UploadUsersSection() {
 
       const res = await api.post("/users/upload", formData);
 
-      setSuccess(
-        `${res.data.message} (Created: ${res.data.createdCount || 0}, Updated: ${res.data.updatedCount || 0}, Total: ${res.data.count || 0})`
-      );
+      const warnings = res.data.warnings || [];
+      const summary = `${res.data.message} (Created: ${res.data.createdCount || 0}, Updated: ${res.data.updatedCount || 0}, Total: ${res.data.count || 0})`;
+      setSuccess(summary);
+      if (warnings.length > 0) {
+        setError(`Some Capability / Franchise names could not be matched:\n\n${warnings.join("\n")}\n\nPlease check the exact names match the admin Capability / Franchise list.`);
+      }
     } catch (err) {
       console.error(err);
       setError("Upload failed. Please make sure you are using the correct Excel template.");
