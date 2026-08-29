@@ -5,6 +5,19 @@ import api from "../../services/api";
 
 // SOW Public Page
 
+const MANUAL_RT = ["planned release", "onboarding pending", "account/support/others", "active -billable/pool", "attrition"];
+
+const computeResourceType = (u) => {
+  const rt = (u.resourceType || "").trim();
+  const rtLower = rt.toLowerCase();
+  if (rt && MANUAL_RT.some((m) => rtLower === m)) return rt;
+  if (!u.sowEndDate) return rt || "—";
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const d = new Date(String(u.sowEndDate).slice(0, 10) + "T00:00:00");
+  if (isNaN(d)) return rt || "—";
+  return d > today ? "Active-Billable" : "Pool";
+};
+
 function Pricing() {
   const allColumns = [
     { key: "category", label: "SBU / Row Label", className: "header-blue" },
@@ -80,202 +93,78 @@ function Pricing() {
     { key: "grandTotal", label: "Grand Total", className: "header-cyan" },
   ];
 
-  const expiryData = [
-    {
-      id: 1,
-      category: "A&E+",
-      futureEnding: 15,
-      expiring1130: 5,
-      expiring3160: 7,
-      nba: 1,
-      plannedRelease: 2,
-      grandTotal: 30,
-    },
-    {
-      id: 2,
-      category: "D&A+",
-      futureEnding: 12,
-      expiring1130: 3,
-      expiring3160: 6,
-      nba: 2,
-      plannedRelease: 1,
-      grandTotal: 24,
-    },
-    {
-      id: 3,
-      category: "FRAL",
-      futureEnding: 8,
-      expiring1130: 2,
-      expiring3160: 4,
-      nba: 1,
-      plannedRelease: 0,
-      grandTotal: 15,
-    },
-    {
-      id: 4,
-      category: "Infra",
-      futureEnding: 14,
-      expiring1130: 6,
-      expiring3160: 5,
-      nba: 2,
-      plannedRelease: 3,
-      grandTotal: 30,
-    },
-    {
-      id: 5,
-      category: "IRB",
-      futureEnding: 7,
-      expiring1130: 3,
-      expiring3160: 2,
-      nba: 1,
-      plannedRelease: 1,
-      grandTotal: 14,
-    },
-    {
-      id: 6,
-      category: "Murex",
-      futureEnding: 10,
-      expiring1130: 4,
-      expiring3160: 3,
-      nba: 1,
-      plannedRelease: 2,
-      grandTotal: 20,
-    },
-    {
-      id: 7,
-      category: "Treasury & Markets",
-      futureEnding: 18,
-      expiring1130: 7,
-      expiring3160: 8,
-      nba: 3,
-      plannedRelease: 4,
-      grandTotal: 40,
-    },
-    {
-      id: 8,
-      category: "Retail Banking",
-      futureEnding: 11,
-      expiring1130: 4,
-      expiring3160: 5,
-      nba: 2,
-      plannedRelease: 1,
-      grandTotal: 23,
-    },
-    {
-      id: 9,
-      category: "Cards",
-      futureEnding: 9,
-      expiring1130: 3,
-      expiring3160: 2,
-      nba: 1,
-      plannedRelease: 1,
-      grandTotal: 16,
-    },
-    {
-      id: 10,
-      category: "Shared Services",
-      futureEnding: 13,
-      expiring1130: 5,
-      expiring3160: 4,
-      nba: 1,
-      plannedRelease: 2,
-      grandTotal: 25,
-    },
-  ];
-
-  const attritionData = [
-    {
-      id: 1,
-      category: "A&E+",
-      attrition: 2,
-      rollOff: 3,
-      grandTotal: 5,
-    },
-    {
-      id: 2,
-      category: "D&A+",
-      attrition: 1,
-      rollOff: 4,
-      grandTotal: 5,
-    },
-    {
-      id: 3,
-      category: "FRAL",
-      attrition: 0,
-      rollOff: 2,
-      grandTotal: 2,
-    },
-    {
-      id: 4,
-      category: "Infra",
-      attrition: 3,
-      rollOff: 5,
-      grandTotal: 8,
-    },
-    {
-      id: 5,
-      category: "Treasury & Markets",
-      attrition: 2,
-      rollOff: 6,
-      grandTotal: 8,
-    },
-  ];
-
-  const extensionData = [
-    {
-      id: 1,
-      category: "A&E+",
-      fgAvailable: 12,
-      fgNotAvailable: 4,
-      toBeIssued: 3,
-      clientConfirmationAwaited: 2,
-      grandTotal: 21,
-    },
-    {
-      id: 2,
-      category: "D&A+",
-      fgAvailable: 10,
-      fgNotAvailable: 3,
-      toBeIssued: 4,
-      clientConfirmationAwaited: 1,
-      grandTotal: 18,
-    },
-    {
-      id: 3,
-      category: "FRAL",
-      fgAvailable: 7,
-      fgNotAvailable: 2,
-      toBeIssued: 2,
-      clientConfirmationAwaited: 1,
-      grandTotal: 12,
-    },
-    {
-      id: 4,
-      category: "Infra",
-      fgAvailable: 13,
-      fgNotAvailable: 5,
-      toBeIssued: 6,
-      clientConfirmationAwaited: 3,
-      grandTotal: 27,
-    },
-    {
-      id: 5,
-      category: "Treasury & Markets",
-      fgAvailable: 15,
-      fgNotAvailable: 6,
-      toBeIssued: 5,
-      clientConfirmationAwaited: 4,
-      grandTotal: 30,
-    },
-  ];
-
   const [backendPricing, setBackendPricing] = useState(null);
+  const [allUsers, setAllUsers] = useState([]);
+  const [capabilitiesList, setCapabilitiesList] = useState([]);
+  const [drillCell, setDrillCell] = useState(null); // { category, columnKey, columnLabel }
 
   useEffect(() => {
     api.get("/pricing")
       .then((response) => setBackendPricing(response.data))
       .catch((error) => console.error("Failed to load pricing data:", error));
+
+    Promise.all([
+      api.get("/users?limit=2000"),
+      api.get("/capabilities"),
+    ]).then(([usersRes, capsRes]) => {
+      const userList = Array.isArray(usersRes.data) ? usersRes.data : usersRes.data.users || [];
+      setAllUsers(userList.filter((u) => (u.role || "").toUpperCase() !== "ADMIN"));
+      setCapabilitiesList(capsRes.data || []);
+    }).catch(console.error);
   }, []);
+
+  const capNameToId = useMemo(() => {
+    const map = {};
+    capabilitiesList.forEach((c) => { if (c.name) map[c.name] = c.id; });
+    return map;
+  }, [capabilitiesList]);
+
+  const drillUsers = useMemo(() => {
+    if (!drillCell) return [];
+    const { category, columnKey } = drillCell;
+    const capId = capNameToId[category];
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const days = (dateStr) => {
+      if (!dateStr) return null;
+      const d = new Date(String(dateStr).slice(0, 10) + "T00:00:00");
+      return isNaN(d) ? null : Math.floor((d - today) / 86400000);
+    };
+
+    const base = allUsers.filter((u) => !capId || u.capabilityId === capId);
+    const crt = (u) => computeResourceType(u).toLowerCase();
+
+    switch (columnKey) {
+      case "futureEnding":   return base.filter((u) => { const d = days(u.sowEndDate); return d !== null && d > 60; });
+      case "expiring3160":   return base.filter((u) => { const d = days(u.sowEndDate); return d !== null && d >= 31 && d <= 60; });
+      case "expiring1130":   return base.filter((u) => { const d = days(u.sowEndDate); return d !== null && d >= 11 && d <= 30; });
+      case "nba":            return base.filter((u) => { const d = days(u.sowEndDate); return d !== null && d <= 10; });
+      case "plannedRelease": return base.filter((u) => crt(u) === "planned release");
+      case "attrition":      return base.filter((u) => crt(u) === "attrition");
+      case "rollOff":        return base.filter((u) => { const d = days(u.sowEndDate); return d !== null && d < 0; });
+      case "grandTotal": {
+        const view = drillCell.view;
+        if (view === "attrition")
+          return base.filter((u) => crt(u) === "attrition");
+        if (view === "expiry")
+          return base.filter((u) => {
+            const d = days(u.sowEndDate);
+            return d !== null || crt(u) === "planned release";
+          });
+        return base;
+      }
+      default:               return [];
+    }
+  }, [drillCell, allUsers, capNameToId]);
+
+  const handleCellClick = (category, columnKey, columnLabel) => {
+    setDrillCell((prev) =>
+      prev?.category === category && prev?.columnKey === columnKey
+        ? null
+        : { category, columnKey, columnLabel, view: selectedView }
+    );
+  };
 
   const expiryRows = backendPricing?.expiry || [];
   const attritionRows = backendPricing?.attrition || [];
@@ -463,7 +352,7 @@ function Pricing() {
             <select
               className="table-view-dropdown"
               value={selectedView}
-              onChange={(e) => setSelectedView(e.target.value)}
+              onChange={(e) => { setSelectedView(e.target.value); setDrillCell(null); }}
             >
               <option value="all">All Data</option>
               <option value="expiry">SOW Expiry Summary</option>
@@ -482,8 +371,71 @@ function Pricing() {
             columns={currentTableConfig.columns}
             data={currentTableConfig.data}
             fileName={currentTableConfig.fileName}
+            onCellClick={handleCellClick}
+            activeDrillCell={drillCell}
           />
         </div>
+
+        {/* Drill-down user list */}
+        {drillCell && (
+          <div className="pricing-single-table-card" style={{ margin: "0 24px 24px" }}>
+            <div style={{ padding: "18px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                <div>
+                  <h5 style={{ margin: 0 }}>
+                    {drillUsers.length} user(s) &nbsp;·&nbsp;
+                    <span style={{ color: "#6b7280" }}>{drillCell.category}</span>
+                    &nbsp;·&nbsp;
+                    <span style={{ color: "#6b7280" }}>{drillCell.columnLabel}</span>
+                  </h5>
+                </div>
+                <button
+                  type="button"
+                  className="export-button"
+                  style={{ background: "#6b7280" }}
+                  onClick={() => setDrillCell(null)}
+                >
+                  Close ✕
+                </button>
+              </div>
+
+              {drillUsers.length === 0 ? (
+                <p style={{ color: "#6b7280", textAlign: "center", padding: "24px 0" }}>
+                  No users match this filter.
+                </p>
+              ) : (
+                <div className="table-scroll-wrapper" style={{ maxHeight: "320px" }}>
+                  <table className="pricing-report-table">
+                    <thead>
+                      <tr>
+                        <th className="header-blue">#</th>
+                        <th className="header-blue">Name</th>
+                        <th className="header-blue">Enterprise ID</th>
+                        <th className="header-blue">Location</th>
+                        <th className="header-blue">SOW End Date</th>
+                        <th className="header-blue">Resource Type</th>
+                        <th className="header-blue">Career Level</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {drillUsers.map((u, i) => (
+                        <tr key={u.id}>
+                          <td>{i + 1}</td>
+                          <td>{u.name || "—"}</td>
+                          <td>{u.enterpriseId || "—"}</td>
+                          <td>{u.location || "—"}</td>
+                          <td>{u.sowEndDate || "—"}</td>
+                          <td>{computeResourceType(u)}</td>
+                          <td>{u.careerLevel || "—"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       <Footer />
@@ -491,7 +443,7 @@ function Pricing() {
   );
 }
 
-function ReportTable({ title, subtitle, columns, data, fileName }) {
+function ReportTable({ title, subtitle, columns, data, fileName, onCellClick, activeDrillCell }) {
   const [sortConfig, setSortConfig] = useState({
     key: columns[0]?.key || "",
     direction: "asc",
@@ -633,9 +585,33 @@ function ReportTable({ title, subtitle, columns, data, fileName }) {
 
                 return (
                   <tr key={row.id} className={isGrandTotal ? "grand-total-row" : ""}>
-                    {columns.map((column) => (
-                      <td key={column.key}>{row[column.key]}</td>
-                    ))}
+                    {columns.map((column) => {
+                      const v = row[column.key];
+                      const display = column.key === "category"
+                        ? (v ?? "")
+                        : (v === "" || v === null || v === undefined ? 0 : v);
+
+                      const clickable =
+                        onCellClick &&
+                        column.key !== "category" &&
+                        !isGrandTotal &&
+                        typeof display === "number" && display > 0;
+
+                      const isActive =
+                        activeDrillCell?.category === row.category &&
+                        activeDrillCell?.columnKey === column.key;
+
+                      return (
+                        <td
+                          key={column.key}
+                          onClick={clickable ? () => onCellClick(row.category, column.key, column.label) : undefined}
+                          style={clickable ? { cursor: "pointer", textDecoration: "underline", color: isActive ? "#1d4ed8" : "inherit", fontWeight: isActive ? 700 : "inherit", background: isActive ? "#dbeafe" : undefined } : {}}
+                          title={clickable ? `Click to view users (${display})` : undefined}
+                        >
+                          {display}
+                        </td>
+                      );
+                    })}
                   </tr>
                 );
               })

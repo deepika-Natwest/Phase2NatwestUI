@@ -34,11 +34,23 @@ function FranchisePage() {
 
   const loadData = async () => {
     try {
-      const fRes = await getFranchises();
-      setFranchises(fRes.data);
+      const [fRes, cRes] = await Promise.all([getFranchises(), getCapabilities()]);
 
-      const cRes = await getCapabilities();
-      setCapabilities(cRes.data);
+      const sortedCaps = [...(cRes.data || [])].sort((a, b) =>
+        (a.name || "").localeCompare(b.name || "")
+      );
+      setCapabilities(sortedCaps);
+
+      const capNameMap = Object.fromEntries(
+        (cRes.data || []).map((c) => [c.id, c.name || ""])
+      );
+      const sortedFranchises = [...(fRes.data || [])].sort((a, b) => {
+        const capCmp = (capNameMap[a.capabilityId] || "").localeCompare(
+          capNameMap[b.capabilityId] || ""
+        );
+        return capCmp !== 0 ? capCmp : (a.name || "").localeCompare(b.name || "");
+      });
+      setFranchises(sortedFranchises);
     } catch (err) {
       console.error(err);
     }

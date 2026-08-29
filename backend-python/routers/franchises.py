@@ -39,6 +39,7 @@ def get_all(capabilityId: Optional[str] = Query(None)):
     return items
 
 
+@router.post("", status_code=201)
 @router.post("/", status_code=201)
 def create(body: FranchiseBody, _user: dict = Depends(require_roles(["ADMIN", "EDITOR"]))):
     if not body.name or not body.capabilityId:

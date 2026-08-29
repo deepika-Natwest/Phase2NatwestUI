@@ -30,7 +30,10 @@ function UserStatusPage() {
 
   const loadData = async () => {
     const res = await getUserStatuses();
-    setStatuses(res.data);
+    const sorted = [...(res.data || [])].sort((a, b) =>
+      (a.name || "").localeCompare(b.name || "")
+    );
+    setStatuses(sorted);
   };
 
   useEffect(() => { loadData(); }, []);

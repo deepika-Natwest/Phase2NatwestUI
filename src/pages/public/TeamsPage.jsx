@@ -93,7 +93,7 @@ function TeamsPublicPage() {
   ).map((id) => ({
     id,
     name: capabilitiesMap[id] || id,
-  }));
+  })).sort((a, b) => a.name.localeCompare(b.name));
 
   // 🔥 Load more handler
   const loadMore = (frId) => {
@@ -161,45 +161,48 @@ function TeamsPublicPage() {
 
                 {/* 🔥 Smooth animation */}
                 <div className="row transition-all">
-                  {usersToShow.map((user) => (
-                    <div key={user.id} className="col-md-4 mb-3">
-                      <div className="card h-100 shadow-sm leadershipCard">
-                        <div className="row">
-                          <div className="col-3">
-                            {user.profilePic && (
-                              <img
-                                src={`/uploads/users/${user.profilePic}`}
-                                className="card-img-top"
-                                alt={user.name}
-                              />
-                            )}
-                          </div>
-
-                          <div className="col-9">
-                            <div className="card-body">
-                              <h5 className="card-title">{user.name}</h5>
-
-                              <p className="card-subtitle text-muted mb-2">
-                                {user.enterpriseId} | {user.location}
-                              </p>
-
-                              <p>
-                                Project: {user.projectName}
-                                <br />
-                                Manager: {user.lineManager}
-                              </p>
-
-                              {user.shortDescription && (
-                                <p className="mt-2">
-                                  {user.shortDescription}
-                                </p>
+                  {usersToShow.map((user) => {
+                    const na = (v) => (v && String(v).trim()) ? String(v).trim() : "NA";
+                    return (
+                      <div key={user.id} className="col-md-4 mb-3">
+                        <div className="card h-100 shadow-sm leadershipCard">
+                          <div className="row">
+                            <div className="col-3">
+                              {user.profilePic && (
+                                <img
+                                  src={`/uploads/users/${user.profilePic}`}
+                                  className="card-img-top"
+                                  alt={user.name}
+                                />
                               )}
+                            </div>
+
+                            <div className="col-9">
+                              <div className="card-body">
+                                <h5 className="card-title">{na(user.name)}</h5>
+
+                                <p className="card-subtitle text-muted mb-2">
+                                  {na(user.enterpriseId)} | {na(user.location)}
+                                </p>
+
+                                <p>
+                                  Project: {na(user.projectName)}
+                                  <br />
+                                  Manager: {na(user.lineManager)}
+                                </p>
+
+                                {user.shortDescription && (
+                                  <p className="mt-2">
+                                    {user.shortDescription}
+                                  </p>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 {/* 🔥 Load More */}

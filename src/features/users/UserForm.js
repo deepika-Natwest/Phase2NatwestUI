@@ -2,11 +2,22 @@ import React, { useEffect, useState } from "react";
 import api from "../../services/api";
 import { LOCATION_OPTIONS, GENDER_OPTIONS } from "../../utils/userConfig";
 
+// Statuses that are set manually; everything else is auto-computed from SOW date
+const MANUAL_RT = ["planned release", "onboarding pending", "account/support/others", "active -billable/pool", "attrition"];
+
+const autoRT = (sowEndDate) => {
+  if (!sowEndDate) return "";
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const d = new Date(String(sowEndDate).slice(0, 10) + "T00:00:00");
+  return isNaN(d) ? "" : d > today ? "Active-Billable" : "Pool";
+};
+
 const UserForm = ({ user, onClose }) => {
   const [capabilities, setCapabilities] = useState([]);
   const [allFranchises, setAllFranchises] = useState([]);
   const [franchises, setFranchises] = useState([]);
   const [userStatuses, setUserStatuses] = useState([]);
+  const [manualOverride, setManualOverride] = useState(false);
   const [form, setForm] = useState({
     capabilityId: "",
     franchiseId: "",
@@ -50,17 +61,21 @@ const UserForm = ({ user, onClose }) => {
     api.get("/user-statuses").then(res => setUserStatuses(res.data)).catch(() => {});
   }, []);
 
-  // When editing, populate form and normalise values so selects match their options
+  // When editing, populate form; auto-compute resourceType unless a manual type is stored
   useEffect(() => {
     if (user) {
       const rawRT = user.resourceType || "";
       const rtKey = (s) => String(s).trim().toLowerCase().replace(/\s*-\s*/g, "-");
       const matchedStatus = userStatuses.find((s) => rtKey(s.name) === rtKey(rawRT));
+      const storedRT = matchedStatus ? matchedStatus.name : rawRT;
+      const isManual = storedRT && MANUAL_RT.some((m) => storedRT.toLowerCase() === m);
+      const effectiveRT = isManual ? storedRT : (autoRT(user.sowEndDate) || storedRT);
+      setManualOverride(isManual);
       setForm({
         ...user,
         password: "",
         careerLevel: normalizeLevel(user.careerLevel),
-        resourceType: matchedStatus ? matchedStatus.name : rawRT,
+        resourceType: effectiveRT,
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,7 +98,18 @@ const UserForm = ({ user, onClose }) => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setForm({ ...form, [name]: files ? files[0] : value });
+    const updated = { ...form, [name]: files ? files[0] : value };
+
+    if (name === "sowEndDate") {
+      // Date changed → clear manual override, recompute resource type
+      setManualOverride(false);
+      updated.resourceType = autoRT(value) || form.resourceType;
+    } else if (name === "resourceType") {
+      // Explicit radio selection → mark as manual override
+      setManualOverride(true);
+    }
+
+    setForm(updated);
   };
 
   const handleSubmit = async (e) => {
@@ -305,12 +331,46 @@ const UserForm = ({ user, onClose }) => {
 
               <div className="row">
                 {/* Resource Type */}
-                <div className="col-md-6 mb-3">
-                  <label>Resource Type</label>
-                  <select name="resourceType" className="form-control" value={form.resourceType} onChange={handleChange}>
-                    <option value="">Select</option>
-                    {userStatuses.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
-                  </select>
+                <div className="col-md-12 mb-3">
+                  <label className="form-label fw-semibold">Resource Type</label>
+                  <div className="mb-2 d-flex align-items-center gap-2">
+                    <span className={`badge ${manualOverride ? "bg-secondary" : "bg-success"}`}>
+                      {manualOverride ? `Override: ${form.resourceType || "—"}` : `Auto: ${autoRT(form.sowEndDate) || "Set SOW End Date"}`}
+                    </span>
+                    {manualOverride && (
+                      <button
+                        type="button"
+                        className="btn btn-link btn-sm p-0 text-danger"
+                        onClick={() => {
+                          setManualOverride(false);
+                          setForm((prev) => ({ ...prev, resourceType: autoRT(prev.sowEndDate) || "" }));
+                        }}
+                      >
+                        Reset to auto
+                      </button>
+                    )}
+                  </div>
+                  <div className="d-flex flex-wrap gap-3">
+                    {[...userStatuses]
+                      .filter(s => !["active-billable", "pool"].includes((s.name || "").toLowerCase()))
+                      .sort((a, b) => (a.name || "").localeCompare(b.name || ""))
+                      .map(s => (
+                        <div key={s.id} className="form-check">
+                          <input
+                            type="radio"
+                            className="form-check-input"
+                            id={`rt-${s.id}`}
+                            name="resourceType"
+                            value={s.name}
+                            checked={manualOverride && form.resourceType === s.name}
+                            onChange={handleChange}
+                          />
+                          <label className="form-check-label" htmlFor={`rt-${s.id}`}>
+                            {s.name}
+                          </label>
+                        </div>
+                      ))}
+                  </div>
                 </div>
 
                 {/* NatWest DOJ */}

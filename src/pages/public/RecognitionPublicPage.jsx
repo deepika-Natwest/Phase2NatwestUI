@@ -1,23 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import maleImg from "../../assets/img/maleAvtaar.png";
-import femaleImg from "../../assets/img/femaleAvatar.png";
-import defaultImg from "../../assets/img/user-avatar.png";
+import api from "../../services/api";
 import { getPublicRecognitions } from "../../features/recognition/publicRecognitionService";
+
+// Parse abbreviated month name from strings like "24 Jul" → 7
+const MONTH_ABBR = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const parseDateStrMonth = (dateStr) => {
+  if (!dateStr) return null;
+  const parts = String(dateStr).trim().split(" ");
+  const idx = MONTH_ABBR.indexOf(parts[1]);
+  return idx >= 0 ? idx + 1 : null;
+};
+
+const MILESTONE_YEARS = [3, 5, 10];
 
 function RecognitionPublicPage() {
   const [recognitions, setRecognitions] = useState([]);
-  const [filtered, setFiltered] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [expandedId, setExpandedId] = useState(null);
-
-  const genderImages = {
-    male: maleImg,
-    female: femaleImg,
-  };
 
   const BADGE_ICONS = {
     "Star Performer": "⭐",
@@ -30,102 +34,76 @@ function RecognitionPublicPage() {
   };
 
   const birthdays = [
-    {
-      id: 1,
-      name: "Aditi Sharma",
-      genderType: "female",
-      recognitionType: "Birthday",
-      recognitionTag: "Application Developer",
-      shortDescription:
-        "Wishing you a very happy birthday filled with happiness, success, and wonderful moments.",
-      date: "24 Jul",
-    },
-    {
-      id: 2,
-      name: "Rahul Verma",
-      genderType: "male",
-      recognitionType: "Birthday",
-      recognitionTag: "Business Analyst",
-      shortDescription:
-        "Warm birthday wishes for a fantastic year ahead filled with growth and achievements.",
-      date: "28 Jul",
-    },
-    {
-      id: 3,
-      name: "Priya Singh",
-      genderType: "female",
-      recognitionType: "Birthday",
-      recognitionTag: "Project Manager",
-      shortDescription:
-        "Celebrating your special day and wishing you continued success and happiness.",
-      date: "31 Jul",
-    },
-  ];
-
-  const milestones = [
-    {
-      id: 1,
-      name: "Aman Gupta",
-      genderType: "male",
-      recognitionType: "3 Years",
-      recognitionTag: "Software Engineer",
-      shortDescription:
-        "Congratulations on completing 3 successful years of dedication, contribution, and excellence.",
-    },
-    {
-      id: 2,
-      name: "Sneha Kapoor",
-      genderType: "female",
-      recognitionType: "5 Years",
-      recognitionTag: "Team Lead",
-      shortDescription:
-        "Celebrating 5 remarkable years of commitment, leadership, and valuable contributions.",
-    },
-    {
-      id: 3,
-      name: "Rohit Mehta",
-      genderType: "male",
-      recognitionType: "10 Years",
-      recognitionTag: "Senior Manager",
-      shortDescription:
-        "Congratulations on achieving 10 years of outstanding service, consistency, and impact.",
-    },
+    { id: 1, name: "Aditi Sharma", genderType: "female", recognitionType: "Birthday", recognitionTag: "Application Developer", shortDescription: "Wishing you a very happy birthday filled with happiness, success, and wonderful moments.", date: "24 Jul" },
+    { id: 2, name: "Rahul Verma",  genderType: "male",   recognitionType: "Birthday", recognitionTag: "Business Analyst",       shortDescription: "Warm birthday wishes for a fantastic year ahead filled with growth and achievements.",    date: "28 Jul" },
+    { id: 3, name: "Priya Singh",  genderType: "female", recognitionType: "Birthday", recognitionTag: "Project Manager",        shortDescription: "Celebrating your special day and wishing you continued success and happiness.",           date: "31 Jul" },
   ];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getPublicRecognitions();
-        setRecognitions(res.data);
-        setFiltered(res.data);
+        const [recRes, usersRes] = await Promise.all([
+          getPublicRecognitions(),
+          api.get("/users"),
+        ]);
+        setRecognitions(recRes.data);
+        const userList = Array.isArray(usersRes.data) ? usersRes.data : usersRes.data.users || [];
+        setAllUsers(userList.filter((u) => (u.role || "").toUpperCase() !== "ADMIN"));
       } catch (err) {
-        console.error("Failed to load recognitions:", err);
+        console.error("Failed to load data:", err);
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
-  // Filters
-  useEffect(() => {
-    let temp = [...recognitions];
+  const monthNum  = month ? parseInt(month)  : null;
+  const yearNum   = year  ? parseInt(year)   : null;
+  const thisYear  = new Date().getFullYear();
 
-    if (month) {
-      temp = temp.filter(
-        (r) => new Date(r.createdAt).getMonth() + 1 === parseInt(month)
-      );
-    }
+  // ── Client Appreciation (backend recognitions) ─────────────────────────────
+  const filtered = useMemo(() => {
+    return recognitions.filter((r) => {
+      const d = new Date(r.createdAt);
+      if (monthNum && d.getMonth() + 1 !== monthNum) return false;
+      if (yearNum  && d.getFullYear()   !== yearNum)  return false;
+      return true;
+    });
+  }, [recognitions, monthNum, yearNum]);
 
-    if (year) {
-      temp = temp.filter(
-        (r) => new Date(r.createdAt).getFullYear() === parseInt(year)
-      );
-    }
+  // ── Birthdays (filter by parsed month from "24 Jul" date string) ────────────
+  const filteredBirthdays = useMemo(() => {
+    if (!monthNum) return birthdays;
+    return birthdays.filter((b) => parseDateStrMonth(b.date) === monthNum);
+  }, [monthNum]);
 
-    setFiltered(temp);
-  }, [month, year, recognitions]);
+  // ── Career Milestones (computed live from natwestDoj) ───────────────────────
+  const filteredMilestones = useMemo(() => {
+    const targetYear = yearNum || thisYear;
+    return allUsers
+      .filter((u) => u.natwestDoj)
+      .flatMap((u) => {
+        const doj = new Date(String(u.natwestDoj).slice(0, 10) + "T00:00:00");
+        if (isNaN(doj)) return [];
+        return MILESTONE_YEARS
+          .filter((n) => {
+            const milestoneYear  = doj.getFullYear() + n;
+            const milestoneMonth = doj.getMonth() + 1;
+            if (milestoneYear !== targetYear) return false;
+            if (monthNum && milestoneMonth !== monthNum) return false;
+            return true;
+          })
+          .map((n) => ({
+            id: `${u.id}-${n}`,
+            name: u.name,
+            genderType: (u.gender || "").toLowerCase(),
+            recognitionType: `${n} Years`,
+            recognitionTag: u.careerLevel || u.franchiseId || "Team Member",
+            shortDescription: `Congratulations on completing ${n} year${n > 1 ? "s" : ""} of dedication and contribution at NatWest.`,
+          }));
+      });
+  }, [allUsers, monthNum, yearNum, thisYear]);
 
   const years = Array.from(
     new Set(recognitions.map((r) => new Date(r.createdAt).getFullYear()))
@@ -147,7 +125,7 @@ function RecognitionPublicPage() {
             {/* Title — left */}
             <div className="col-6 d-flex align-items-center">
               <span className="recog-main-side-line trophy-emoji">🏆</span>
-              <span className="recog-main-title ms-2">Recognitions</span>
+              <span className="recog-main-title ms-2">People Spotlight</span>
             </div>
 
             {/* Filters — right */}
@@ -183,13 +161,18 @@ function RecognitionPublicPage() {
         </div>
       </div>
 
-      {/* Recognition Cards */}
-      <div className="container">
-        {loading ? (
-          <div className="text-center mt-5">Loading...</div>
-        ) : filtered.length === 0 ? (
-          <div className="text-center mt-5">No recognitions found.</div>
-        ) : (
+      {loading && <div className="text-center mt-5">Loading...</div>}
+
+      {/* Client Appreciation */}
+      {!loading && filtered.length > 0 && (
+      <div className="container mb-5">
+        <div style={{ display:"flex", alignItems:"center", gap:"12px", marginBottom:"20px" }}>
+          <div style={{ background:"linear-gradient(135deg,#7c3aed,#a855f7)", borderRadius:"10px", padding:"10px 18px", display:"flex", alignItems:"center", gap:"8px" }}>
+            <span style={{ fontSize:"22px" }}>👏</span>
+            <span style={{ color:"#fff", fontWeight:700, fontSize:"16px", letterSpacing:"0.3px" }}>Client Appreciation</span>
+          </div>
+          <div style={{ flex:1, height:"2px", background:"linear-gradient(to right,#a855f7,transparent)" }} />
+        </div>
           <div className="row">
             {filtered.map((recog) => {
               const isExpanded = expandedId === recog.id;
@@ -242,14 +225,21 @@ function RecognitionPublicPage() {
               );
             })}
           </div>
-        )}
       </div>
+      )}
 
-    
-      {/* Employee Birthday Cards */}
-      <div className="container">
+      {/* Birthdays */}
+      {filteredBirthdays.length > 0 && (
+      <div className="container mb-5">
+        <div style={{ display:"flex", alignItems:"center", gap:"12px", marginBottom:"20px" }}>
+          <div style={{ background:"linear-gradient(135deg,#db2777,#f472b6)", borderRadius:"10px", padding:"10px 18px", display:"flex", alignItems:"center", gap:"8px" }}>
+            <span style={{ fontSize:"22px" }}>🎂</span>
+            <span style={{ color:"#fff", fontWeight:700, fontSize:"16px", letterSpacing:"0.3px" }}>Birthdays</span>
+          </div>
+          <div style={{ flex:1, height:"2px", background:"linear-gradient(to right,#f472b6,transparent)" }} />
+        </div>
         <div className="row">
-          {birthdays.map((emp) => {
+          {filteredBirthdays.map((emp) => {
             const birthdayId = `birthday-${emp.id}`;
             const isExpanded = expandedId === birthdayId;
 
@@ -292,48 +282,44 @@ function RecognitionPublicPage() {
           })}
         </div>
       </div>
+      )}
 
-      
-
-      {/* Personal Milestone Cards */}
+      {/* Career Milestones — computed live from natwestDoj */}
+      {filteredMilestones.length > 0 && (
       <div className="container mb-5">
+        <div style={{ display:"flex", alignItems:"center", gap:"12px", marginBottom:"20px" }}>
+          <div style={{ background:"linear-gradient(135deg,#d97706,#fbbf24)", borderRadius:"10px", padding:"10px 18px", display:"flex", alignItems:"center", gap:"8px" }}>
+            <span style={{ fontSize:"22px" }}>🌟</span>
+            <span style={{ color:"#fff", fontWeight:700, fontSize:"16px", letterSpacing:"0.3px" }}>Career Milestones</span>
+          </div>
+          <div style={{ flex:1, height:"2px", background:"linear-gradient(to right,#fbbf24,transparent)" }} />
+        </div>
         <div className="row">
-          {milestones.map((emp) => {
+          {filteredMilestones.map((emp) => {
             const milestoneId = `milestone-${emp.id}`;
             const isExpanded = expandedId === milestoneId;
 
             return (
               <div key={milestoneId} className="col-md-4 mb-4">
                 <div
-                  className={`recog-card h-100 ${
-                    isExpanded ? "expanded" : ""
-                  }`}
+                  className={`recog-card h-100 ${isExpanded ? "expanded" : ""}`}
                   onClick={() => toggleExpand(milestoneId)}
                   style={{ cursor: "pointer" }}
                 >
-                  <div className="recog-img-wrap">
-                   
-                  </div>
+                  <div className="recog-img-wrap"></div>
 
                   <div className="recog-card-content">
                     <div className="recog-card-title-row">
                       <span className="recog-card-name">{emp.name}</span>
-
                       <span className="recog-badge star-performer">
                         <span className="recog-badge-icon">⭐</span>
                         {emp.recognitionType}
                       </span>
                     </div>
-
                     <span className="recog-card-message">
-                      {isExpanded
-                        ? emp.shortDescription
-                        : `${emp.shortDescription?.slice(0, 120)}...`}
+                      {isExpanded ? emp.shortDescription : `${emp.shortDescription?.slice(0, 120)}...`}
                     </span>
-
-                    <span className="recog-card-dept">
-                      {emp.recognitionTag}
-                    </span>
+                    <span className="recog-card-dept">{emp.recognitionTag}</span>
                   </div>
                 </div>
               </div>
@@ -341,6 +327,7 @@ function RecognitionPublicPage() {
           })}
         </div>
       </div>
+      )}
 
       <Footer />
     </>

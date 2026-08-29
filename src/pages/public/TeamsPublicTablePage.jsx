@@ -10,6 +10,7 @@ function TeamsPublicTablePage() {
 
   const [capabilitiesMap, setCapabilitiesMap] = useState({});
   const [franchisesMap, setFranchisesMap] = useState({});
+  const [franchisesList, setFranchisesList] = useState([]);
   const [selectedCap, setSelectedCap] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -68,6 +69,7 @@ function TeamsPublicTablePage() {
         const frMap = {};
         frList.forEach((f) => { frMap[f.id] = f.name; });
         setFranchisesMap(frMap);
+        setFranchisesList(frList);
       } catch (err) {
         console.error("Failed to load master data:", err);
       }
@@ -111,13 +113,23 @@ function TeamsPublicTablePage() {
   });
 
   // All BUs from admin capabilities (not filtered by users present)
-  const dropdownCapabilities = Object.entries(capabilitiesMap).map(([id, name]) => ({ id, name }));
+  const dropdownCapabilities = Object.entries(capabilitiesMap).map(([id, name]) => ({ id, name })).sort((a, b) => a.name.localeCompare(b.name));
 
-  // All SBUs from admin franchises; fall back to user-derived values if map is empty
+  // IDs of franchises belonging to the selected BU (null = no filter)
+  const validFranchiseIds = selectedCap
+    ? new Set(franchisesList.filter((f) => String(f.capabilityId) === String(selectedCap)).map((f) => String(f.id)))
+    : null;
+
+  // SBUs filtered to the selected BU; names always resolved from franchisesMap
   const franchiseOptions = (
     Object.keys(franchisesMap).length > 0
-      ? Object.entries(franchisesMap).map(([id, name]) => ({ value: id, label: name }))
-      : uniqueValues("franchiseId").map((v) => ({ value: v, label: v }))
+      ? Object.entries(franchisesMap)
+          .filter(([id]) => !validFranchiseIds || validFranchiseIds.has(id))
+          .map(([id, name]) => ({ value: id, label: name }))
+      : uniqueValues("franchiseId")
+          .filter((v) => !validFranchiseIds || validFranchiseIds.has(String(v)))
+          .map((v) => ({ value: String(v), label: franchisesMap[String(v)] || v }))
+          .filter((o) => o.label !== o.value)
   ).sort((a, b) => a.label.localeCompare(b.label));
 
   const MultiFilterDropdown = ({ field, label, options }) => {
@@ -187,26 +199,26 @@ function TeamsPublicTablePage() {
                 Team Portal
               </span>
             </div>
-            <div className="col-3 mt-3 ms-auto">
+            <div className="col-auto mt-3 d-flex align-items-center">
+              <span className="fw-semibold small text-white">
+                Team Size: <strong style={{ color: "#fff" }}>{filteredUsers.length}</strong>
+              </span>
+            </div>
+            <div className="col-2 mt-3 ms-auto">
               <select className="form-select" style={{ fontSize: "13px" }}
-                value={selectedCap} onChange={(e) => setSelectedCap(e.target.value)}>
+                value={selectedCap} onChange={(e) => { setSelectedCap(e.target.value); setFilters((prev) => ({ ...prev, franchiseId: [] })); }}>
                 <option value="">All BUs</option>
                 {dropdownCapabilities.map((c) => (
                   <option key={c.id} value={c.id}>{c.name}</option>
                 ))}
               </select>
             </div>
-            <div className="col-3 mt-3">
+            <div className="col-2 mt-3">
               <MultiFilterDropdown
                 field="franchiseId"
                 label="SBU"
                 options={franchiseOptions}
               />
-            </div>
-            <div className="col-2 mt-3 d-flex align-items-center justify-content-end">
-              <span className="fw-semibold small text-white">
-                Team Size: <strong style={{ color: "#fff" }}>{filteredUsers.length}</strong>
-              </span>
             </div>
           </div>
         </div>
@@ -275,22 +287,30 @@ function TeamsPublicTablePage() {
               {filteredUsers.length === 0 ? (
                 <tr><td colSpan="7" className="text-center">No users found</td></tr>
               ) : (
-                filteredUsers.map((user, index) => (
-                  <tr key={user.id}>
-                    <td>{index + 1}</td>
-                    <td style={{ width: "25%" }}>{user.name}</td>
-                    <td>{user.enterpriseId}</td>
-                    <td>{user.careerLevel}</td>
-                    <td>{user.location}</td>
-                    <td>
-                      <span style={{ color: "#0d6efd", cursor: "pointer", textDecoration: "underline" }}
-                        onClick={() => navigate(`/program?highlight=${encodeURIComponent(user.projectName || "")}`)}>
-                        {user.projectName}
-                      </span>
-                    </td>
-                    <td>{user.lineManager}</td>
-                  </tr>
-                ))
+                filteredUsers.map((user, index) => {
+                  const na = (v) => (v && String(v).trim()) ? String(v).trim() : "NA";
+                  const project = na(user.projectName);
+                  return (
+                    <tr key={user.id}>
+                      <td>{index + 1}</td>
+                      <td style={{ width: "25%" }}>{na(user.name)}</td>
+                      <td>{na(user.enterpriseId)}</td>
+                      <td>{na(user.careerLevel)}</td>
+                      <td>{na(user.location)}</td>
+                      <td>
+                        {project === "NA" ? (
+                          <span className="text-muted">NA</span>
+                        ) : (
+                          <span style={{ color: "#0d6efd", cursor: "pointer", textDecoration: "underline" }}
+                            onClick={() => navigate(`/program?highlight=${encodeURIComponent(user.projectName)}`)}>
+                            {project}
+                          </span>
+                        )}
+                      </td>
+                      <td>{na(user.lineManager)}</td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

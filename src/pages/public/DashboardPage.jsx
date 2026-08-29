@@ -134,10 +134,10 @@ function DashboardPage() {
         {/* Summary Cards */}
         <div className="row mb-4">
           {[
-            { value: summaryCards.totalResources    ?? 142,  label: "👥 Total Resources"       },
-            { value: `${summaryCards.billableHCPct  ?? 84}%`, label: "⚙️ Billable HC"           },
-            { value: summaryCards.leakageHours      ?? 268,  label: "⏱ Leakage Hours"          },
-            { value: `${summaryCards.timesheetCompliance ?? 91}%`, label: "📝 Timesheet Compliance" },
+            { value: summaryCards.totalResources    ?? 0,   label: "👥 Total Resources"       },
+            { value: `${summaryCards.billableHCPct  ?? 0}%`, label: "⚙️ Billable HC"           },
+            { value: summaryCards.leakageHours      ?? 0,   label: "⏱ Leakage Hours"          },
+            { value: `${summaryCards.timesheetCompliance ?? 0}%`, label: "📝 Timesheet Compliance" },
           ].map(({ value, label }) => (
             <div className="col-lg-3 col-md-6 mb-3" key={label}>
               <div className="summary-card">

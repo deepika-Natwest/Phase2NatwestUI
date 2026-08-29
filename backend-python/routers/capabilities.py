@@ -17,6 +17,7 @@ def get_all():
     return read_json(DATA_DIR / "capabilities.json")
 
 
+@router.post("", status_code=201)
 @router.post("/", status_code=201)
 def create(body: CapabilityBody):
     items = read_json(DATA_DIR / "capabilities.json")

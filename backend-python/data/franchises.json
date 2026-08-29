@@ -1,7 +1,7 @@
 [
   {
     "id": "67e49d2e-7d21-444c-bb76-29eb95ab66dc",
-    "name": "RB",
+    "name": "Retail Banking",
     "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92"
   },
   {
@@ -16,7 +16,7 @@
   },
   {
     "id": "2f73f624-07e7-451c-95a1-61d46079d1e9",
-    "name": "Wealth",
+    "name": "Wealth Managrment",
     "capabilityId": "b5c92e0d-a026-47ab-a523-87ef18a05a92"
   },
   {
@@ -32,6 +32,96 @@
   {
     "id": "5971e8e7-4469-49ab-80ad-21551314d230",
     "name": "Bank Of API's",
-    "capabilityId": "d8018d81-f0a6-4863-bc7c-20996cd27eff"
+    "capabilityId": "04a3895a-fb02-4e49-97dd-e49278a4984f"
+  },
+  {
+    "id": "ec01e891-4c15-40cb-8b18-66aaa83cd9df",
+    "name": "A&E",
+    "capabilityId": "04a3895a-fb02-4e49-97dd-e49278a4984f"
+  },
+  {
+    "id": "8244225e-90c0-4fe9-8e85-a63c808916ca",
+    "name": "Shared Services",
+    "capabilityId": "04a3895a-fb02-4e49-97dd-e49278a4984f"
+  },
+  {
+    "id": "170f6246-d178-41fd-a6bc-1e400a56e132",
+    "name": "Wealth CRM",
+    "capabilityId": "04a3895a-fb02-4e49-97dd-e49278a4984f"
+  },
+  {
+    "id": "58c04cb2-1cea-4e13-8f14-91f14715677f",
+    "name": "Treasury Solutions-BSM",
+    "capabilityId": "a499ef6f-4f92-495f-bd25-47bb9968097d"
+  },
+  {
+    "id": "96e5c1ec-b146-4e81-a0fc-3b011e9bc964",
+    "name": "Treasury Solutions-Climate",
+    "capabilityId": "a499ef6f-4f92-495f-bd25-47bb9968097d"
+  },
+  {
+    "id": "1ca2824e-8dc6-449e-844d-e153378f9ba1",
+    "name": "Treasury Solutions-SFP/others",
+    "capabilityId": "a499ef6f-4f92-495f-bd25-47bb9968097d"
+  },
+  {
+    "id": "591b427d-cdec-4f2b-bfa7-e8550920bca6",
+    "name": "Natwest Markets",
+    "capabilityId": "a499ef6f-4f92-495f-bd25-47bb9968097d"
+  },
+  {
+    "id": "31cd15f2-3cd8-4f5f-a5a7-a278fcecc5ea",
+    "name": "NWM-RBSI",
+    "capabilityId": "a499ef6f-4f92-495f-bd25-47bb9968097d"
+  },
+  {
+    "id": "190e8351-3dd7-4027-bc96-be3d1528762c",
+    "name": "Payments",
+    "capabilityId": "a499ef6f-4f92-495f-bd25-47bb9968097d"
+  },
+  {
+    "id": "8d8f5353-602d-4256-b414-cb2f960bda30",
+    "name": "Core Banking",
+    "capabilityId": "a499ef6f-4f92-495f-bd25-47bb9968097d"
+  },
+  {
+    "id": "23b983db-4f11-4e5e-928a-d433a5c774e0",
+    "name": "NWM-Ops",
+    "capabilityId": "a499ef6f-4f92-495f-bd25-47bb9968097d"
+  },
+  {
+    "id": "bc925a9c-37f6-4cee-b233-f7bc044341ce",
+    "name": "Markets Risk",
+    "capabilityId": "a499ef6f-4f92-495f-bd25-47bb9968097d"
+  },
+  {
+    "id": "72d2d1f4-6251-4944-a89d-61d1f165160c",
+    "name": "FS-FRAL",
+    "capabilityId": "cbb99b0a-5179-4050-8859-680a4113237f"
+  },
+  {
+    "id": "893bb824-a05a-4dcc-ac0d-f51d9c1957ad",
+    "name": "RS-FRAL",
+    "capabilityId": "cbb99b0a-5179-4050-8859-680a4113237f"
+  },
+  {
+    "id": "8fda3009-594d-42e6-bce2-bcbb63c114b7",
+    "name": "FRAL-Non Consolidated",
+    "capabilityId": "cbb99b0a-5179-4050-8859-680a4113237f"
+  },
+  {
+    "id": "32090b48-04f8-4efd-850b-6cbc591f35b7",
+    "name": "IRB",
+    "capabilityId": "316bb331-35d0-4dcc-b514-2295d096d8f4"
+  },
+  {
+    "id": "43b3f78c-dfb8-4690-baa7-583d66e2f6da",
+    "name": "Infra",
+    "capabilityId": "74ed2fbc-91aa-49b2-9db3-b79c88e3286c"
+  },
+  {
+    "id": "95fe5c8e-8f0f-43d2-b970-7d6418935070",
+    "name": "Murex",
+    "capabilityId": "244586ee-3f8e-4978-9ffb-2333ed10a976"
   }
 ]

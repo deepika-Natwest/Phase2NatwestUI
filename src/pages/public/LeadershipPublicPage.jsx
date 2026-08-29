@@ -9,6 +9,12 @@ const MANAGEMENT_ORDER = [
   "Growth Team",
 ];
 
+const SECTION_STYLES = {
+  "Leadership Team":     { bg: "linear-gradient(135deg,#1d4ed8,#3b82f6)", line: "#3b82f6", emoji: "👑" },
+  "Senior Delivery Leads": { bg: "linear-gradient(135deg,#065f46,#10b981)", line: "#10b981", emoji: "🚀" },
+  "Growth Team":         { bg: "linear-gradient(135deg,#92400e,#f59e0b)", line: "#f59e0b", emoji: "📈" },
+};
+
 function LeadershipPublicPage() {
   const [leaders, setLeaders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -78,7 +84,13 @@ function LeadershipPublicPage() {
 
               return (
                 <div key={level} className="mb-5">
-                  <h3 className="section-title">{level}</h3>
+                  <div style={{ display:"flex", alignItems:"center", gap:"12px", marginBottom:"20px" }}>
+                    <div style={{ background: (SECTION_STYLES[level] || SECTION_STYLES["Leadership Team"]).bg, borderRadius:"10px", padding:"10px 18px", display:"flex", alignItems:"center", gap:"8px" }}>
+                      <span style={{ fontSize:"22px" }}>{(SECTION_STYLES[level] || SECTION_STYLES["Leadership Team"]).emoji}</span>
+                      <span style={{ color:"#fff", fontWeight:700, fontSize:"16px", letterSpacing:"0.3px" }}>{level}</span>
+                    </div>
+                    <div style={{ flex:1, height:"2px", background:`linear-gradient(to right,${(SECTION_STYLES[level] || SECTION_STYLES["Leadership Team"]).line},transparent)` }} />
+                  </div>
 
                   <div className="row">
                     {groupedLeaders[level].map((leader) => (

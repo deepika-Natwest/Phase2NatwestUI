@@ -209,11 +209,11 @@ function ProjectProgramPage() {
       <div className="recog-detailed-heading">
         <div className="container">
           <div className="row w-100 align-items-center">
-            <div className="col-6 d-flex align-items-center">
+            <div className="col-4 d-flex align-items-center">
               <span className="recog-main-side-line trophy-emoji">📋</span>
               <span className="recog-main-title ms-2">Project / Programs</span>
             </div>
-            <div className="col-2 mt-3">
+            <div className="col-2 mt-3 ms-auto">
               <select className="form-select" style={{ fontSize: "13px" }} value={selectedBU} onChange={handleBUChange}>
                 <option value="">All BUs</option>
                 {buOptions.map((bu) => <option key={bu} value={bu}>{bu}</option>)}

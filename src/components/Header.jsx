@@ -17,7 +17,7 @@ const NAV_ITEMS = [
   { to: "/program",      label: "Program",      abbr: "Pr" },
   { to: "/leaderships",  label: "Leadership",   abbr: "Ld" },
   { to: "/events",       label: "Events",       abbr: "Ev" },
-  { to: "/recognitions", label: "Recognitions", abbr: "Rg" },
+  { to: "/recognitions", label: "Recognition", abbr: "RC" },
 ];
 
 // Per-type theme: primary color + soft background tint

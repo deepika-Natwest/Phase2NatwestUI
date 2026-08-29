@@ -18,6 +18,7 @@ def get_all():
     return read_json(_FILE)
 
 
+@router.post("", status_code=201)
 @router.post("/", status_code=201)
 def create(body: StatusBody):
     items = read_json(_FILE)

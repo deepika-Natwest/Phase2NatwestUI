@@ -29,7 +29,10 @@ function CapabilitiesPage() {
   // Load list
   const loadData = async () => {
     const res = await getCapabilities();
-    setCapabilities(res.data);
+    const sorted = [...(res.data || [])].sort((a, b) =>
+      (a.name || "").localeCompare(b.name || "")
+    );
+    setCapabilities(sorted);
   };
 
   useEffect(() => {

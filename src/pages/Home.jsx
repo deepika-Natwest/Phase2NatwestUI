@@ -81,7 +81,9 @@ Security acts as a central risk‑control layer that combines people, processes,
     const fetchMembers = async () => {
       try {
         const res = await api.get("/users?limit=1000");
-        const users = res.data.users || res.data || [];
+        const users = (res.data.users || res.data || []).filter(
+          (u) => (u.role || "").toUpperCase() !== "ADMIN"
+        );
         setMembers(users);
       } catch (err) {
         console.error("Error fetching members:", err);

@@ -7,10 +7,23 @@ import { LOCATION_OPTIONS, CAREER_LEVELS } from "../../utils/userConfig";
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-// Protect by role OR by the fixed admin ID ("1") in case role is ever corrupted
 const isAdmin = (u) => u.id === "1" || (u.role || "").toUpperCase() === "ADMIN";
 
 const CAREER_LEVEL_OPTIONS = CAREER_LEVELS || Array.from({ length: 12 }, (_, i) => `Level ${i + 1}`);
+
+// Only these are recognised manual overrides; everything else is auto-computed from SOW date
+const MANUAL_RT = ["planned release", "onboarding pending", "account/support/others", "active -billable/pool", "attrition"];
+
+const computeResourceType = (u, fallback = "-") => {
+  const rt = (u.resourceType || "").trim();
+  const rtLower = rt.toLowerCase();
+  if (rt && MANUAL_RT.some((m) => rtLower === m)) return rt;
+  if (!u.sowEndDate) return rt || fallback;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const d = new Date(String(u.sowEndDate).slice(0, 10) + "T00:00:00");
+  if (isNaN(d)) return rt || fallback;
+  return d > today ? "Active-Billable" : "Pool";
+};
 
 // ---------------------------------------------------------------------------
 // Component
@@ -339,7 +352,7 @@ const UserPage = () => {
                   <td>{u.enterpriseId}</td>
                   <td>{u.role}</td>
                   <td>{getFranchiseName(u.franchiseId)}</td>
-                  <td>{u.resourceType || "-"}</td>
+                  <td>{computeResourceType(u)}</td>
                   <td>{u.natwestDoj || "-"}</td>
                   <td>{u.sowId || "-"}</td>
                   <td>{u.sowStartDate || "-"}</td>
@@ -513,25 +526,43 @@ const UserPage = () => {
                     </div>
 
                     {/* Resource Type */}
-                    <div className="col-6">
-                      <label className="form-label">Resource Type</label>
-                      <select
-                        className="form-select"
-                        value={bulkEditData.resourceType}
-                        onChange={(e) =>
-                          setBulkEditData((prev) => ({
-                            ...prev,
-                            resourceType: e.target.value,
-                          }))
-                        }
-                      >
-                        <option value="">— keep existing —</option>
-                        {userStatuses.map((s) => (
-                          <option key={s.id ?? s.name} value={s.name}>
-                            {s.name}
-                          </option>
-                        ))}
-                      </select>
+                    <div className="col-12">
+                      <label className="form-label fw-semibold">Resource Type</label>
+                      <div className="d-flex flex-wrap gap-3 mt-1">
+                        <div className="form-check">
+                          <input
+                            type="radio"
+                            className="form-check-input"
+                            id="brt-keep"
+                            name="bulkResourceType"
+                            value=""
+                            checked={bulkEditData.resourceType === ""}
+                            onChange={() => setBulkEditData((prev) => ({ ...prev, resourceType: "" }))}
+                          />
+                          <label className="form-check-label text-muted fst-italic" htmlFor="brt-keep">
+                            — keep existing —
+                          </label>
+                        </div>
+                        {[...userStatuses]
+                          .filter((s) => !["active-billable", "pool"].includes((s.name || "").toLowerCase()))
+                          .sort((a, b) => (a.name || "").localeCompare(b.name || ""))
+                          .map((s) => (
+                            <div key={s.id ?? s.name} className="form-check">
+                              <input
+                                type="radio"
+                                className="form-check-input"
+                                id={`brt-${s.id ?? s.name}`}
+                                name="bulkResourceType"
+                                value={s.name}
+                                checked={bulkEditData.resourceType === s.name}
+                                onChange={() => setBulkEditData((prev) => ({ ...prev, resourceType: s.name }))}
+                              />
+                              <label className="form-check-label" htmlFor={`brt-${s.id ?? s.name}`}>
+                                {s.name}
+                              </label>
+                            </div>
+                          ))}
+                      </div>
                     </div>
                   </div>
                 </div>

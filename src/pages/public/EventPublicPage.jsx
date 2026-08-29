@@ -27,17 +27,21 @@ function EventPublicPage() {
     fetchData();
   }, []);
 
+  // Parse date-only strings as local time to avoid UTC timezone shift
+  const parseLocalDate = (dateStr) =>
+    new Date(String(dateStr).slice(0, 10) + "T00:00:00");
+
   // Filter whenever month or year changes
   useEffect(() => {
     let filtered = [...events];
     if (month) {
       filtered = filtered.filter(
-        (e) => new Date(e.date).getMonth() + 1 === parseInt(month)
+        (e) => parseLocalDate(e.date).getMonth() + 1 === parseInt(month)
       );
     }
     if (year) {
       filtered = filtered.filter(
-        (e) => new Date(e.date).getFullYear() === parseInt(year)
+        (e) => parseLocalDate(e.date).getFullYear() === parseInt(year)
       );
     }
     setFilteredEvents(filtered);
@@ -45,7 +49,7 @@ function EventPublicPage() {
 
   // Generate years from events
   const years = Array.from(
-    new Set(events.map((e) => new Date(e.date).getFullYear()))
+    new Set(events.map((e) => parseLocalDate(e.date).getFullYear()))
   ).sort((a, b) => b - a);
 
   return (
@@ -104,26 +108,22 @@ function EventPublicPage() {
             {filteredEvents.map((event) => (
               <div key={event.id} className="col-md-4 mb-4">
                 <div className="card h-100 shadow-sm eventCard">
-                  <span className={` eventStatus status-${event.status.toLowerCase()}`}>
-                    {event.status}
-                  </span>
-                  {event.eventImage && (
-                    <img
-                        src={
-                          event.eventImage
-                            ? `/uploads/events/${event.eventImage}`
-                            : defaultEventImg
-                        }
-                        className="card-img-top"
-                        alt={event.eventName}
-                        style={{ height: "250px", objectFit: "cover" }}
-                      />
+                  {event.status && (
+                    <span className={`eventStatus status-${event.status.toLowerCase()}`}>
+                      {event.status}
+                    </span>
                   )}
+                  <img
+                    src={event.eventImage ? `/uploads/events/${event.eventImage}` : defaultEventImg}
+                    className="card-img-top"
+                    alt={event.eventName}
+                    style={{ height: "250px", objectFit: "cover" }}
+                  />
                   <div className="card-body">
                     <h5 className="card-title">{event.eventName}</h5>
                     {event.description && <p className="mt-2">{event.description}</p>}
                     <p className="card-subtitle text-muted mb-1">
-                      {event.location} | {new Date(event.date).toLocaleDateString()}
+                      {event.location} | {parseLocalDate(event.date).toLocaleDateString()}
                     </p>
                   </div>
                 </div>

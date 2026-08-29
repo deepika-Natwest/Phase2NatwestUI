@@ -1,0 +1,502 @@
+[
+  {
+    "id": 1,
+    "category": "Dashboard & KPIs",
+    "query": "What is the total headcount?"
+  },
+  {
+    "id": 2,
+    "category": "Dashboard & KPIs",
+    "query": "What is the current billable HC percentage?"
+  },
+  {
+    "id": 3,
+    "category": "Dashboard & KPIs",
+    "query": "How many leakage hours are there?"
+  },
+  {
+    "id": 4,
+    "category": "Dashboard & KPIs",
+    "query": "What is the timesheet compliance rate?"
+  },
+  {
+    "id": 5,
+    "category": "Dashboard & KPIs",
+    "query": "What was the utilization in June?"
+  },
+  {
+    "id": 6,
+    "category": "Dashboard & KPIs",
+    "query": "How many resources are in Gurugram?"
+  },
+  {
+    "id": 7,
+    "category": "Dashboard & KPIs",
+    "query": "How many resources are based in Bangalore?"
+  },
+  {
+    "id": 8,
+    "category": "Dashboard & KPIs",
+    "query": "How many people are in Pune?"
+  },
+  {
+    "id": 9,
+    "category": "Dashboard & KPIs",
+    "query": "How many resources are in Chennai?"
+  },
+  {
+    "id": 10,
+    "category": "Dashboard & KPIs",
+    "query": "What is the headcount for D&A+?"
+  },
+  {
+    "id": 11,
+    "category": "Dashboard & KPIs",
+    "query": "What is the FRAL headcount?"
+  },
+  {
+    "id": 12,
+    "category": "Dashboard & KPIs",
+    "query": "How many resources are in Treasury & Markets?"
+  },
+  {
+    "id": 13,
+    "category": "Dashboard & KPIs",
+    "query": "What is the headcount for Infra?"
+  },
+  {
+    "id": 14,
+    "category": "Dashboard & KPIs",
+    "query": "How many Java resources are allocated?"
+  },
+  {
+    "id": 15,
+    "category": "Dashboard & KPIs",
+    "query": "What is the utilization trend from January to June?"
+  },
+  {
+    "id": 16,
+    "category": "Dashboard & KPIs",
+    "query": "How many React resources are currently allocated?"
+  },
+  {
+    "id": 17,
+    "category": "Dashboard & KPIs",
+    "query": "What are the leakage breakdown categories?"
+  },
+  {
+    "id": 18,
+    "category": "Dashboard & KPIs",
+    "query": "What percentage of timesheets are pending?"
+  },
+  {
+    "id": 19,
+    "category": "Dashboard & KPIs",
+    "query": "How many hours have been logged for Digital Banking?"
+  },
+  {
+    "id": 20,
+    "category": "Dashboard & KPIs",
+    "query": "What is the IRB headcount?"
+  },
+  {
+    "id": 21,
+    "category": "Users & People",
+    "query": "How many users are in Bangalore?"
+  },
+  {
+    "id": 22,
+    "category": "Users & People",
+    "query": "Who works in Pune?"
+  },
+  {
+    "id": 23,
+    "category": "Users & People",
+    "query": "How many people are currently active?"
+  },
+  {
+    "id": 24,
+    "category": "Users & People",
+    "query": "Who is working on the Kepler project?"
+  },
+  {
+    "id": 25,
+    "category": "Users & People",
+    "query": "What is the career level of Prashanth Prasannakumar?"
+  },
+  {
+    "id": 26,
+    "category": "Users & People",
+    "query": "How many resources have an Active-Billable status?"
+  },
+  {
+    "id": 27,
+    "category": "Users & People",
+    "query": "Who has an onboarding pending status?"
+  },
+  {
+    "id": 28,
+    "category": "Users & People",
+    "query": "List all people based in Gurugram."
+  },
+  {
+    "id": 29,
+    "category": "Users & People",
+    "query": "Who is on planned release?"
+  },
+  {
+    "id": 30,
+    "category": "Users & People",
+    "query": "How many people are at career Level 8?"
+  },
+  {
+    "id": 31,
+    "category": "Users & People",
+    "query": "Who works in the D&A franchise?"
+  },
+  {
+    "id": 32,
+    "category": "Users & People",
+    "query": "How many resources are in the FinCrime franchise?"
+  },
+  {
+    "id": 33,
+    "category": "Users & People",
+    "query": "Who is Stanislaus Prabhu Irudayaraj?"
+  },
+  {
+    "id": 34,
+    "category": "Users & People",
+    "query": "Who has attrition status?"
+  },
+  {
+    "id": 35,
+    "category": "Users & People",
+    "query": "List people working in Bengaluru."
+  },
+  {
+    "id": 36,
+    "category": "Users & People",
+    "query": "What is the SOW ID for Prashanth Prasannakumar?"
+  },
+  {
+    "id": 37,
+    "category": "Users & People",
+    "query": "Who is Prashanth Prasannakumar's line manager?"
+  },
+  {
+    "id": 38,
+    "category": "Users & People",
+    "query": "When does Prashanth Prasannakumar's SOW end?"
+  },
+  {
+    "id": 39,
+    "category": "Users & People",
+    "query": "How many people are at the Account/Support/Others resource type?"
+  },
+  {
+    "id": 40,
+    "category": "Users & People",
+    "query": "Who works on the Single Pane of Glass program?"
+  },
+  {
+    "id": 41,
+    "category": "Leadership",
+    "query": "Who is the Client Account Lead?"
+  },
+  {
+    "id": 42,
+    "category": "Leadership",
+    "query": "Who leads D&A+ delivery?"
+  },
+  {
+    "id": 43,
+    "category": "Leadership",
+    "query": "List all members of the Leadership Team."
+  },
+  {
+    "id": 44,
+    "category": "Leadership",
+    "query": "Who are the Senior Delivery Leads?"
+  },
+  {
+    "id": 45,
+    "category": "Leadership",
+    "query": "Who is in the Growth Team?"
+  },
+  {
+    "id": 46,
+    "category": "Leadership",
+    "query": "What is Ujjwal Jyoti's designation?"
+  },
+  {
+    "id": 47,
+    "category": "Leadership",
+    "query": "Where is Sharon Lewis located?"
+  },
+  {
+    "id": 48,
+    "category": "Leadership",
+    "query": "What is Suman Dahiya's role?"
+  },
+  {
+    "id": 49,
+    "category": "Leadership",
+    "query": "Who is the Enterprise Engineering Sr. Delivery Lead?"
+  },
+  {
+    "id": 50,
+    "category": "Leadership",
+    "query": "How many leaders are based in Gurugram?"
+  },
+  {
+    "id": 51,
+    "category": "Leadership",
+    "query": "What is Priya Vivek's designation and location?"
+  },
+  {
+    "id": 52,
+    "category": "Leadership",
+    "query": "Who manages Treasury & Markets delivery?"
+  },
+  {
+    "id": 53,
+    "category": "Programs",
+    "query": "How many programs are there in total?"
+  },
+  {
+    "id": 54,
+    "category": "Programs",
+    "query": "Which programs are in the D&A franchise?"
+  },
+  {
+    "id": 55,
+    "category": "Programs",
+    "query": "Tell me about the Leapfrog program."
+  },
+  {
+    "id": 56,
+    "category": "Programs",
+    "query": "What is the Kepler program?"
+  },
+  {
+    "id": 57,
+    "category": "Programs",
+    "query": "Tell me about Genesis - Data pipeline."
+  },
+  {
+    "id": 58,
+    "category": "Programs",
+    "query": "What is the CDD Baseline program?"
+  },
+  {
+    "id": 59,
+    "category": "Programs",
+    "query": "Which programs are under the C&I franchise?"
+  },
+  {
+    "id": 60,
+    "category": "Programs",
+    "query": "Tell me about the Sentinal program."
+  },
+  {
+    "id": 61,
+    "category": "Programs",
+    "query": "Is there a program called Single Pane of Glass?"
+  },
+  {
+    "id": 62,
+    "category": "Programs",
+    "query": "What is ISO 20022?"
+  },
+  {
+    "id": 63,
+    "category": "Programs",
+    "query": "What programs are related to GenAI?"
+  },
+  {
+    "id": 64,
+    "category": "Programs",
+    "query": "Tell me about the FCCM program."
+  },
+  {
+    "id": 65,
+    "category": "Programs",
+    "query": "What is the Genesis - Streamlit app?"
+  },
+  {
+    "id": 66,
+    "category": "Programs",
+    "query": "Which programs are linked to PB Mobile Integration?"
+  },
+  {
+    "id": 67,
+    "category": "Deliverables",
+    "query": "How many AI-based deliverables are there?"
+  },
+  {
+    "id": 68,
+    "category": "Deliverables",
+    "query": "Tell me about the AWS COMET implementation."
+  },
+  {
+    "id": 69,
+    "category": "Deliverables",
+    "query": "What cost savings did the Hubble migration achieve?"
+  },
+  {
+    "id": 70,
+    "category": "Deliverables",
+    "query": "Who worked on the Hubble migration to AWS?"
+  },
+  {
+    "id": 71,
+    "category": "Deliverables",
+    "query": "Which deliverables fall under Cost Saving category?"
+  },
+  {
+    "id": 72,
+    "category": "Deliverables",
+    "query": "Which deliverables are under FinCrime franchise?"
+  },
+  {
+    "id": 73,
+    "category": "Deliverables",
+    "query": "How does AWS COMET help with EU AI Act compliance?"
+  },
+  {
+    "id": 74,
+    "category": "Deliverables",
+    "query": "What is the Hubble project about?"
+  },
+  {
+    "id": 75,
+    "category": "Events",
+    "query": "List all events."
+  },
+  {
+    "id": 76,
+    "category": "Events",
+    "query": "When was the NatWest Q1 Townhall held?"
+  },
+  {
+    "id": 77,
+    "category": "Events",
+    "query": "Are there any upcoming events?"
+  },
+  {
+    "id": 78,
+    "category": "Events",
+    "query": "Where was the Q2 Townhall held?"
+  },
+  {
+    "id": 79,
+    "category": "Events",
+    "query": "What events happened in 2026?"
+  },
+  {
+    "id": 80,
+    "category": "Events",
+    "query": "How many events have been completed?"
+  },
+  {
+    "id": 81,
+    "category": "Recognitions",
+    "query": "Who received Employee of the Month?"
+  },
+  {
+    "id": 82,
+    "category": "Recognitions",
+    "query": "Who has been Client Recognized?"
+  },
+  {
+    "id": 83,
+    "category": "Recognitions",
+    "query": "Tell me about Shivangi Soni's recognition."
+  },
+  {
+    "id": 84,
+    "category": "Recognitions",
+    "query": "What recognition did Rajesh Jindal receive?"
+  },
+  {
+    "id": 85,
+    "category": "Recognitions",
+    "query": "How many recognitions are there in total?"
+  },
+  {
+    "id": 86,
+    "category": "Recognitions",
+    "query": "Who is Megha Jagadeesh and what was she recognized for?"
+  },
+  {
+    "id": 87,
+    "category": "Capabilities & Franchises",
+    "query": "How many capabilities are there?"
+  },
+  {
+    "id": 88,
+    "category": "Capabilities & Franchises",
+    "query": "List all capabilities."
+  },
+  {
+    "id": 89,
+    "category": "Capabilities & Franchises",
+    "query": "What franchises are under D&A+?"
+  },
+  {
+    "id": 90,
+    "category": "Capabilities & Franchises",
+    "query": "What capability does FinCrime belong to?"
+  },
+  {
+    "id": 91,
+    "category": "Capabilities & Franchises",
+    "query": "What is the RS-FRAL & IRB capability?"
+  },
+  {
+    "id": 92,
+    "category": "Capabilities & Franchises",
+    "query": "What is the Bank of API's franchise?"
+  },
+  {
+    "id": 93,
+    "category": "Capabilities & Franchises",
+    "query": "How many franchises are there?"
+  },
+  {
+    "id": 94,
+    "category": "Pricing & Contract Risk",
+    "query": "What is the grand total for D&A+ in pricing?"
+  },
+  {
+    "id": 95,
+    "category": "Pricing & Contract Risk",
+    "query": "How many resources are expiring in Treasury & Markets?"
+  },
+  {
+    "id": 96,
+    "category": "Pricing & Contract Risk",
+    "query": "What is the attrition count for Infra?"
+  },
+  {
+    "id": 97,
+    "category": "Pricing & Contract Risk",
+    "query": "How many resources have SOW extension pending client confirmation?"
+  },
+  {
+    "id": 98,
+    "category": "Pricing & Contract Risk",
+    "query": "How many resources are rolling off?"
+  },
+  {
+    "id": 99,
+    "category": "General & Cross-Domain",
+    "query": "Give me a summary of the D&A+ capability."
+  },
+  {
+    "id": 100,
+    "category": "General & Cross-Domain",
+    "query": "What does Accenture do for NatWest?"
+  }
+]
