@@ -1,4 +1,4 @@
-import uuid
+﻿import uuid
 from fastapi import APIRouter, HTTPException, Body
 from typing import Any, Dict
 from config import DATA_DIR
@@ -8,12 +8,12 @@ router = APIRouter()
 
 
 @router.get("")
-@router.get("/")
+@router.get("")
 def get_all():
     return read_json(DATA_DIR / "program.json")
 
 
-@router.post("/")
+@router.post("")
 def save_program(body: Dict[str, Any] = Body(...)):
     items = read_json(DATA_DIR / "program.json")
     if not isinstance(items, list):

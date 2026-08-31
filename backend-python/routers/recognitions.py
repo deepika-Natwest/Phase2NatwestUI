@@ -1,4 +1,4 @@
-import uuid
+﻿import uuid
 import os
 from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form
 from typing import Optional
@@ -20,12 +20,12 @@ def _save(file: UploadFile, folder: Path) -> str:
     return name
 
 
-@router.get("/")
+@router.get("")
 def get_all():
     return read_json(DATA_DIR / "recognitions.json")
 
 
-@router.post("/", status_code=201)
+@router.post("", status_code=201)
 def create(
     name: str = Form(...),
     designation: Optional[str] = Form(None),

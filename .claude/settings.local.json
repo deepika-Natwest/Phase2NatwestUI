@@ -3,7 +3,8 @@
     "allow": [
       "PowerShell(Get-ChildItem \"c:\\\\Users\\\\nikhil.b.goyal\\\\OneDrive - Accenture\\\\Desktop\\\\Natwest_UI\\\\Phase_2_AI\\\\src\" -Recurse -ErrorAction SilentlyContinue | Where-Object { -not $_.PSIsContainer } | Select-Object FullName | Format-Table -AutoSize -Wrap)",
       "PowerShell(Get-ChildItem \"c:\\\\Users\\\\nikhil.b.goyal\\\\OneDrive - Accenture\\\\Desktop\\\\Natwest_UI\\\\Phase_2_AI\\\\backend\" -Recurse -ErrorAction SilentlyContinue | Where-Object { -not $_.PSIsContainer } | Select-Object FullName | Format-Table -AutoSize -Wrap)",
-      "PowerShell(Get-ChildItem \"c:\\\\Users\\\\nikhil.b.goyal\\\\OneDrive - Accenture\\\\Desktop\\\\Natwest_UI\\\\Phase_2_AI\\\\backend\\\\src\" -Recurse -ErrorAction SilentlyContinue | Where-Object { -not $_.PSIsContainer } | Select-Object FullName | Format-Table -AutoSize -Wrap)"
+      "PowerShell(Get-ChildItem \"c:\\\\Users\\\\nikhil.b.goyal\\\\OneDrive - Accenture\\\\Desktop\\\\Natwest_UI\\\\Phase_2_AI\\\\backend\\\\src\" -Recurse -ErrorAction SilentlyContinue | Where-Object { -not $_.PSIsContainer } | Select-Object FullName | Format-Table -AutoSize -Wrap)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:5000/api/chatbot/ask\" -Method POST -Body '{\"message\":\"test\"}' -ContentType \"application/json\" -TimeoutSec 10; \"Status: $\\($r.StatusCode\\)\"; $r.Content | Select-Object -First 200 } catch { \"Error: $_\" })"
     ]
   }
 }

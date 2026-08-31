@@ -1,4 +1,4 @@
-import uuid
+﻿import uuid
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from config import DATA_DIR
@@ -13,13 +13,13 @@ class StatusBody(BaseModel):
 
 
 @router.get("")
-@router.get("/")
+@router.get("")
 def get_all():
     return read_json(_FILE)
 
 
 @router.post("", status_code=201)
-@router.post("/", status_code=201)
+@router.post("", status_code=201)
 def create(body: StatusBody):
     items = read_json(_FILE)
     new_item = {"id": str(uuid.uuid4()), "name": body.name}

@@ -10,6 +10,21 @@ from services.rag_service import (
 )
 from services.llm_service import answer_with_llm, get_provider
 
+HISTORY_LIMIT = 10  # last 5 exchanges (user + assistant) = 10 messages
+
+# Maps frontend category IDs → knowledge-base tab names to search within
+CATEGORY_TAB_MAP: dict[str, list[str]] = {
+    "people":       ["Users", "Franchises", "Capabilities"],
+    "deliverables": ["Deliverables"],
+    "utilization":  ["Dashboard"],
+    "programs":     ["Programs", "Franchises", "Capabilities"],
+    "recognitions": ["Recognitions"],
+    "events":       ["Events"],
+    "sow":          ["Users"],
+    "org":          ["Capabilities", "Franchises", "Users"],
+    # "others" is intentionally absent → no filtering (full knowledge base)
+}
+
 router = APIRouter()
 
 
@@ -17,6 +32,7 @@ class QuestionBody(BaseModel):
     question: Optional[str] = None
     message: Optional[str] = None
     history: Optional[List[Dict[str, Any]]] = None
+    categoryScope: Optional[str] = None
 
 
 @router.post("/ask")
@@ -26,10 +42,21 @@ async def ask_question(body: QuestionBody):
     if not q_str:
         raise HTTPException(status_code=400, detail="Question is required.")
 
-    knowledge = build_knowledge_base()
+    full_knowledge = build_knowledge_base()
+
+    # Scope the knowledge base to only relevant tabs when a specific category is selected
+    scope = (body.categoryScope or "").strip().lower()
+    if scope and scope in CATEGORY_TAB_MAP:
+        allowed_tabs = set(CATEGORY_TAB_MAP[scope])
+        knowledge = [doc for doc in full_knowledge if doc.get("tab") in allowed_tabs]
+    else:
+        knowledge = full_knowledge
+
+    # Cap history to the last 5 exchanges before any downstream use
+    history = (body.history or [])[-HISTORY_LIMIT:]
 
     # Resolve contextual follow-up / pronoun references using history
-    resolved_q = resolve_contextual_query(q_str, body.history, knowledge)
+    resolved_q = resolve_contextual_query(q_str, history, knowledge)
 
     # 1. Deterministic / Structured Fast Path
     structured = answer_structured_question(resolved_q, knowledge)
@@ -49,7 +76,7 @@ async def ask_question(body: QuestionBody):
             answer = await answer_with_llm(
                 resolved_q,
                 [d["doc"] for d in documents],
-                history=body.history,
+                history=history,
             )
             if answer:
                 return {

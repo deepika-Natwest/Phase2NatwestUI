@@ -9,7 +9,7 @@ from routers import (
     recognitions, reference_data, upload, user_statuses, users,
 )
 
-app = FastAPI(title="NatWest API", version="2.0.0")
+app = FastAPI(title="NatWest API", version="2.0.0", redirect_slashes=False)
 
 app.add_middleware(
     CORSMiddleware,

@@ -1,4 +1,4 @@
-import uuid
+﻿import uuid
 import os
 from fastapi import APIRouter, HTTPException, Depends, Query, UploadFile, File, Form
 from typing import Optional
@@ -26,7 +26,7 @@ def _save(file: UploadFile, folder: Path) -> str:
 
 
 @router.get("")
-@router.get("/")
+@router.get("")
 def get_users(
     search: Optional[str] = Query(None),
     page: Optional[int] = Query(None),
@@ -44,7 +44,7 @@ def get_users(
     return users
 
 
-@router.post("/", status_code=201)
+@router.post("", status_code=201)
 def create_user(
     name: str = Form(...),
     enterpriseId: str = Form(...),

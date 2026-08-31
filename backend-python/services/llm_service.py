@@ -34,7 +34,7 @@ def _build_prompt(question: str, documents: List[dict], history: Optional[List[d
     history_str = ""
     if history:
         turns = []
-        for h in history[-6:]:
+        for h in history[-10:]:
             role = "User" if h.get("role") != "assistant" else "Assistant"
             txt = h.get("text") or h.get("content") or ""
             if txt:
@@ -127,7 +127,7 @@ async def answer_with_llm(
             }
         ]
         if history:
-            for item in history[-6:]:
+            for item in history[-10:]:
                 role = "assistant" if item.get("role") == "assistant" else "user"
                 txt = item.get("text") or item.get("content") or ""
                 if txt:

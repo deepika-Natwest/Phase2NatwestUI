@@ -1,4 +1,4 @@
-import uuid
+﻿import uuid
 from fastapi import APIRouter, HTTPException, Depends, Query
 from pydantic import BaseModel
 from typing import Optional
@@ -31,7 +31,7 @@ def filter_by_capability(
 
 
 @router.get("")
-@router.get("/")
+@router.get("")
 def get_all(capabilityId: Optional[str] = Query(None)):
     items = read_json(DATA_DIR / "franchises.json")
     if capabilityId:
@@ -40,7 +40,7 @@ def get_all(capabilityId: Optional[str] = Query(None)):
 
 
 @router.post("", status_code=201)
-@router.post("/", status_code=201)
+@router.post("", status_code=201)
 def create(body: FranchiseBody, _user: dict = Depends(require_roles(["ADMIN", "EDITOR"]))):
     if not body.name or not body.capabilityId:
         raise HTTPException(status_code=400, detail="name and capabilityId are required")

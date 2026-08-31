@@ -1,4 +1,4 @@
-import uuid
+﻿import uuid
 import os
 from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form
 from typing import Optional
@@ -71,12 +71,12 @@ def _build_deliverable(
     return item
 
 
-@router.get("/")
+@router.get("")
 def get_all():
     return read_json(DATA_DIR / "deliverables.json")
 
 
-@router.post("/", status_code=201)
+@router.post("", status_code=201)
 def create(
     capabilityId: Optional[str] = Form(None),
     franchiseId: Optional[str] = Form(None),

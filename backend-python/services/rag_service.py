@@ -108,8 +108,97 @@ def _read_pricing_docs() -> List[dict]:
     return docs
 
 
+def _compute_live_dashboard() -> dict:
+    """Compute all dashboard KPIs live from users/capabilities/franchises.json.
+    Non-derivable metrics (leakage, utilization, skills, timesheet, project hours)
+    are carried forward from public-dashboard.json.
+    """
+    from datetime import date as _date
+
+    users        = read_json(DATA_DIR / "users.json")        or []
+    capabilities = read_json(DATA_DIR / "capabilities.json") or []
+    franchises   = read_json(DATA_DIR / "franchises.json")   or []
+    static       = read_json(DATA_DIR / "public-dashboard.json") or {}
+
+    cap_map = {c["id"]: c["name"] for c in capabilities if c.get("id") and c.get("name")}
+    fr_map  = {f["id"]: {"name": f["name"], "capabilityId": f.get("capabilityId", "")}
+               for f in franchises if f.get("id") and f.get("name")}
+
+    real_users = [u for u in users if str(u.get("role", "")).lower() != "admin"]
+    total = len(real_users)
+    today = _date.today()
+
+    _MANUAL_RT_SET = {"planned release", "onboarding pending", "account/support/others", "attrition"}
+
+    def _eff_rt(u: dict) -> str:
+        rt = (u.get("resourceType") or "").strip().lower()
+        if rt in _MANUAL_RT_SET:
+            return rt
+        sow = u.get("sowEndDate")
+        if not sow:
+            return rt
+        try:
+            d = _date.fromisoformat(str(sow)[:10])
+            return "active-billable" if d > today else "pool"
+        except Exception:
+            return rt
+
+    billable     = sum(1 for u in real_users if "billable" in _eff_rt(u))
+    billable_pct = round(billable / total * 100) if total else 0
+
+    hc_by_cap = {name: 0 for name in cap_map.values()}
+    for u in real_users:
+        cap_name = cap_map.get(u.get("capabilityId"))
+        if cap_name:
+            hc_by_cap[cap_name] += 1
+    hc_actual_data = [{"name": n, "value": v} for n, v in sorted(hc_by_cap.items())]
+
+    fr_counts: dict = {fid: 0 for fid in fr_map}
+    for u in real_users:
+        fid = u.get("franchiseId")
+        if fid in fr_counts:
+            fr_counts[fid] += 1
+    franchise_hc = {fr_map[fid]["name"]: fr_counts[fid] for fid in fr_map}
+
+    loc_counts: dict = {}
+    for u in real_users:
+        loc = (u.get("location") or "").strip()
+        if loc:
+            loc_counts[loc] = loc_counts.get(loc, 0) + 1
+    location_data = [{"location": loc, "resources": cnt}
+                     for loc, cnt in sorted(loc_counts.items(), key=lambda x: -x[1])]
+
+    rt_counts: dict = {}
+    for u in real_users:
+        rt = _eff_rt(u) or "unknown"
+        rt_counts[rt] = rt_counts.get(rt, 0) + 1
+
+    static_cards = static.get("summaryCards") or {}
+    return {
+        "currentHC":              total,
+        "summaryCards": {
+            "totalResources":       total,
+            "billableHCPct":        billable_pct,
+            "leakageHours":         static_cards.get("leakageHours", 0),
+            "timesheetCompliance":  static_cards.get("timesheetCompliance", 0),
+        },
+        "hcActualData":            hc_actual_data,
+        "locationData":            location_data,
+        "franchiseHC":             franchise_hc,
+        "resourceTypeCounts":      rt_counts,
+        "additions":               static.get("additions", 0),
+        "leavers":                 static.get("leavers", 0),
+        "utilizationTrendData":    static.get("utilizationTrendData", []),
+        "leakageData":             static.get("leakageData", []),
+        "timesheetData":           static.get("timesheetData", []),
+        "resourceAllocationData":  static.get("resourceAllocationData", []),
+        "projectData":             static.get("projectData", []),
+        "weeklyHCTrend":           static.get("weeklyHCTrend", []),
+    }
+
+
 def _read_dashboard_docs() -> List[dict]:
-    dash = read_json(DATA_DIR / "public-dashboard.json")
+    dash = _compute_live_dashboard()
     if not isinstance(dash, dict):
         return []
     docs = []
@@ -552,7 +641,7 @@ def _is_farewell(q: str) -> bool:
 
 def _answer_dashboard(question: str) -> Optional[str]:
     q = _norm(question).replace("billabale", "billable")
-    dash = read_json(DATA_DIR / "public-dashboard.json")
+    dash = _compute_live_dashboard()
     if not isinstance(dash, dict):
         return None
 
@@ -612,29 +701,26 @@ def _answer_dashboard(question: str) -> Optional[str]:
         hrs = (dash.get("summaryCards") or {}).get("leakageHours")
         return f"Leakage is {hrs} hours." if hrs is not None else None
 
-    # Headcount by Capability (e.g. "headcount in D&A+", "headcount for FRAL")
-    if re.search(r"(?:headcount|resources|hc)\s+(?:in|for|under)\s+([a-z0-9 &+]+)", q):
-        match = re.search(r"(?:headcount|resources|hc)\s+(?:in|for|under)\s+([a-z0-9 &+]+)", q)
-        if match:
-            target = match.group(1).strip()
-            # Normalize target alias
-            if target in ("d a", "d a+", "data ai", "data and ai", "data and analytics"):
-                target = "d&a+"
-            for item in (dash.get("hcActualData") or []):
-                item_name_norm = _norm(item.get("name", ""))
-                if target in item_name_norm or _norm(target) == item_name_norm or (target == "d&a+" and "d&a" in item_name_norm):
-                    return f"Headcount in {item['name']} is {item['value']}."
+    # Headcount by Capability — fuzzy match against live capability names
+    _cap_strip = lambda s: re.sub(r"[^a-z0-9]", "", _norm(s))
+    match = re.search(r"(?:headcount|resources|hc)\s+(?:in|for|under)\s+([a-z0-9 &+]+)", q)
+    if match:
+        target = match.group(1).strip()
+        target_stripped = _cap_strip(target)
+        for item in (dash.get("hcActualData") or []):
+            item_name_norm = _norm(item.get("name", ""))
+            item_stripped = _cap_strip(item_name_norm)
+            if target_stripped == item_stripped or target_stripped in item_stripped or item_stripped in target_stripped:
+                return f"Headcount in {item['name']} is {item['value']}."
 
-    # Location breakdown
-    if re.search(r"(?:resources|headcount)\s+(?:in|at|located in)\s+(gurugram|gurgaon|chennai|pune|bangalore|bengaluru)", q):
-        m_loc = re.search(r"(?:resources|headcount)\s+(?:in|at|located in)\s+(gurugram|gurgaon|chennai|pune|bangalore|bengaluru)", q)
-        if m_loc:
-            loc_query = m_loc.group(1)
-            if loc_query == "gurgaon": loc_query = "gurugram"
-            if loc_query == "bengaluru": loc_query = "bangalore"
-            for item in (dash.get("locationData") or []):
-                if _norm(item.get("location", "")) == loc_query:
-                    return f"There are {item['resources']} resources in {item['location']}."
+    # Location breakdown — pattern matches any location, aliases normalised
+    _LOC_ALIASES = {"gurgaon": "gurugram", "bengaluru": "bangalore"}
+    m_loc = re.search(r"(?:resources|headcount)\s+(?:in|at|located in)\s+([\w\s]+?)(?:\?|$)", q)
+    if m_loc:
+        loc_query = _LOC_ALIASES.get(m_loc.group(1).strip(), m_loc.group(1).strip())
+        for item in (dash.get("locationData") or []):
+            if _norm(item.get("location", "")) == loc_query:
+                return f"There are {item['resources']} resources in {item['location']}."
 
     return None
 
@@ -1012,11 +1098,17 @@ def _answer_people_question(question: str) -> Optional[str]:
             if matches else "No users are assigned to a project named NatWest in the current user data."
         )
 
-    locations = {
-        "bangalore": {"bangalore", "bengaluru", "banglore"},
-        "pune": {"pune"},
-        "london": {"london"},
-    }
+    # Build location lookup dynamically from user data; known spelling variants are normalised
+    _SPELLING_NORM = {"bengaluru": "bangalore", "banglore": "bangalore", "gurgaon": "gurugram"}
+    locations: dict[str, set] = {}
+    for user in users:
+        raw = _norm(user.get("location", ""))
+        if raw:
+            canonical = _SPELLING_NORM.get(raw, raw)
+            locations.setdefault(canonical, set()).add(raw)
+    for alias, canonical in _SPELLING_NORM.items():
+        if canonical in locations:
+            locations[canonical].add(alias)
     for label, aliases in locations.items():
         if any(alias in q.split() for alias in aliases):
             matches = [user for user in users if _norm(user.get("location")) in aliases]
@@ -1044,7 +1136,7 @@ def _answer_schema_query(question: str, knowledge: List[dict]) -> Optional[str]:
         docs_by_tab.setdefault(doc.get("tab", ""), []).append(doc)
 
     # Dashboard dimensions are a separate source from individual user records.
-    dash = read_json(DATA_DIR / "public-dashboard.json")
+    dash = _compute_live_dashboard()
     if isinstance(dash, dict):
         summary = dash.get("summaryCards") or {}
         if "total resources" in q and "headcount" not in q:
@@ -1055,7 +1147,7 @@ def _answer_schema_query(question: str, knowledge: List[dict]) -> Optional[str]:
         for item in dash.get("locationData") or []:
             if _norm(item.get("location")) in q and "dashboard" in q and any(w in q for w in ("resource", "people", "headcount")):
                 return f"The dashboard shows {item['resources']} resources in {item['location']}."
-        for item in dash.get("resourceAllocationData") or []:
+        for item in (dash.get("resourceAllocationData") or []):
             if _norm(item.get("name")) in q and "allocation" in q:
                 return f"{item['name']} has {item['allocated']} allocated resources and {item['actual']} actual resources."
         if "project" in q and ("most" in q or "highest" in q):

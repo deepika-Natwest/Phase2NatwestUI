@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+﻿from fastapi import APIRouter
 from datetime import date, datetime
 from config import DATA_DIR
 from file_helper import read_json
@@ -16,7 +16,7 @@ def _parse_date(s) -> date | None:
 
 
 @router.get("")
-@router.get("/")
+@router.get("")
 def get_pricing():
     """Compute SOW dashboard tables live from users.json + capabilities.json."""
     users = read_json(DATA_DIR / "users.json")

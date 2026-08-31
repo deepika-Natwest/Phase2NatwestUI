@@ -222,6 +222,19 @@
   cursor: not-allowed;
 }
 
+.chatbot-chip--others {
+  background: #e8f4fd;
+  color: #1565c0;
+  border-color: #90caf9;
+  margin-top: 4px;
+}
+
+.chatbot-chip--others:hover:not(:disabled) {
+  background: #1565c0;
+  color: #fff;
+  border-color: #1565c0;
+}
+
 .chatbot-messages {
   flex: 1 1 auto;
   min-height: 0;

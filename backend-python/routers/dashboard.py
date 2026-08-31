@@ -1,3 +1,4 @@
+﻿from datetime import date as _date
 from fastapi import APIRouter, Depends
 from config import DATA_DIR
 from file_helper import read_json
@@ -29,11 +30,24 @@ def get_public_dashboard():
     real_users = [u for u in users if str(u.get("role", "")).lower() != "admin"]
     total = len(real_users)
 
-    # ── Billable HC % ─────────────────────────────────────────────────────────
-    billable = sum(
-        1 for u in real_users
-        if "billable" in str(u.get("resourceType") or "").lower()
-    )
+    # ── Billable HC % (SOW-date-aware) ────────────────────────────────────────
+    _MANUAL_RT_SET = {"planned release", "onboarding pending", "account/support/others", "attrition"}
+    today = _date.today()
+
+    def _eff_rt(u: dict) -> str:
+        rt = (u.get("resourceType") or "").strip().lower()
+        if rt in _MANUAL_RT_SET:
+            return rt
+        sow = u.get("sowEndDate")
+        if not sow:
+            return rt
+        try:
+            d = _date.fromisoformat(str(sow)[:10])
+            return "active-billable" if d > today else "pool"
+        except Exception:
+            return rt
+
+    billable = sum(1 for u in real_users if "billable" in _eff_rt(u))
     billable_pct = round(billable / total * 100) if total else 0
 
     # ── HC Actual by Capability (all capabilities, 0 if no users) ─────────────
@@ -106,6 +120,6 @@ def get_public_dashboard():
 
 
 @router.get("")
-@router.get("/")
+@router.get("")
 def get_admin_dashboard(user: dict = Depends(get_current_user)):
     return {"message": f"Welcome {user.get('username')} to Admin Dashboard"}

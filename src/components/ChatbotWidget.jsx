@@ -89,7 +89,7 @@ function getPanelStyle(bx, by, pw, ph) {
 
 const INITIAL_MESSAGES = [
   { role: "assistant", text: "Hi! How may I help you?" },
-  { role: "assistant", text: "Select one of the options below or type your query." },
+  { role: "assistant", text: "Select a category below, or choose 'Others' to type your own question." },
 ];
 
 const CATEGORIES = [
@@ -172,6 +172,16 @@ const CATEGORIES = [
       "Are there capabilities with no franchises under them?",
       "Are there franchises with no users assigned?",
       "Which teams have no upcoming deliverables?",
+    ],
+  },
+  {
+    id: "others",
+    label: "💬 Others",
+    questions: [
+      "Give me an overall summary of the engagement.",
+      "Which capability has the most resources and deliverables?",
+      "Show me key metrics across all areas.",
+      "What data is available in this application?",
     ],
   },
 ];
@@ -336,8 +346,8 @@ function ChatbotWidget() {
 
   // ── Chat submit & Send ───────────────────────────────────────────────────
   // viaChip=true  → keep selected category so its questions reappear after the answer
-  // viaChip=false → reset to full category list after the answer
-  const sendQuery = async (queryText, viaChip = false) => {
+  // viaChip=false → only reset category if it is not "others" (Others lets user keep typing)
+  const sendQuery = async (queryText, viaChip = false, categoryId = selectedCategory?.id) => {
     const trimmed = queryText.trim();
     if (!trimmed || loading) return;
 
@@ -347,16 +357,17 @@ function ChatbotWidget() {
     setQuestion("");
     setLoading(true);
 
-    // Build context from recent history (last 6 turns, ignoring welcome messages)
+    // Build context from recent history (last 5 exchanges = 10 messages, ignoring welcome messages)
     const historyPayload = nextMessages
       .filter(m => !INITIAL_MESSAGES.includes(m))
-      .slice(-6)
+      .slice(-10)
       .map(m => ({ role: m.role, text: m.text }));
 
     try {
       const res = await api.post("/chatbot/ask", {
         question: trimmed,
         history: historyPayload,
+        categoryScope: categoryId || null,
       });
       setMessages(prev => [...prev, { role: "assistant", text: res.data.answer }]);
     } catch {
@@ -369,13 +380,15 @@ function ChatbotWidget() {
       ]);
     } finally {
       setLoading(false);
-      if (!viaChip) setSelectedCategory(null); // typed query → show full category list
+      // After a typed submit: stay in "others" so the user can keep typing; reset all other categories
+      if (!viaChip && categoryId !== "others") setSelectedCategory(null);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await sendQuery(question, false);
+    // "others" textarea submits keep the category selected
+    await sendQuery(question, false, selectedCategory?.id);
   };
 
   const handleKeyDown = (e) => {
@@ -529,6 +542,16 @@ function ChatbotWidget() {
                               {q}
                             </button>
                           ))}
+                          {selectedCategory.id !== "others" && (
+                            <button
+                              type="button"
+                              className="chatbot-chip chatbot-chip--others"
+                              onClick={() => setSelectedCategory(CATEGORIES.find(c => c.id === "others"))}
+                              disabled={loading}
+                            >
+                              💬 Others
+                            </button>
+                          )}
                         </div>
                       </>
                     )}
@@ -544,13 +567,18 @@ function ChatbotWidget() {
                   onChange={(e) => setQuestion(e.target.value)}
                   onKeyDown={handleKeyDown}
                   rows={2}
-                  placeholder="Ask a question about the app data..."
+                  placeholder={
+                    selectedCategory?.id === "others"
+                      ? "Ask a custom question about any app data..."
+                      : "Select 'Others' to type a custom question"
+                  }
                   className="chatbot-input"
                   aria-label="Ask a question"
+                  disabled={loading || selectedCategory?.id !== "others"}
                 />
                 <button
                   type="submit"
-                  disabled={loading || !question.trim()}
+                  disabled={loading || !question.trim() || selectedCategory?.id !== "others"}
                   className="chatbot-submit"
                   aria-label={loading ? "Searching" : "Send"}
                   title="Send"
